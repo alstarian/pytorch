@@ -25,6 +25,130 @@
     <style>
 
 
+
+            /* ========================================
+   TABLET/IPAD OPTIMIZATION
+   ======================================== */
+
+@media (min-width: 768px) {
+    /* Center the game in a reasonable play area on larger screens */
+    #gameContainer {
+        max-width: 500px;
+        margin: 0 auto;
+        border-left: 1px solid rgba(102, 126, 234, 0.2);
+        border-right: 1px solid rgba(102, 126, 234, 0.2);
+    }
+    
+    /* Scale up HUD elements */
+    .stat-box {
+        padding: 14px 22px;
+        min-width: 100px;
+    }
+    
+    .stat-label {
+        font-size: 11px;
+    }
+    
+    .stat-value {
+        font-size: 36px;
+    }
+    
+    .heart {
+        width: 14px;
+        height: 14px;
+    }
+    
+    /* Larger pause button */
+    #pauseButton {
+        width: 56px;
+        height: 56px;
+        font-size: 30px;
+    }
+    
+    /* Scale up streak bar */
+    #streakBar {
+        padding: 14px 18px;
+    }
+    
+    .streak-text {
+        font-size: 13px;
+    }
+    
+    .streak-count {
+        font-size: 16px;
+    }
+    
+    .progress-bar {
+        height: 9px;
+    }
+    
+    /* Scale up difficulty indicator */
+    #difficultyIndicator {
+        padding: 10px 16px;
+    }
+    
+    .difficulty-text {
+        font-size: 11px;
+    }
+    
+    .difficulty-level {
+        font-size: 20px;
+    }
+    
+    /* Larger combo */
+    #combo {
+        font-size: 20px;
+        padding: 10px 22px;
+    }
+    
+    /* Scale modals appropriately */
+    .modal {
+        max-width: 450px;
+        padding: 50px 40px;
+    }
+    
+    .pause-modal {
+        max-width: 400px;
+        padding: 50px 40px;
+    }
+    
+    h1 {
+        font-size: 52px;
+    }
+    
+    h2 {
+        font-size: 42px;
+    }
+    
+    .subtitle, .pause-subtitle {
+        font-size: 17px;
+    }
+    
+    button {
+        padding: 20px 50px;
+        font-size: 18px;
+    }
+    
+    /* Scale up animals and basket for larger screen */
+    canvas {
+        /* Animals will be drawn larger via JavaScript adjustment if needed */
+    }
+}
+
+/* Extra large tablets/small desktops */
+@media (min-width: 1024px) {
+    #gameContainer {
+        max-width: 600px;
+    }
+    
+    .modal, .pause-modal {
+        max-width: 500px;
+    }
+}
+
+
+
+
              /* ADD THIS ENTIRE NEW CSS BLOCK */
 #gameInfoBar {
     position: absolute;
@@ -2302,50 +2426,33 @@ function resetGameTracker() {
         }
 
         function drawAnimals() {
+    const emojiSize = window.innerWidth > 768 ? 64 : 48;
+    
+    // Draw animals (with bounce physics handled in game loop)
     animals.forEach(a => {
         ctx.save();
-        ctx.translate(a.x, a.y); // Use direct x position now
+        ctx.translate(a.x, a.y);
         ctx.rotate(a.rotation);
 
         ctx.fillStyle = '#000000';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.font = '48px Arial, "Apple Color Emoji", sans-serif';
+        ctx.font = `${emojiSize}px Arial, "Apple Color Emoji", sans-serif`;
         ctx.fillText(a.type.emoji, 0, 0);
 
         ctx.restore();
 
         a.rotation += slowMoActive ? 0.015 : (0.04 + (difficulty * 0.003));
-        a.currentX = a.x; // Update currentX for collision detection
+        a.currentX = a.x;
     });
 
+    // Draw powerups (smooth swerve, no bounce)
     powerupNumbers.forEach(p => {
-        // Initialize velocity if needed
-        if (p.vx === undefined) {
-            p.vx = (Math.random() - 0.5) * 3;
-        }
-        
-        // Move horizontally
-        p.x += p.vx;
-        
-        // Bounce powerups too
-        // Bounce powerups - MORE DRAMATIC
-            if (p.x < 40) {
-                p.x = 40;
-                p.vx = (4 + Math.random() * 5); // Strong bounce right (4-9 speed)
-                createParticles(40, p.y, '#00FFFF', 10);
-                if (audioCtx) beep(500, 0.06, 'sine', 0.2);
-            }
-
-            if (p.x > gameWidth - 40) {
-                p.x = gameWidth - 40;
-                p.vx = -(4 + Math.random() * 5); // Strong bounce left (4-9 speed)
-                createParticles(gameWidth - 40, p.y, '#00FFFF', 10);
-                if (audioCtx) beep(500, 0.06, 'sine', 0.2);
-            }
+        p.swerveOffset += p.swerveSpeed;
+        const swerveX = Math.sin(p.swerveOffset) * p.swerveAmount;
 
         ctx.save();
-        ctx.translate(p.x, p.y);
+        ctx.translate(p.x + swerveX, p.y);
 
         ctx.shadowColor = '#00FFFF';
         ctx.shadowBlur = 20;
@@ -2353,14 +2460,14 @@ function resetGameTracker() {
         ctx.fillStyle = '#000000';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.font = '48px Arial, "Apple Color Emoji", sans-serif';
+        ctx.font = `${emojiSize}px Arial, "Apple Color Emoji", sans-serif`;
         ctx.fillText(p.type.emoji, 0, 0);
 
         ctx.shadowBlur = 0;
         ctx.restore();
 
         p.rotation += slowMoActive ? 0.015 : 0.04;
-        p.currentX = p.x;
+        p.currentX = p.x + swerveX;
     });
 }
 
@@ -2561,18 +2668,18 @@ function resetGameTracker() {
     // Move horizontally
     animals[i].x += animals[i].vx;
     
-    // Bounce off left wall - More moderate bounce
+    // Bounce off left wall - 10% slower
     if (animals[i].x < 30) {
         animals[i].x = 30;
-        animals[i].vx = (1.5 + Math.random() * 2); // Gentler bounce right (1.5-3.5 speed)
+        animals[i].vx = (1.35 + Math.random() * 1.8); // Was 1.5-3.5, now 1.35-3.15
         createParticles(30, animals[i].y, animals[i].type.color, 8);
         if (audioCtx) beep(400, 0.06, 'sine', 0.15);
     }
     
-    // Bounce off right wall - More moderate bounce
+    // Bounce off right wall - 10% slower
     if (animals[i].x > gameWidth - 30) {
         animals[i].x = gameWidth - 30;
-        animals[i].vx = -(1.5 + Math.random() * 2); // Gentler bounce left (1.5-3.5 speed)
+        animals[i].vx = -(1.35 + Math.random() * 1.8); // Was 1.5-3.5, now 1.35-3.15
         createParticles(gameWidth - 30, animals[i].y, animals[i].type.color, 8);
         if (audioCtx) beep(400, 0.06, 'sine', 0.15);
     }
@@ -2584,7 +2691,6 @@ function resetGameTracker() {
         streak++;
         updateStreak();
         
-        // Track catches for achievements
         gameAchievementTracker.consecutiveCatches++;
         checkSpeedDemon();
         checkAchievement('first100');
@@ -2625,7 +2731,6 @@ function resetGameTracker() {
         combo = 0;
         streak = 0;
         
-        // Reset perfect streak when missing
         gameAchievementTracker.consecutiveCatches = 0;
         
         updateStreak();
