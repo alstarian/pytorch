@@ -25,6 +25,21 @@
     <style>
 
 
+                                #gameInfoBar {
+                    position: absolute;
+                    top: 80px;
+                    left: 15px;
+                    right: 15px;
+                    display: flex;
+                    gap: 10px;
+                    z-index: 100;
+                }
+
+
+
+
+
+
                                         #hud {
                     position: absolute;
                     top: 5px;  /* More aggressive - was 15px */
@@ -375,18 +390,16 @@
         }
 
         #streakBar {
-            position: absolute;
-            top: 80px;
-            left: 15px;
-            right: 15px;
-            background: rgba(15, 20, 35, 0.9);
-            border: 1px solid rgba(255, 215, 0, 0.4);
-            border-radius: 12px;
-            padding: 10px 14px;
-            backdrop-filter: blur(20px);
-            z-index: 100;
-            transition: all 0.3s;
-        }
+    position: relative;    /* CHANGED: was "absolute" */
+    flex: 1;               /* NEW LINE: add this */
+    background: rgba(15, 20, 35, 0.9);
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    border-radius: 12px;
+    padding: 10px 14px;
+    backdrop-filter: blur(20px);
+    transition: all 0.3s;
+}
+
 
         #streakBar.hot {
             border-color: rgba(255, 215, 0, 0.8);
@@ -438,19 +451,17 @@
             font-weight: 600;
         }
 
-        #difficultyIndicator {
-            position: absolute;
-            top: 155px;
-            left: 15px;
-            right: 15px;
+            #difficultyIndicator {
+            position: relative;    /* CHANGED: was "absolute" */
+            flex: 1;               /* NEW LINE: add this */
             background: rgba(15, 20, 35, 0.9);
             border: 1px solid rgba(255, 107, 107, 0.3);
             border-radius: 12px;
             padding: 8px 12px;
             backdrop-filter: blur(20px);
-            z-index: 100;
             text-align: center;
         }
+
 
         .difficulty-text {
             font-size: 9px;
@@ -716,9 +727,9 @@
             50% { transform: scale(1.03); }
         }
 
-        #combo {
+           #combo {
             position: absolute;
-            top: 215px;
+            top: 155px;    /* CHANGED: was "215px" - moved up 60px */
             left: 50%;
             transform: translateX(-50%) scale(0.8);
             background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
@@ -732,6 +743,7 @@
             z-index: 99;
             box-shadow: 0 8px 24px rgba(255, 215, 0, 0.4);
         }
+
 
         #combo.show {
             opacity: 1;
@@ -1217,7 +1229,14 @@
             </div>
         </div>
 
-        <div id="streakBar">
+
+            <!-- NEW CODE - ADD THIS ENTIRE BLOCK -->
+<div id="gameInfoBar">
+    <!-- Move your existing streakBar here -->
+    <!-- Move your existing difficultyIndicator here -->
+
+
+     <div id="streakBar">
             <div class="streak-info">
                 <span class="streak-text">🔥 STREAK</span>
                 <span class="streak-count" id="streakCount">0/10</span>
@@ -1232,6 +1251,14 @@
             <div class="difficulty-text">Level</div>
             <div class="difficulty-level" id="diffLevel">1</div>
         </div>
+
+</div>
+
+
+
+
+
+   
 
         <div id="combo"></div>
 
