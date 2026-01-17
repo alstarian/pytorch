@@ -2831,8 +2831,7 @@ function resetGameTracker() {
 
 
 
-
-        function startGame() {
+function startGame() {
     initAudio();
     console.log("START GAME CALLED!");
 
@@ -2864,6 +2863,9 @@ function resetGameTracker() {
     slowMoActive = false;
     powerupsCaught = 0;
     player.x = gameWidth / 2 - 40;
+    
+    updateZoneTheme(1);  // ADD THIS LINE - Reset canvas background to level 1
+    
     updateScore();
     updateStreak();
     updateStreakReward();
@@ -2876,6 +2878,7 @@ function resetGameTracker() {
     // CHANGED: Start the game loop properly
     animationFrameId = requestAnimationFrame(gameLoop);  // Changed from requestAnimationFrame
 }
+
 
 
         function endGame() {
