@@ -25,15 +25,18 @@
     <style>
 
 
-                                #gameInfoBar {
-                    position: absolute;
-                    top: 80px;
-                    left: 15px;
-                    right: 15px;
-                    display: flex;
-                    gap: 10px;
-                    z-index: 100;
-                }
+             /* ADD THIS ENTIRE NEW CSS BLOCK */
+#gameInfoBar {
+    position: absolute;
+    top: 80px;
+    left: 15px;
+    right: 15px;
+    display: flex;           /* This makes them side-by-side */
+    flex-direction: row;     /* Forces horizontal layout */
+    gap: 10px;               /* Space between the two boxes */
+    z-index: 100;
+}
+
 
 
 
@@ -1232,27 +1235,23 @@
 
             <!-- NEW CODE - ADD THIS ENTIRE BLOCK -->
 <div id="gameInfoBar">
-    <!-- Move your existing streakBar here -->
-    <!-- Move your existing difficultyIndicator here -->
-
-
-     <div id="streakBar">
-            <div class="streak-info">
-                <span class="streak-text">🔥 STREAK</span>
-                <span class="streak-count" id="streakCount">0/10</span>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
-            <div class="streak-reward" id="streakReward">Next: +1 Life! ❤️</div>
+    <div id="streakBar">
+        <div class="streak-info">
+            <span class="streak-text">🔥 STREAK</span>
+            <span class="streak-count" id="streakCount">0/10</span>
         </div>
-
-        <div id="difficultyIndicator">
-            <div class="difficulty-text">Level</div>
-            <div class="difficulty-level" id="diffLevel">1</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
         </div>
+        <div class="streak-reward" id="streakReward">Next: +1 Life! ❤️</div>
+    </div>
 
+    <div id="difficultyIndicator">
+        <div class="difficulty-text">Level</div>
+        <div class="difficulty-level" id="diffLevel">1</div>
+    </div>
 </div>
+
 
 
 
