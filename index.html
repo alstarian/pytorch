@@ -523,19 +523,17 @@
 /* Optional: Add safe area padding for iPhone notch */
 @supports (padding: env(safe-area-inset-top)) {
     #hud {
-        top: calc(5px + env(safe-area-inset-top)); /* Very tight spacing */
+        top: calc(5px + env(safe-area-inset-top));
         padding: 0 15px;
     }
-    #streakBar {
-        top: calc(80px + env(safe-area-inset-top)); /* Moved up */
-    }
-    #difficultyIndicator {
-        top: calc(155px + env(safe-area-inset-top)); /* Moved up */
+    #gameInfoBar {
+        top: calc(80px + env(safe-area-inset-top)); /* NEW: adjust the wrapper, not the children */
     }
     #combo {
-        top: calc(215px + env(safe-area-inset-top)); /* Moved up */
+        top: calc(155px + env(safe-area-inset-top)); /* CHANGED: was 215px */
     }
 }
+
 
 /* If you want to keep the rounded modal on larger screens: */
 @media (min-width: 768px) {
