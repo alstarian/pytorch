@@ -544,7 +544,7 @@
             margin-bottom: 8px;
             font-weight: 600;
         }
-    
+
 
         .highscore-beat {
             font-size: 18px;
@@ -2469,6 +2469,7 @@ function resetGameTracker() {
             updateDifficultyDisplay();
             lastSpawn = performance.now();
             lastPowerupSpawn = performance.now() + 10000;
+            document.getElementById('pauseButton').style.display = 'flex';
             requestAnimationFrame(gameLoop);
         }
 
@@ -2476,6 +2477,7 @@ function resetGameTracker() {
             gameRunning = false;
             slowMoActive = false;
             document.getElementById('slowmoOverlay').classList.remove('active');
+            document.getElementById('pauseButton').style.display = 'none';
 
             const gameOverAnim = document.createElement('div');
             gameOverAnim.className = 'game-over-animation';
@@ -2622,6 +2624,48 @@ function resetGameTracker() {
             if (e.key === 'ArrowLeft') player.x = Math.max(0, player.x - 22);
             if (e.key === 'ArrowRight') player.x = Math.min(gameWidth - 80, player.x + 22);
         });
+
+
+
+        // Pause button functionality
+document.getElementById('pauseButton').addEventListener('click', () => {
+    if (!gameRunning) return; // Don't allow pausing if game isn't running
+    
+    paused = true;
+    document.getElementById('pauseOverlay').classList.remove('hidden');
+    document.getElementById('pauseButton').style.display = 'none'; // Hide pause button when paused
+});
+
+// Resume button
+document.getElementById('resumeButton').addEventListener('click', () => {
+    paused = false;
+    document.getElementById('pauseOverlay').classList.add('hidden');
+    document.getElementById('pauseButton').style.display = 'flex'; // Show pause button again
+    
+    // Resume the game loop
+    if (gameRunning && !animationFrameId) {
+        requestAnimationFrame(gameLoop);
+    }
+});
+
+// Quit button (returns to main menu)
+document.getElementById('quitButton').addEventListener('click', () => {
+    paused = false;
+    gameRunning = false;
+    document.getElementById('pauseOverlay').classList.add('hidden');
+    document.getElementById('pauseButton').style.display = 'flex';
+    document.getElementById('overlay').classList.remove('hidden');
+    
+    // Cancel any ongoing animation frame
+    if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+    }
+});
+
+
+
+
     </script>
 </body>
 </html>
