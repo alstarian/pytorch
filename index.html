@@ -2805,24 +2805,53 @@ document.getElementById('quitButton').addEventListener('click', () => {
 });
 
 
+/// Auto-pause when user switches apps, gets a call, or minimizes browser
 // Auto-pause when user switches apps, gets a call, or minimizes browser
 document.addEventListener('visibilitychange', () => {
-    if (document.hidden && gameRunning && !paused) {
-        // Page is hidden (phone call, app switch, etc.) - auto pause
+    if (document.hidden) {
+        // Page is hidden (phone call, app switch, etc.)
+        if (gameRunning && !paused) {
+            paused = true;
+            const overlay = document.getElementById('pauseOverlay');
+            overlay.classList.remove('hidden');
+            overlay.style.opacity = '1';
+            document.getElementById('pauseButton').style.display = 'none';
+        }
+    } else {
+        // Page is visible again
+        if (gameRunning && paused) {
+            // Ensure pause overlay is visible when returning
+            const overlay = document.getElementById('pauseOverlay');
+            overlay.classList.remove('hidden');
+            overlay.style.opacity = '1';
+            document.getElementById('pauseButton').style.display = 'none';
+        }
+    }
+});
+
+// Also handle when window loses focus
+window.addEventListener('blur', () => {
+    if (gameRunning && !paused) {
         paused = true;
-        document.getElementById('pauseOverlay').classList.remove('hidden');
+        const overlay = document.getElementById('pauseOverlay');
+        overlay.classList.remove('hidden');
+        overlay.style.opacity = '1';
         document.getElementById('pauseButton').style.display = 'none';
     }
 });
 
-// Also handle when window loses focus (additional safety net)
-window.addEventListener('blur', () => {
-    if (gameRunning && !paused) {
-        paused = true;
-        document.getElementById('pauseOverlay').classList.remove('hidden');
+// When window gains focus, ensure pause screen shows if paused
+window.addEventListener('focus', () => {
+    if (gameRunning && paused) {
+        const overlay = document.getElementById('pauseOverlay');
+        overlay.classList.remove('hidden');
+        overlay.style.opacity = '1';
         document.getElementById('pauseButton').style.display = 'none';
     }
 });
+
+
+
 
 // Optional: You could also auto-resume when they come back, but it's safer to keep it paused
 // window.addEventListener('focus', () => {
