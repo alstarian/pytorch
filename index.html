@@ -25,17 +25,17 @@
     <style>
 
 
-                        #hud {
-    position: absolute;
-    top: 10px;  /* Changed from 15px */
-    left: 0;
-    right: 0;
-    padding: 0 15px;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    z-index: 100;
-}
+                                        #hud {
+                    position: absolute;
+                    top: 5px;  /* More aggressive - was 15px */
+                    left: 0;
+                    right: 0;
+                    padding: 0 15px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    z-index: 100;
+                }
 
 
 
@@ -46,7 +46,7 @@
 
 #pauseButton {
     position: absolute;
-    top: calc(25px + env(safe-area-inset-top)); /* Changed from 30px */
+    top: calc(10px + env(safe-area-inset-top)); /* Much closer - was 30px */
     left: 50%;
     transform: translateX(-50%);
     width: 48px;
@@ -396,17 +396,17 @@
 /* Optional: Add safe area padding for iPhone notch */
 @supports (padding: env(safe-area-inset-top)) {
     #hud {
-        top: calc(10px + env(safe-area-inset-top)); /* Changed from 25px to 10px */
+        top: calc(5px + env(safe-area-inset-top)); /* Very tight spacing */
         padding: 0 15px;
     }
     #streakBar {
-        top: calc(85px + env(safe-area-inset-top)); /* Adjusted accordingly */
+        top: calc(80px + env(safe-area-inset-top)); /* Moved up */
     }
     #difficultyIndicator {
-        top: calc(160px + env(safe-area-inset-top)); /* Adjusted accordingly */
+        top: calc(155px + env(safe-area-inset-top)); /* Moved up */
     }
     #combo {
-        top: calc(220px + env(safe-area-inset-top)); /* Adjusted accordingly */
+        top: calc(215px + env(safe-area-inset-top)); /* Moved up */
     }
 }
 
