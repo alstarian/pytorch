@@ -2523,71 +2523,94 @@ function resetGameTracker() {
             }
 
             for (let i = animals.length - 1; i >= 0; i--) {
-                animals[i].y += animals[i].speed;
-
-                const hit = checkHit(animals[i]);
-
-                if (hit === true) {
-                    catchSound();
-                    streak++;
-                    updateStreak();
-                    
-                    // NEW: Track catches for achievements
-                    gameAchievementTracker.consecutiveCatches++;
-                    checkSpeedDemon();
-                    checkAchievement('first100');
-                    checkAchievement('comboKing');
-                    checkAchievement('noMiss');
-                    checkAchievement('scoreHero');
-                    checkAchievement('zoneExplorer');
-
-                    if (time - lastCatch < 1800) {
-                        combo++;
-                        if (combo > 1) showCombo();
-                        if (combo >= 3) playComboSound(combo); // NEW: Voice encouragement
-                    } else {
-                        combo = 1;
-                    }
-                    lastCatch = time;
-
-                    const points = animals[i].type.points * Math.max(1, combo);
-                    score += points;
-
-                    rescued[animals[i].type.name] = (rescued[animals[i].type.name] || 0) + 1;
-                    animalCounts[animals[i].type.name] = (animalCounts[animals[i].type.name] || 0) + 1;
-
-                    updateScore();
-                    updateDifficulty();
-
-                    createParticles(animals[i].currentX || animals[i].x, animals[i].y, animals[i].type.color, 25);
-
-                    animals.splice(i, 1);
-
-                    if (navigator.vibrate) navigator.vibrate(15);
-                    continue;
-                }
-
-                            if (animals[i].y > gameHeight - 90) {
-                    missSound();
-                    lives--;
-                    combo = 0;
-                    streak = 0;
-                    
-                    // NEW: Reset perfect streak when missing
-                    gameAchievementTracker.consecutiveCatches = 0;
-                    
-                    updateStreak();
-                    updateLives();
-                    animals.splice(i, 1);
-
-                    if (lives <= 0) {
-                        endGame();
-                        return;
-                    }
-                }
-
-            }
-
+    animals[i].y += animals[i].speed;
+    
+    // NEW: Bounce physics - Calculate next position with swerve
+    animals[i].swerveOffset += animals[i].swerveSpeed;
+    const swerveX = Math.sin(animals[i].swerveOffset) * animals[i].swerveAmount;
+    const nextX = animals[i].x + swerveX;
+    
+    // Bounce off left wall
+    if (nextX < 30) {
+        animals[i].x = 30;
+        animals[i].swerveSpeed = Math.abs(animals[i].swerveSpeed); // Force rightward
+        animals[i].swerveOffset = 0;
+        animals[i].swerveAmount = 25 + Math.random() * 30;
+        createParticles(30, animals[i].y, animals[i].type.color, 12);
+        if (audioCtx) beep(400, 0.08, 'sine', 0.2);
+    }
+    
+    // Bounce off right wall
+    if (nextX > gameWidth - 30) {
+        animals[i].x = gameWidth - 30;
+        animals[i].swerveSpeed = -Math.abs(animals[i].swerveSpeed); // Force leftward
+        animals[i].swerveOffset = Math.PI;
+        animals[i].swerveAmount = 25 + Math.random() * 30;
+        createParticles(gameWidth - 30, animals[i].y, animals[i].type.color, 12);
+        if (audioCtx) beep(400, 0.08, 'sine', 0.2);
+    }
+    
+    const hit = checkHit(animals[i]);
+    
+    if (hit === true) {
+        catchSound();
+        streak++;
+        updateStreak();
+        
+        // NEW: Track catches for achievements
+        gameAchievementTracker.consecutiveCatches++;
+        checkSpeedDemon();
+        checkAchievement('first100');
+        checkAchievement('comboKing');
+        checkAchievement('noMiss');
+        checkAchievement('scoreHero');
+        checkAchievement('zoneExplorer');
+        
+        if (time - lastCatch < 1800) {
+            combo++;
+            if (combo > 1) showCombo();
+            if (combo >= 3) playComboSound(combo); // NEW: Voice encouragement
+        } else {
+            combo = 1;
+        }
+        lastCatch = time;
+        
+        const points = animals[i].type.points * Math.max(1, combo);
+        score += points;
+        
+        rescued[animals[i].type.name] = (rescued[animals[i].type.name] || 0) + 1;
+        animalCounts[animals[i].type.name] = (animalCounts[animals[i].type.name] || 0) + 1;
+        
+        updateScore();
+        updateDifficulty();
+        
+        createParticles(animals[i].currentX || animals[i].x, animals[i].y, animals[i].type.color, 25);
+        
+        animals.splice(i, 1);
+        
+        if (navigator.vibrate) navigator.vibrate(15);
+        continue;
+    }
+    
+    if (animals[i].y > gameHeight - 90) {
+        missSound();
+        lives--;
+        combo = 0;
+        streak = 0;
+        
+        // NEW: Reset perfect streak when missing
+        gameAchievementTracker.consecutiveCatches = 0;
+        
+        updateStreak();
+        updateLives();
+        animals.splice(i, 1);
+        
+        if (lives <= 0) {
+            endGame();
+            return;
+        }
+    }
+}
             drawAnimals();
             updateParticles();
             drawPlayer();
