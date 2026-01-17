@@ -25,36 +25,51 @@
     <style>
 
 
+                        #hud {
+    position: absolute;
+    top: 10px;  /* Changed from 15px */
+    left: 0;
+    right: 0;
+    padding: 0 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    z-index: 100;
+}
+
 
 
                         /* Pause button - top-right, matches your HUD style */
             /* Pause button - centered between score and lives */
-            /* Pause button - centered between score and lives, avoiding Dynamic Island */
-                #pauseButton {
-                    position: absolute;
-                    top: calc(40px + env(safe-area-inset-top)); /* Increased from 20px to 30px */
-                    left: 50%;
-                    transform: translateX(-50%);
-                    width: 48px;
-                    height: 48px;
-                    background: rgba(15, 20, 35, 0.9);
-                    border: 1px solid rgba(102, 126, 234, 0.25);
-                    border-radius: 16px;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    font-size: 26px;
-                    z-index: 150;
-                    backdrop-filter: blur(20px);
-                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-                    cursor: pointer;
-                    user-select: none;
-                    transition: all 0.2s ease;
-                }
+          
 
-                    #pauseButton:active {
-                        transform: translateX(-50%) scale(0.92);
-                    }
+
+#pauseButton {
+    position: absolute;
+    top: calc(25px + env(safe-area-inset-top)); /* Changed from 30px */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 48px;
+    height: 48px;
+    background: rgba(15, 20, 35, 0.9);
+    border: 1px solid rgba(102, 126, 234, 0.25);
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    z-index: 150;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.2s ease;
+}
+
+#pauseButton:active {
+    transform: translateX(-50%) scale(0.92);
+}
+          
 
             /* Pause overlay - reuses your existing modal styling */
             #pauseOverlay {
@@ -380,9 +395,18 @@
 
 /* Optional: Add safe area padding for iPhone notch */
 @supports (padding: env(safe-area-inset-top)) {
-    .modal {
-        padding-top: calc(60px + env(safe-area-inset-top));
-        padding-bottom: calc(44px + env(safe-area-inset-bottom));
+    #hud {
+        top: calc(10px + env(safe-area-inset-top)); /* Changed from 25px to 10px */
+        padding: 0 15px;
+    }
+    #streakBar {
+        top: calc(85px + env(safe-area-inset-top)); /* Adjusted accordingly */
+    }
+    #difficultyIndicator {
+        top: calc(160px + env(safe-area-inset-top)); /* Adjusted accordingly */
+    }
+    #combo {
+        top: calc(220px + env(safe-area-inset-top)); /* Adjusted accordingly */
     }
 }
 
