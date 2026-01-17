@@ -23,6 +23,105 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
     <style>
+
+
+
+
+                        /* Pause button - top-right, matches your HUD style */
+            #pauseButton {
+                position: absolute;
+                top: calc(20px + env(safe-area-inset-top));
+                right: 15px;
+                width: 48px;
+                height: 48px;
+                background: rgba(15, 20, 35, 0.9);
+                border: 1px solid rgba(102, 126, 234, 0.25);
+                border-radius: 16px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 26px;
+                z-index: 150;
+                backdrop-filter: blur(20px);
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+                cursor: pointer;
+                user-select: none;
+                transition: all 0.2s ease;
+            }
+
+            #pauseButton:active {
+                transform: scale(0.92);
+            }
+
+            /* Pause overlay - reuses your existing modal styling */
+            #pauseOverlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(10, 14, 26, 0.97);
+                backdrop-filter: blur(20px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+            }
+
+
+
+
+                            html, body {
+                width: 100%;
+                height: 100%;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+                background: #0a0e1a;
+            }
+
+
+                            canvas {
+                width: 100% !important;
+                height: 100% !important;
+                display: block;
+                margin: 0;
+                padding: 0;
+            }
+
+
+                /* Make both stat boxes vertically centered and more compact */
+        .stat-box {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;    /* Perfect vertical centering */
+            align-items: flex-start;
+            padding: 10px 16px;         /* Reduced from 12px 18px — makes boxes shorter/tighter */
+            min-width: 80px;            /* Slightly smaller min-width */
+            height: 68px;               /* Optional: Force exact same height on both boxes (tweak if needed) */
+        }
+
+        /* Smaller score number to better match lives box height */
+        .stat-value {
+            font-size: 25px;            /* Try 24px if you want it even smaller */
+            line-height: 1;
+        }
+
+        /* Fine-tune lives box alignment */
+        .stat-label {
+            margin-bottom: 4px;         /* Reduced from 5px */
+        }
+
+        .lives {
+            margin-top: 6px;             /* Slight push down so hearts sit centered */
+            justify-content: center;    /* Ensures hearts are centered if they wrap (rare) */
+        }
+
+
+
+
+
+
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&display=swap');
 
         * {
@@ -39,15 +138,19 @@
             height: 100vh;
         }
 
-        #gameContainer {
-            position: relative;
+           #gameContainer {
+            position: fixed;     /* Changed from relative to fixed for true full-screen */
+            top: 0;
+            left: 0;
             width: 100vw;
             height: 100vh;
-            max-width: 430px;
-            margin: 0 auto;
+            max-width: none;     /* Critical: removes the 430px cap */
+            margin: 0;
+            padding: 0;
             background: radial-gradient(ellipse at top, #1a1f35 0%, #0a0e1a 100%);
-        }
+            overflow: hidden;    /* Prevents any scroll/overflow issues */
 
+        }
         canvas {
             display: block;
             width: 100%;
@@ -253,20 +356,48 @@
             z-index: 1000;
         }
 
-        .modal {
-            background: rgba(20, 25, 40, 0.95);
-            border: 1px solid rgba(102, 126, 234, 0.2);
-            border-radius: 28px;
-            padding: 44px 36px;
-            max-width: 90%;
-            width: 370px;
-            margin: 0 auto;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
-            max-height: 90vh;
-            overflow-y: auto;
-        }
+      
+
+.modal {
+    background: rgba(20, 25, 40, 0.95);
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    border-radius: 0; /* Remove rounded corners for full screen */
+    padding: 60px 24px 44px; /* Add more top padding for status bar */
+    width: 100%; /* Full width */
+    height: 100vh; /* Full viewport height */
+    max-width: 100%; /* Override the 370px limit */
+    max-height: 100vh; /* Full height */
+    margin: 0; /* Remove auto margins */
+    text-align: center;
+    box-shadow: none; /* Remove shadow for cleaner full-screen look */
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Optional: Add safe area padding for iPhone notch */
+@supports (padding: env(safe-area-inset-top)) {
+    .modal {
+        padding-top: calc(60px + env(safe-area-inset-top));
+        padding-bottom: calc(44px + env(safe-area-inset-bottom));
+    }
+}
+
+/* If you want to keep the rounded modal on larger screens: */
+@media (min-width: 768px) {
+    .modal {
+        border-radius: 28px;
+        padding: 44px 36px;
+        max-width: 90%;
+        width: 370px;
+        height: auto;
+        max-height: 90vh;
+        margin: 0 auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+}
+
 
         h1 {
             font-size: 44px;
@@ -413,6 +544,7 @@
             margin-bottom: 8px;
             font-weight: 600;
         }
+    
 
         .highscore-beat {
             font-size: 18px;
@@ -796,8 +928,135 @@
 
 
 
+@supports (padding: env(safe-area-inset-top)) {
+    #hud {
+        top: calc(25px + env(safe-area-inset-top));
+        padding: 0 15px;
+    }
+    #streakBar {
+        top: calc(100px + env(safe-area-inset-top));
+    }
+    #difficultyIndicator {
+        top: calc(175px + env(safe-area-inset-top));
+    }
+    #combo {
+        top: calc(235px + env(safe-area-inset-top));
+    }
+}
+
+/* Fallback for older iOS (constant instead of env) */
+@supports (padding: constant(safe-area-inset-top)) {
+    #hud {
+        top: calc(25px + constant(safe-area-inset-top));
+    }
+    #streakBar {
+        top: calc(100px + constant(safe-area-inset-top));
+    }
+    #difficultyIndicator {
+        top: calc(175px + constant(safe-area-inset-top));
+    }
+    #combo {
+        top: calc(235px + constant(safe-area-inset-top));
+    }
+}
+
+
+
+
+
+
+
         
     </style>
+
+
+
+</style>
+
+
+
+
+
+
+<!-- ADD NEW CELEBRATION & ZONE CSS HERE -->
+<style>
+/* Confetti particles */
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: #FFD700;
+    top: 0;
+    z-index: 5000;
+    pointer-events: none;
+    animation: confettiFall 2s ease-out forwards;
+}
+
+@keyframes confettiFall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* Screen shake */
+@keyframes screenShake {
+    0%, 100% { transform: translate(0, 0); }
+    10%, 30%, 50%, 70%, 90% { transform: translate(-5px, 0); }
+    20%, 40%, 60%, 80% { transform: translate(5px, 0); }
+}
+
+.shake {
+    animation: screenShake 0.5s ease-in-out;
+}
+
+/* Fireworks */
+.firework {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    z-index: 5000;
+    pointer-events: none;
+}
+
+@keyframes fireworkBurst {
+    0% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translate(var(--tx), var(--ty)) scale(0);
+    }
+}
+
+/* Zone popup */
+@keyframes zonePopup {
+    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+    10% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+    85% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
+}
+
+/* Combo message */
+@keyframes comboPop {
+    0% { transform: translate(-50%, 0) scale(0); opacity: 0; }
+    15% { transform: translate(-50%, 0) scale(1.3); opacity: 1; }
+    80% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+    100% { transform: translate(-50%, -20px) scale(0.8); opacity: 0; }
+}
+</style>
+
+</head>
+
+
+
+
 </head>
 <body>
     <div id="gameContainer">
@@ -837,6 +1096,24 @@
         <div id="combo"></div>
 
         <canvas id="gameCanvas"></canvas>
+
+
+
+                <div id="pauseButton">⏸️</div>
+
+        <!-- Full-screen pause overlay (add this after #gameContainer or at the end of body) -->
+        <div id="pauseOverlay" class="hidden">
+            <div class="modal">
+                <h2>⏸️ Game Paused</h2>
+                <p class="subtitle">Take a break! Tap Resume to continue playing.</p>
+                <button id="resumeButton">Resume Game</button>
+                <button class="secondary" id="quitButton">Quit to Menu</button>
+            </div>
+        </div>
+
+
+
+
     </div>
 
     <div class="slowmo-overlay" id="slowmoOverlay"></div>
@@ -1166,6 +1443,284 @@
         let animalCounts = JSON.parse(localStorage.getItem('animalCounts') || '{}');
         let achievements = JSON.parse(localStorage.getItem('achievements') || '{}');
 
+
+
+        // ============ NEW CELEBRATION & FEATURE CODE ============
+
+// Achievement tracker for gameplay
+let gameAchievementTracker = {
+    catchTimestamps: [],
+    consecutiveCatches: 0,
+    livesEarnedThisGame: 0,
+    powerupsCaughtThisGame: 0
+};
+
+// Extended achievements
+const achievementsList = {
+    first100: { id: 'first100', name: 'Century Club', desc: 'Catch 100 animals', icon: '💯', target: 100, type: 'totalCaught' },
+    speedDemon: { id: 'speedDemon', name: 'Speed Demon', desc: 'Catch 5 in 3 seconds', icon: '⚡', type: 'speed' },
+    comboKing: { id: 'comboKing', name: 'Combo King', desc: 'Reach 15x combo', icon: '👑', target: 15, type: 'combo' },
+    noMiss: { id: 'noMiss', name: 'Perfect Start', desc: 'Catch first 20 without missing', icon: '🎯', target: 20, type: 'perfect' },
+    scoreHero: { id: 'scoreHero', name: 'Score Hero', desc: 'Reach 500 points', icon: '🌟', target: 500, type: 'score' },
+    powerupMaster: { id: 'powerupMaster', name: 'Power-Up Master', desc: 'Catch 10 power-ups', icon: '6️⃣7️⃣', target: 10, type: 'powerups' },
+    lifeGuard: { id: 'lifeGuard', name: 'Life Guard', desc: 'Earn 5 lives in one game', icon: '❤️', target: 5, type: 'livesEarned' },
+    zoneExplorer: { id: 'zoneExplorer', name: 'Zone Explorer', desc: 'Reach the Arctic', icon: '🗺️', target: 10, type: 'level' }
+};
+
+// Zone themes  
+const zones = [
+    { name: 'Training Grounds', levels: [1, 2, 3, 4, 5, 6, 7, 8, 9], background: 'linear-gradient(180deg, #0f1729 0%, #1a2332 40%, #2d3748 100%)', color: '#667eea' },
+    { name: 'Jungle Paradise 🌴', levels: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19], background: 'linear-gradient(180deg, #1a4d2e 0%, #2d5a3d 40%, #4f7942 100%)', color: '#4ade80' },
+    { name: 'Arctic Tundra ❄️', levels: [20, 21, 22, 23, 24, 25, 26, 27, 28, 29], background: 'linear-gradient(180deg, #1e3a5f 0%, #2e5984 40%, #87ceeb 100%)', color: '#4ECDC4' },
+    { name: 'Savanna Sunset 🦁', levels: [30, 31, 32, 33, 34, 35, 36, 37, 38, 39], background: 'linear-gradient(180deg, #8B4513 0%, #CD853F 40%, #DAA520 100%)', color: '#FFA500' },
+    { name: 'Mystic Forest 🌙', levels: [40, 41, 42, 43, 44, 45, 46, 47, 48, 49], background: 'linear-gradient(180deg, #2C1654 0%, #4A235A 40%, #6C3483 100%)', color: '#9B59B6' },
+    { name: 'Volcanic Valley 🌋', levels: [50, 51, 52, 53, 54, 55, 56, 57, 58, 59], background: 'linear-gradient(180deg, #4A0E0E 0%, #7D2020 40%, #B22222 100%)', color: '#FF6B6B' }
+];
+
+
+// Confetti celebration
+function throwConfetti(count = 50) {
+    const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F'];
+    
+    for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDelay = Math.random() * 0.3 + 's';
+            confetti.style.animationDuration = (Math.random() * 1 + 1.5) + 's';
+            document.body.appendChild(confetti);
+            
+            setTimeout(() => confetti.remove(), 2500);
+        }, i * 30);
+    }
+}
+
+// Screen shake
+function shakeScreen() {
+    const gameContainer = document.getElementById('gameContainer');
+    gameContainer.classList.add('shake');
+    setTimeout(() => gameContainer.classList.remove('shake'), 500);
+}
+
+// Fireworks
+function launchFirework(x, y) {
+    const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A'];
+    const particleCount = 30;
+    
+    for (let i = 0; i < particleCount; i++) {
+        const firework = document.createElement('div');
+        firework.className = 'firework';
+        firework.style.left = x + 'px';
+        firework.style.top = y + 'px';
+        firework.style.background = colors[Math.floor(Math.random() * colors.length)];
+        
+        const angle = (Math.PI * 2 * i) / particleCount;
+        const velocity = 50 + Math.random() * 50;
+        const tx = Math.cos(angle) * velocity;
+        const ty = Math.sin(angle) * velocity;
+        
+        firework.style.setProperty('--tx', tx + 'px');
+        firework.style.setProperty('--ty', ty + 'px');
+        firework.style.animation = 'fireworkBurst 1s ease-out forwards';
+        
+        document.body.appendChild(firework);
+        setTimeout(() => firework.remove(), 1000);
+    }
+}
+
+// Celebration types
+function celebrateAchievement(type) {
+    switch(type) {
+        case 'highscore':
+            throwConfetti(100);
+            launchFirework(window.innerWidth / 2, window.innerHeight / 2);
+            shakeScreen();
+            break;
+        case 'combo':
+            throwConfetti(30);
+            break;
+        case 'milestone':
+            launchFirework(window.innerWidth / 2, 200);
+            throwConfetti(50);
+            break;
+        case 'levelup':
+            shakeScreen();
+            throwConfetti(40);
+            break;
+    }
+}
+
+// Get current zone
+function getCurrentZone(level) {
+    for (let zone of zones) {
+        if (zone.levels.includes(level)) {
+            return zone;
+        }
+    }
+    return zones[zones.length - 1];
+}
+
+// Update zone theme
+function updateZoneTheme(level) {
+    const zone = getCurrentZone(level);
+    const canvas = document.getElementById('gameCanvas');
+    
+    canvas.style.background = zone.background;
+    document.getElementById('diffLevel').style.color = zone.color;
+    
+    if (zone.levels[0] === level) {
+        showZoneTransition(zone.name);
+        celebrateAchievement('levelup');
+       
+    }
+}
+
+// Zone transition popup
+function showZoneTransition(zoneName) {
+    const popup = document.createElement('div');
+    popup.style.cssText = `
+        position: fixed;
+        top: 200px;
+        left: 50%;
+        transform: translate(-50%, -100px);
+        background: rgba(20, 25, 40, 0.95);
+        border: 2px solid #FFD700;
+        border-radius: 12px;
+        padding: 8px 20px;
+        z-index: 150;
+        text-align: center;
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        opacity: 0;
+        pointer-events: none;
+        animation: zoneSlideIn 2.5s ease-out forwards;
+    `;
+    
+    popup.innerHTML = `
+        <div style="font-size: 9px; color: rgba(255,255,255,0.5); margin-bottom: 2px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">Entering</div>
+        <div style="font-size: 14px; font-weight: 800; background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+                    -webkit-background-clip: text; -webkit-text-fill-color: transparent;">${zoneName}</div>
+    `;
+    
+    document.body.appendChild(popup);
+    setTimeout(() => popup.remove(), 2500);
+}
+
+
+// Combo voice messages
+function playComboSound(comboLevel) {
+    if (!audioCtx) return;
+    
+    const messages = [
+        { min: 3, text: 'Nice!', freq: 600 },
+        { min: 5, text: 'Great!', freq: 700 },
+        { min: 7, text: 'Amazing!', freq: 800 },
+        { min: 10, text: 'Incredible!', freq: 900 },
+        { min: 15, text: 'UNSTOPPABLE!', freq: 1000 },
+        { min: 20, text: 'LEGENDARY!', freq: 1200 }
+    ];
+    
+    let message = messages[0];
+    for (let msg of messages) {
+        if (comboLevel >= msg.min) {
+            message = msg;
+        }
+    }
+    
+    
+    
+    showComboMessage(message.text);
+}
+
+// Visual combo message
+function showComboMessage(text) {
+    const popup = document.createElement('div');
+    popup.style.cssText = `
+        position: fixed; top: 30%; left: 50%;
+        transform: translate(-50%, 0) scale(0);
+        font-size: 48px; font-weight: 900;
+        color: #FFD700;
+        text-shadow: 0 0 20px rgba(255, 215, 0, 1),
+                     0 0 40px rgba(255, 215, 0, 0.8),
+                     0 4px 0 rgba(0,0,0,0.5);
+        z-index: 6000;
+        pointer-events: none;
+        animation: comboPop 1.5s ease-out forwards;
+    `;
+    popup.textContent = text;
+    document.body.appendChild(popup);
+    setTimeout(() => popup.remove(), 1500);
+}
+
+// Check achievements
+function checkAchievement(achievementId) {
+    const ach = achievementsList[achievementId];
+    if (!ach || achievements[achievementId]) return;
+    
+    let unlocked = false;
+    
+    switch(ach.type) {
+        case 'totalCaught':
+            if (totalAnimalsCaught >= ach.target) unlocked = true;
+            break;
+        case 'combo':
+            if (combo >= ach.target) unlocked = true;
+            break;
+        case 'score':
+            if (score >= ach.target) unlocked = true;
+            break;
+        case 'powerups':
+            if (gameAchievementTracker.powerupsCaughtThisGame >= ach.target) unlocked = true;
+            break;
+        case 'livesEarned':
+            if (gameAchievementTracker.livesEarnedThisGame >= ach.target) unlocked = true;
+            break;
+        case 'perfect':
+            if (gameAchievementTracker.consecutiveCatches >= ach.target) unlocked = true;
+            break;
+        case 'level':
+            if (difficulty >= ach.target) unlocked = true;
+            break;
+    }
+    
+    if (unlocked) {
+        achievements[achievementId] = true;
+        localStorage.setItem('achievements', JSON.stringify(achievements));
+        showAchievement(ach.icon, ach.name, ach.desc);
+        celebrateAchievement('milestone');
+    }
+}
+
+// Speed demon check
+function checkSpeedDemon() {
+    const now = Date.now();
+    gameAchievementTracker.catchTimestamps.push(now);
+    gameAchievementTracker.catchTimestamps = gameAchievementTracker.catchTimestamps.filter(
+        time => now - time <= 3000
+    );
+    
+    if (gameAchievementTracker.catchTimestamps.length >= 5) {
+        checkAchievement('speedDemon');
+    }
+}
+
+// Reset tracker
+function resetGameTracker() {
+    gameAchievementTracker = {
+        catchTimestamps: [],
+        consecutiveCatches: 0,
+        livesEarnedThisGame: 0,
+        powerupsCaughtThisGame: 0
+    };
+}
+
+// ============ END NEW CODE ============
+
+
+
+
+
         function updateMainMenuHighScore() {
             const currentHighScore = parseInt(localStorage.getItem('zooKeeperHighScore') || 0);
             highScore = currentHighScore;
@@ -1274,6 +1829,16 @@
         let slowMoActive = false;
         let slowMoEndTime = 0;
         let powerupsCaught = 0;
+        let paused = false;           // Tracks if game is paused
+        let animationFrameId = null;  // Stores the requestAnimationFrame ID for canceling
+
+
+
+
+
+
+
+
 
         for(let i = 0; i < 100; i++) {
             stars.push({
@@ -1641,6 +2206,10 @@
                 if(lives < 5) {
                     lives++;
                     updateLives();
+
+                     gameAchievementTracker.livesEarnedThisGame++;
+                    checkAchievement('lifeGuard');    
+
                     const hearts = document.querySelectorAll('.heart');
                     if(hearts[lives - 1]) {
                         hearts[lives - 1].classList.add('gained');
@@ -1673,17 +2242,25 @@
             setTimeout(() => el.classList.remove('show'), 1200);
         }
 
-        function updateDifficulty() {
-            const newDifficulty = Math.floor(score / 200) + 1;
-            if (newDifficulty > difficulty) {
-                difficulty = newDifficulty;
-                if(difficulty > maxDifficulty) maxDifficulty = difficulty;
-                updateDifficultyDisplay();
-                levelUpSound();
-                showAchievement('⬆️', 'Level Up!', `Level ${difficulty}`);
-                checkAchievements();
+                    function updateDifficulty() {
+                const newDifficulty = Math.floor(score / 200) + 1;
+                if (newDifficulty > difficulty) {
+                    difficulty = newDifficulty;
+                    if(difficulty > maxDifficulty) maxDifficulty = difficulty;
+                    updateDifficultyDisplay();
+                    
+                    // NEW: Update zone theme when level changes
+                    updateZoneTheme(difficulty);
+                    
+                    
+                    showAchievement('⬆️', 'Level Up!', `Level ${difficulty}`);
+                    checkAchievements();
+                    
+                    // NEW: Check zone achievement
+                    checkAchievement('zoneExplorer');
+                }
             }
-        }
+
 
         function gameLoop(time) {
             if (!gameRunning) return;
@@ -1694,66 +2271,92 @@
 
             drawStars();
             drawGround();
+            drawAnimals();         // Shows animals exactly where they stopped
+            updateParticles();     // Lets particles fade nicely (optional — remove if you want total freeze)
+            drawPlayer();
 
-            const baseSpawn = 1300;
-            const reductionPerLevel = 25;
-            const minSpawn = 700;
-            const spawnInterval = Math.max(minSpawn, baseSpawn - (difficulty * reductionPerLevel));
 
-            if (time - lastSpawn > spawnInterval) {
-                spawn();
-                lastSpawn = time;
+                        // === IF PAUSED: STOP HERE (freeze everything) ===
+                       if (paused) {
+                drawAnimals();
+                updateParticles();
+                drawPlayer();
+                animationFrameId = requestAnimationFrame(gameLoop);  // <-- Add this here too
+                return;
             }
 
-            const powerupInterval = 15000 + Math.random() * 15000;
-            if(time - lastPowerupSpawn > powerupInterval) {
-                spawnPowerup();
-                lastPowerupSpawn = time;
-            }
 
-            if(slowMoActive) {
-                animals.forEach(a => {
-                    if(a.speed > a.type.baseSpeed * 0.3) {
-                        a.speed = a.type.baseSpeed * 0.3;
-                        a.swerveSpeed = a.swerveSpeed * 0.3;
-                    }
-                });
-                powerupNumbers.forEach(p => {
-                    if(p.speed > p.type.baseSpeed * 0.3) {
-                        p.speed = p.type.baseSpeed * 0.3;
-                    }
-                });
-            } else {
-                animals.forEach(a => {
-                    const targetSpeed = a.type.baseSpeed * Math.min(1 + (difficulty * 0.06), 1.8);
-                    if(a.speed < targetSpeed) {
-                        a.speed = targetSpeed;
-                        a.swerveSpeed = (0.02 + (Math.random() * 0.01)) * Math.min(1 + (difficulty * 0.05), 1.5);
-                    }
-                });
-                powerupNumbers.forEach(p => {
-                    const targetSpeed = p.type.baseSpeed * Math.min(1 + (difficulty * 0.06), 1.8);
-                    if(p.speed < targetSpeed) {
-                        p.speed = targetSpeed;
-                    }
-                });
-            }
+
+                        // === ACTIVE GAME LOGIC (ONLY RUNS WHEN NOT PAUSED) ===
+                // Paste ALL your original update code here (exactly as it was)
+                checkSlowMo(time);
+
+
+                        const baseSpawn = 1300;
+                const reductionPerLevel = 25;
+                const minSpawn = 700;
+                const spawnInterval = Math.max(minSpawn, baseSpawn - (difficulty * reductionPerLevel));
+                if (time - lastSpawn > spawnInterval) {
+                    spawn();
+                    lastSpawn = time;
+                }
+                const powerupInterval = 15000 + Math.random() * 15000;
+                if(time - lastPowerupSpawn > powerupInterval) {
+                    spawnPowerup();
+                    lastPowerupSpawn = time;
+                }
+                if(slowMoActive) {
+                    animals.forEach(a => {
+                        if(a.speed > a.type.baseSpeed * 0.3) {
+                            a.speed = a.type.baseSpeed * 0.3;
+                            a.swerveSpeed = a.swerveSpeed * 0.3;
+                        }
+                    });
+                    powerupNumbers.forEach(p => {
+                        if(p.speed > p.type.baseSpeed * 0.3) {
+                            p.speed = p.type.baseSpeed * 0.3;
+                        }
+                    });
+                } else {
+                    animals.forEach(a => {
+                        const targetSpeed = a.type.baseSpeed * Math.min(1 + (difficulty * 0.06), 1.8);
+                        if(a.speed < targetSpeed) {
+                            a.speed = targetSpeed;
+                            a.swerveSpeed = (0.02 + (Math.random() * 0.01)) * Math.min(1 + (difficulty * 0.05), 1.5);
+                        }
+                    });
+                    powerupNumbers.forEach(p => {
+                        const targetSpeed = p.type.baseSpeed * Math.min(1 + (difficulty * 0.06), 1.8);
+                        if(p.speed < targetSpeed) {
+                            p.speed = targetSpeed;
+                        }
+                    });
+                }
 
             for(let i = powerupNumbers.length - 1; i >= 0; i--) {
                 powerupNumbers[i].y += powerupNumbers[i].speed;
 
                 const hit = checkHit(powerupNumbers[i]);
 
-                if(hit) {
-                    powerupsCaught++;
-                    activateSlowMo();
-                    score += powerupNumbers[i].type.points;
-                    updateScore();
-                    powerupNumbers.splice(i, 1);
-                    checkAchievements();
-                    if(navigator.vibrate) navigator.vibrate([50, 30, 50]);
-                    continue;
-                }
+                             if(hit) {
+                        powerupsCaught++;
+                        
+                        // NEW: Track powerup for achievement
+                        gameAchievementTracker.powerupsCaughtThisGame++;
+                        
+                        activateSlowMo();
+                        score += powerupNumbers[i].type.points;
+                        updateScore();
+                        powerupNumbers.splice(i, 1);
+                        checkAchievements();
+                        
+                        // NEW: Check powerup achievement
+                        checkAchievement('powerupMaster');
+                        
+                        if(navigator.vibrate) navigator.vibrate([50, 30, 50]);
+                        continue;
+                    }
+
 
                 if(powerupNumbers[i].y > gameHeight - 90) {
                     powerupNumbers.splice(i, 1);
@@ -1769,10 +2372,20 @@
                     catchSound();
                     streak++;
                     updateStreak();
+                    
+                    // NEW: Track catches for achievements
+                    gameAchievementTracker.consecutiveCatches++;
+                    checkSpeedDemon();
+                    checkAchievement('first100');
+                    checkAchievement('comboKing');
+                    checkAchievement('noMiss');
+                    checkAchievement('scoreHero');
+                    checkAchievement('zoneExplorer');
 
                     if (time - lastCatch < 1800) {
                         combo++;
                         if (combo > 1) showCombo();
+                        if (combo >= 3) playComboSound(combo); // NEW: Voice encouragement
                     } else {
                         combo = 1;
                     }
@@ -1795,11 +2408,15 @@
                     continue;
                 }
 
-                if (animals[i].y > gameHeight - 90) {
+                            if (animals[i].y > gameHeight - 90) {
                     missSound();
                     lives--;
                     combo = 0;
                     streak = 0;
+                    
+                    // NEW: Reset perfect streak when missing
+                    gameAchievementTracker.consecutiveCatches = 0;
+                    
                     updateStreak();
                     updateLives();
                     animals.splice(i, 1);
@@ -1809,16 +2426,20 @@
                         return;
                     }
                 }
+
             }
 
             drawAnimals();
             updateParticles();
             drawPlayer();
-            requestAnimationFrame(gameLoop);
+            animationFrameId = requestAnimationFrame(gameLoop);
         }
 
         function startGame() {
             initAudio();
+
+              // NEW: Reset achievement tracker
+                resetGameTracker();
 
             totalPlays++;
             localStorage.setItem('totalPlays', totalPlays);
@@ -1892,12 +2513,17 @@
 
                 const newHigh = score > highScore;
                 if(newHigh) {
-                    highScore = score;
-                    localStorage.setItem('zooKeeperHighScore', highScore);
-                    document.getElementById('newHighScore').classList.remove('hidden');
-                    document.getElementById('gameOverTitle').textContent = '🏆 NEW RECORD! 🏆';
-                    achievementSound();
-                    setTimeout(bigWinSound, 500);
+                highScore = score;
+                localStorage.setItem('zooKeeperHighScore', highScore);
+                document.getElementById('newHighScore').classList.remove('hidden');
+                document.getElementById('gameOverTitle').textContent = '🏆 NEW RECORD! 🏆';
+                
+                // NEW: Epic celebration for high score
+                celebrateAchievement('highscore');
+                
+                achievementSound();
+                setTimeout(bigWinSound, 500);
+
                     updateMainMenuHighScore();
                 } else {
                     document.getElementById('newHighScore').classList.add('hidden');
