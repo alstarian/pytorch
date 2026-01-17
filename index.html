@@ -2561,18 +2561,18 @@ function resetGameTracker() {
     // Move horizontally
     animals[i].x += animals[i].vx;
     
-    // Bounce off left wall - MUCH MORE DRAMATIC
+    // Bounce off left wall - More moderate bounce
     if (animals[i].x < 30) {
         animals[i].x = 30;
-        animals[i].vx = (3 + Math.random() * 4); // Strong bounce right (3-7 speed)
+        animals[i].vx = (1.5 + Math.random() * 2); // Gentler bounce right (1.5-3.5 speed)
         createParticles(30, animals[i].y, animals[i].type.color, 8);
         if (audioCtx) beep(400, 0.06, 'sine', 0.15);
     }
     
-    // Bounce off right wall - MUCH MORE DRAMATIC
+    // Bounce off right wall - More moderate bounce
     if (animals[i].x > gameWidth - 30) {
         animals[i].x = gameWidth - 30;
-        animals[i].vx = -(3 + Math.random() * 4); // Strong bounce left (3-7 speed)
+        animals[i].vx = -(1.5 + Math.random() * 2); // Gentler bounce left (1.5-3.5 speed)
         createParticles(gameWidth - 30, animals[i].y, animals[i].type.color, 8);
         if (audioCtx) beep(400, 0.06, 'sine', 0.15);
     }
