@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable
+    " content="yes">
 
     <meta name="apple-mobile-web-app-title" content="Zoo Keeper Pro">
     <meta name="apple-mobile-web-app-status-bar-style
@@ -1768,6 +1769,8 @@
         let achievements = JSON.parse(localStorage.getItem('achievements') || '{}');
         let dangerItems = [];
         let lastDangerSpawn = 0;
+        let lastHeartSpawn = 0;
+
 
 
         const dangerTypes = [
@@ -2736,6 +2739,23 @@ function checkSlowMo(time) {
 
 
 
+// ❤️ HEART SPAWN - Extra Lives (Rare!)
+if (time - lastHeartSpawn > 10000 && lives < 5 && Math.random() < 0.05) {
+    powerupNumbers.push({
+        x: Math.random() * (gameWidth - 60),
+        y: -60,
+        speed: 1.8,  // Slightly slower than normal
+        type: { 
+            points: 500, 
+            emoji: '❤️', 
+            color: '#ff4444',
+            isHeart: true  // Special flag
+        }
+    });
+    lastHeartSpawn = time;
+}
+
+
 
 
 
@@ -2832,29 +2852,39 @@ function checkSlowMo(time) {
     }
 
     // Update power-up numbers
-    for (let i = powerupNumbers.length - 1; i >= 0; i--) {
-        powerupNumbers[i].y += powerupNumbers[i].speed;
+for (let i = powerupNumbers.length - 1; i >= 0; i--) {
+    powerupNumbers[i].y += powerupNumbers[i].speed;
+    
+    const hit = checkHit(powerupNumbers[i]);
+    
+    if (hit === true) {
+        powerupSound();
+        activateSlowMo();
+        powerupsCaught++;
+        gameAchievementTracker.powerupsCaughtThisGame++;
+        checkAchievement('powerupMaster');
         
-        const hit = checkHit(powerupNumbers[i]);
-        
-        if (hit === true) {
-            powerupSound();
-            activateSlowMo();
-            powerupsCaught++;
-            gameAchievementTracker.powerupsCaughtThisGame++;
-            checkAchievement('powerupMaster');
-            
+        // ❤️ HEART CHECK - Extra Life!
+        if (powerupNumbers[i].type?.isHeart) {
+            lives = Math.min(5, lives + 1);
+            updateLives();
+            lifeUpSound();  // Add this sound later
+            createParticles(powerupNumbers[i].x, powerupNumbers[i].y, '#ff4444', 40);
+        } else {
             createParticles(powerupNumbers[i].x, powerupNumbers[i].y, '#00FFFF', 30);
-            powerupNumbers.splice(i, 1);
-            
-            if (navigator.vibrate) navigator.vibrate([10, 30, 10]);
-            continue;
         }
         
-        if (powerupNumbers[i].y > gameHeight) {
-            powerupNumbers.splice(i, 1);
-        }
+        powerupNumbers.splice(i, 1);
+        
+        if (navigator.vibrate) navigator.vibrate([10, 30, 10]);
+        continue;
     }
+    
+    if (powerupNumbers[i].y > gameHeight) {
+        powerupNumbers.splice(i, 1);
+    }
+}
+
 
     // Update danger items
     for (let i = dangerItems.length - 1; i >= 0; i--) {
