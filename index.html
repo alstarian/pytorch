@@ -1200,9 +1200,18 @@
         z-index: 10001;
         animation: rotateIcon 2s infinite;
     }
+
+
+    
 }
 
 
+    /* ✅ ADD THIS - Force hide in portrait */
+@media (orientation: portrait) {
+    body::before,
+    body::after {
+        display: none !important;
+    }
 
 
 
