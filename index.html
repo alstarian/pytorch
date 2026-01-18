@@ -2285,9 +2285,9 @@ function resetGameTracker() {
             setTimeout(() => div.remove(), 2000);
         }
 
-        function activateSlowMo() {
+              function activateSlowMo() {
             slowMoActive = true;
-            slowMoEndTime = performance.now() + 2500;
+            slowMoEndTime = performance.now() + 2500;  // 2.5 seconds from NOW
             document.getElementById('slowmoOverlay').classList.add('active');
             powerupSound();
             showAchievement('⏱️', 'SLOW MOTION!', '3 seconds activated!');
@@ -2781,7 +2781,7 @@ function resetGameTracker() {
         
         if (hit === true) {
             powerupSound();
-            activateSlowMo(time);
+            activateSlowMo();
             powerupsCaught++;
             gameAchievementTracker.powerupsCaughtThisGame++;
             checkAchievement('powerupMaster');
