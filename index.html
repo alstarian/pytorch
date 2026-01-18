@@ -1165,10 +1165,11 @@
 
 
 
-/* Portrait-only lock - MOBILE ONLY */
-@media (orientation: landscape) and (max-width: 768px) {
+
+/* Portrait-only lock - MOBILE + TABLET */
+@media (orientation: landscape) {
     body::before {
-        content: "📱 Please rotate your device";
+        content: "Please rotate your device";
         position: fixed;
         top: 0;
         left: 0;
@@ -1190,7 +1191,7 @@
     }
     
     body::after {
-        content: "🔄";
+        content: "📱";
         font-size: 80px;
         position: fixed;
         top: 35%;
@@ -1200,6 +1201,115 @@
         animation: rotateIcon 2s infinite;
     }
 }
+
+
+
+
+
+/* iPad Portrait Optimization */
+@media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+    /* Center game with max playable width */
+    #gameContainer {
+        max-width: 600px;
+        margin: 0 auto;
+        border-left: 1px solid rgba(102, 126, 234, 0.2);
+        border-right: 1px solid rgba(102, 126, 234, 0.2);
+    }
+    
+    /* Scale up HUD elements */
+    .stat-box {
+        padding: 14px 22px;
+        min-width: 100px;
+    }
+    
+    .stat-label {
+        font-size: 11px;
+    }
+    
+    .stat-value {
+        font-size: 36px;
+    }
+    
+    .heart {
+        width: 14px;
+        height: 14px;
+    }
+    
+    /* Larger pause button */
+    #pauseButton {
+        width: 56px;
+        height: 56px;
+        font-size: 30px;
+    }
+    
+    /* Scale up streak bar */
+    #streakBar {
+        padding: 14px 18px;
+    }
+    
+    .streak-text {
+        font-size: 13px;
+    }
+    
+    .streak-count {
+        font-size: 16px;
+    }
+    
+    .progress-bar {
+        height: 9px;
+    }
+    
+    /* Scale up difficulty indicator */
+    #difficultyIndicator {
+        padding: 10px 16px;
+    }
+    
+    .difficulty-text {
+        font-size: 11px;
+    }
+    
+    .difficulty-level {
+        font-size: 20px;
+    }
+    
+    /* Larger combo */
+    #combo {
+        font-size: 20px;
+        padding: 10px 22px;
+    }
+    
+    /* Scale modals appropriately */
+    .modal {
+        max-width: 450px;
+        padding: 50px 40px;
+    }
+    
+    .pause-modal {
+        max-width: 400px;
+        padding: 50px 40px;
+    }
+    
+    h1 {
+        font-size: 52px;
+    }
+    
+    h2 {
+        font-size: 42px;
+    }
+    
+    .subtitle, .pause-subtitle {
+        font-size: 17px;
+    }
+    
+    button {
+        padding: 20px 50px;
+        font-size: 18px;
+    }
+}
+
+
+
+
 
 @keyframes rotateIcon {
     0%, 100% { transform: translateX(-50%) rotate(0deg); }
