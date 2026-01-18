@@ -6,7 +6,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
 
     <meta name="apple-mobile-web-app-title" content="Zoo Keeper Pro">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-status-bar-style
+
+" content="black-translucent">
     <link rel="apple-touch-icon" sizes="180x180" href="icon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="icon.png">
     <link rel="icon" type="image/png" sizes="512x512" href="icon.png">
@@ -2293,12 +2295,34 @@ function resetGameTracker() {
             showAchievement('⏱️', 'SLOW MOTION!', '3 seconds activated!');
             showBigWin('SLOW-MO! ⏱️');
             createParticles(player.x + 40, player.y + 40, '#00FFFF', 50);
+
+                animals.forEach(a => {
+        if(!a.baseSpeed) a.baseSpeed = a.speed; // Save original speed
+        if(!a.baseVx && a.vx !== undefined) a.baseVx = a.vx;
+        a.speed *= 0.3;  // Slow down 70%
+        if(a.vx !== undefined) a.vx *= 0.3;
+
+
         }
 
         function checkSlowMo(time) {
             if(slowMoActive && time >= slowMoEndTime) {
                 slowMoActive = false;
                 document.getElementById('slowmoOverlay').classList.remove('active');
+
+
+                    animals.forEach(a => {
+            if(a.baseSpeed) {
+                a.speed = a.baseSpeed;
+                delete a.baseSpeed;
+            }
+            if(a.baseVx !== undefined) {
+                a.vx = a.baseVx;
+                delete a.baseVx;
+            }
+        });
+
+
             }
         }
 
@@ -2479,6 +2503,7 @@ function resetGameTracker() {
     const emojiSize = window.innerWidth > 768 ? 64 : 48;
     
     // Draw animals
+
     animals.forEach(a => {
         ctx.save();
         ctx.translate(a.x, a.y);
@@ -2680,6 +2705,11 @@ function resetGameTracker() {
         }
         lastDangerSpawn = time;
     }
+
+
+
+
+
 
     // ... rest of your code stays the same ...
 
