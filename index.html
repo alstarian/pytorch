@@ -2739,21 +2739,22 @@ function checkSlowMo(time) {
 
 
 
-// ❤️ HEART SPAWN - Extra Lives (Rare!)
+// ❤️ HEART SPAWN - Floating at top!
 if (time - lastHeartSpawn > 10000 && lives < 5 && Math.random() < 0.05) {
     powerupNumbers.push({
-        x: Math.random() * (gameWidth - 60),
-        y: -60,
-        speed: 1.8,  // Slightly slower than normal
+        x: 40 + Math.random() * 100,  // Top-left zone
+        y: 80,  // Near top
+        speed: 0.3,  // SUPER SLOW float
         type: { 
             points: 500, 
             emoji: '❤️', 
             color: '#ff4444',
-            isHeart: true  // Special flag
+            isHeart: true
         }
     });
     lastHeartSpawn = time;
 }
+
 
 
 
