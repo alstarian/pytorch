@@ -2888,31 +2888,42 @@ function checkSlowMo(time) {
 }
 
 
-// Portrait orientation check
+// BULLETPROOF Portrait Lock
 let gamePausedByOrientation = false;
 
-function checkOrientationPause() {
+function forcePortraitPause() {
     const isLandscape = window.innerWidth > window.innerHeight;
     
-    if(isLandscape && gameRunning) {
+    if(isLandscape) {
+        // FORCE PAUSE - Stop gameLoop completely
         document.body.classList.add('portrait-pause');
-        if(!paused) {
-            gamePausedByOrientation = true;
-            pauseGame();
+        gamePausedByOrientation = true;
+        gameRunning = false;  // ← CRITICAL: Stops gameLoop
+        if(animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
         }
-    } else {
+    } else if(gamePausedByOrientation) {
+        // RESUME ONLY when returning to portrait
         document.body.classList.remove('portrait-pause');
-        if(gamePausedByOrientation && paused) {
-            gamePausedByOrientation = false;
-            resumeGame();
+        gamePausedByOrientation = false;
+        if(paused) {
+            resumeGame();  // Resume if pause button was used
+        } else {
+            gameRunning = true;  // Restart gameLoop
+            gameLoop(performance.now());  // Restart animation
         }
     }
 }
 
-// Listen for orientation changes
-window.addEventListener('resize', () => setTimeout(checkOrientationPause, 100));
-window.addEventListener('orientationchange', () => setTimeout(checkOrientationPause, 200));
-checkOrientationPause(); // Initial check
+// Listen for ALL orientation events
+window.addEventListener('resize', () => setTimeout(forcePortraitPause, 50));
+window.addEventListener('orientationchange', () => setTimeout(forcePortraitPause, 150));
+window.matchMedia('(orientation: landscape)').addEventListener('change', forcePortraitPause);
+
+// Initial check
+forcePortraitPause();
+
 
 
 
