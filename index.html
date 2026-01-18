@@ -2877,47 +2877,43 @@ if (time - lastHeartSpawn > 20000 && lives < 5 && Math.random() < 0.05) {
 
     // Update power-up numbers
 for (let i = powerupNumbers.length - 1; i >= 0; i--) {
-
     // ❤️ SWERVE for hearts!
     if (powerupNumbers[i].type?.isHeart) {
-        powerupNumbers[i].swerveOffset += powerupNumbers[i].swerveSpeed || 0.02;
+        powerupNumbers[i].swerveOffset += powerupNumbers[i].swerveSpeed * 0.02;
         powerupNumbers[i].x += Math.sin(powerupNumbers[i].swerveOffset) * (powerupNumbers[i].swerveAmount || 20);
     }
     
-    powerupNumbers[i].y += powerupNumbers[i].speed;
-
-
-    powerupNumbers[i].y += powerupNumbers[i].speed;
+    powerupNumbers[i].y += powerupNumbers[i].speed;  // ✅ Movement!
     
     const hit = checkHit(powerupNumbers[i]);
     
-if (hit === true) {
-    // ❤️ HEARTS - No slow-mo!
-    if (powerupNumbers[i].type?.isHeart) {
-        lives = Math.min(5, lives + 1);
-        updateLives();
-        lifeUpSound();
-        createParticles(powerupNumbers[i].x, powerupNumbers[i].y, '#ff4444', 40);
-    } else {
-        // 67 Powerups - Slow-mo!
-        powerupSound();
-        activateSlowMo();
-        powerupsCaught++;
-        gameAchievementTracker.powerupsCaughtThisGame++;
-        checkAchievement('powerupMaster');
-        createParticles(powerupNumbers[i].x, powerupNumbers[i].y, '#00FFFF', 30);
+    if (hit === true) {
+        // ❤️ HEARTS - No slow-mo!
+        if (powerupNumbers[i].type?.isHeart) {
+            lives = Math.min(5, lives + 1);
+            updateLives();
+            lifeUpSound();
+            createParticles(powerupNumbers[i].x, powerupNumbers[i].y, '#ff4444', 40);
+        } else {
+            // 67 Powerups - Slow-mo!
+            powerupSound();
+            activateSlowMo();
+            powerupsCaught++;
+            gameAchievementTracker.powerupsCaughtThisGame++;
+            checkAchievement('powerupMaster');
+            createParticles(powerupNumbers[i].x, powerupNumbers[i].y, '#00FFFF', 30);
+        }
+        
+        powerupNumbers.splice(i, 1);
+        if (navigator.vibrate) navigator.vibrate([10, 30, 10]);
+        continue;
     }
-    
-    powerupNumbers.splice(i, 1);
-    if (navigator.vibrate) navigator.vibrate([10, 30, 10]);
-    continue;
-}
-
     
     if (powerupNumbers[i].y > gameHeight) {
         powerupNumbers.splice(i, 1);
     }
 }
+
 
 
     // Update danger items
