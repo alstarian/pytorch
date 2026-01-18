@@ -2288,30 +2288,30 @@ function resetGameTracker() {
         }
 
               function activateSlowMo() {
-            slowMoActive = true;
-            slowMoEndTime = performance.now() + 2500;  // 2.5 seconds from NOW
-            document.getElementById('slowmoOverlay').classList.add('active');
-            powerupSound();
-            showAchievement('⏱️', 'SLOW MOTION!', '3 seconds activated!');
-            showBigWin('SLOW-MO! ⏱️');
-            createParticles(player.x + 40, player.y + 40, '#00FFFF', 50);
+    slowMoActive = true;
+    slowMoEndTime = performance.now() + 2500;  // 2.5 seconds from NOW
+    document.getElementById('slowmoOverlay').classList.add('active');
+    powerupSound();
+    showAchievement('⏱️', 'SLOW MOTION!', '2.5 seconds activated!');
+    showBigWin('SLOW-MO! ⏱️');
+    createParticles(player.x + 40, player.y + 40, '#00FFFF', 50);
 
-                animals.forEach(a => {
-        if(!a.baseSpeed) a.baseSpeed = a.speed; // Save original speed
+    // Slow down all existing animals
+    animals.forEach(a => {
+        if(!a.baseSpeed) a.baseSpeed = a.speed;
         if(!a.baseVx && a.vx !== undefined) a.baseVx = a.vx;
-        a.speed *= 0.3;  // Slow down 70%
+        a.speed *= 0.3;
         if(a.vx !== undefined) a.vx *= 0.3;
+    });
+}
 
-
-        }
-
-        function checkSlowMo(time) {
-            if(slowMoActive && time >= slowMoEndTime) {
-                slowMoActive = false;
-                document.getElementById('slowmoOverlay').classList.remove('active');
-
-
-                    animals.forEach(a => {
+function checkSlowMo(time) {
+    if(slowMoActive && time >= slowMoEndTime) {
+        slowMoActive = false;
+        document.getElementById('slowmoOverlay').classList.remove('active');
+        
+        // Speed up existing animals back to normal
+        animals.forEach(a => {
             if(a.baseSpeed) {
                 a.speed = a.baseSpeed;
                 delete a.baseSpeed;
@@ -2321,10 +2321,9 @@ function resetGameTracker() {
                 delete a.baseVx;
             }
         });
+    }
+}
 
-
-            }
-        }
 
         function checkAchievements() {
             if(streak === 5 && !achievements.streak5) {
