@@ -2868,32 +2868,41 @@ if (time - lastHeartSpawn > 20000 && lives < 5 && Math.random() < 0.05) {
     // Update power-up numbers
 for (let i = powerupNumbers.length - 1; i >= 0; i--) {
     powerupNumbers[i].y += powerupNumbers[i].speed;
-    
+
+    // Add swerve if it exists (for consistency with animals/danger)
+    if (powerupNumbers[i].swerveOffset !== undefined) {
+        powerupNumbers[i].swerveOffset += powerupNumbers[i].swerveSpeed || 0;
+        const swerveX = Math.sin(powerupNumbers[i].swerveOffset) * (powerupNumbers[i].swerveAmount || 0);
+        powerupNumbers[i].currentX = powerupNumbers[i].x + swerveX;
+    }
+
     const hit = checkHit(powerupNumbers[i]);
-    
+
     if (hit === true) {
-        powerupSound();
-        activateSlowMo();
-        powerupsCaught++;
-        gameAchievementTracker.powerupsCaughtThisGame++;
-        checkAchievement('powerupMaster');
-        
-        // ❤️ HEART CHECK - Extra Life!
         if (powerupNumbers[i].type?.isHeart) {
+            // ❤️ HEART ONLY: Extra life, no slow-mo
             lives = Math.min(5, lives + 1);
             updateLives();
-            lifeUpSound();  // Add this sound later
-            createParticles(powerupNumbers[i].x, powerupNumbers[i].y, '#ff4444', 40);
+            lifeUpSound();
+            createParticles(powerupNumbers[i].x, powerupNumbers[i].y, '#ff4444', 50);
+            showAchievement('❤️', 'Extra Life!', 'Heart caught!');
+            showBigWin('EXTRA LIFE! ❤️');
+            if (navigator.vibrate) navigator.vibrate([30, 50, 30]); // Different vibe pattern
         } else {
-            createParticles(powerupNumbers[i].x, powerupNumbers[i].y, '#00FFFF', 30);
+            // 6️⃣7️⃣ ONLY: Slow-mo + stats
+            powerupSound();
+            activateSlowMo();
+            powerupsCaught++;
+            gameAchievementTracker.powerupsCaughtThisGame++;
+            checkAchievement('powerupMaster');
+            createParticles(powerupNumbers[i].x, powerupNumbers[i].y, '#00FFFF', 40);
+            if (navigator.vibrate) navigator.vibrate([10, 30, 10]);
         }
-        
+
         powerupNumbers.splice(i, 1);
-        
-        if (navigator.vibrate) navigator.vibrate([10, 30, 10]);
         continue;
     }
-    
+
     if (powerupNumbers[i].y > gameHeight) {
         powerupNumbers.splice(i, 1);
     }
