@@ -2570,7 +2570,6 @@ function checkSlowMo(time) {
         ctx.save();
         ctx.translate(d.x + swerveX, d.y);
         ctx.rotate(d.rotation);
-        
 
         // Red warning glow
         ctx.shadowColor = '#FF0000';
@@ -2589,38 +2588,30 @@ function checkSlowMo(time) {
         d.currentX = d.x + swerveX;
     });
 
-// Draw powerups ✨
-powerupNumbers.forEach(p => {
-    p.swerveOffset += p.swerveSpeed;
-    const swerveX = Math.sin(p.swerveOffset) * p.swerveAmount;
+    // Draw powerups
+    powerupNumbers.forEach(p => {
+        p.swerveOffset += p.swerveSpeed;
+        const swerveX = Math.sin(p.swerveOffset) * p.swerveAmount;
 
-    ctx.save();
-    ctx.translate(p.x + swerveX, p.y);
+        ctx.save();
+        ctx.translate(p.x + swerveX, p.y);
 
-    const type = p.type;
-    if (type.isHeart) {
-        ctx.shadowColor = type.glowColor || '#ff69b4';
-        ctx.shadowBlur = 25;
-        const pulse = 1 + 0.2 * Math.sin(Date.now() * 0.005);
-        ctx.scale(pulse, pulse);
-    } else {
         ctx.shadowColor = '#00FFFF';
         ctx.shadowBlur = 20;
-    }
 
-    ctx.fillStyle = '#000000';
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.font = `${emojiSize}px Arial, "Apple Color Emoji", sans-serif`;
-    ctx.fillText(type.emoji, 0, 0);
+        ctx.fillStyle = '#000000';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.font = `${emojiSize}px Arial, "Apple Color Emoji", sans-serif`;
+        ctx.fillText(p.type.emoji, 0, 0);
 
-    ctx.shadowBlur = 0;
-    ctx.restore();
+        ctx.shadowBlur = 0;
+        ctx.restore();
 
-    p.rotation += slowMoActive ? 0.015 : 0.04;
-    p.currentX = p.x + swerveX;
-});
-
+        p.rotation += slowMoActive ? 0.015 : 0.04;
+        p.currentX = p.x + swerveX;
+    });
+}
 
         function checkHit(a) {
             const dx = (a.currentX || a.x) - (player.x + 40);
@@ -2763,15 +2754,14 @@ if (time - lastHeartSpawn > 20000 && lives < 5 && Math.random() < 0.05) {
     powerupNumbers.push({
         x: 40 + Math.random() * 100,
         y: 80,
-        speed: 1.0,
+        speed: 1.0,          // FASTER fall
         type: { 
             points: 500, 
             emoji: '❤️', 
             color: '#ff4444',
-            glowColor: '#ff69b4',  // ✨ ADD THIS
             isHeart: true 
         },
-        swerveSpeed: 0.02,
+        swerveSpeed: 0.02,   // ADD SWERVE!
         swerveAmount: 20,
         swerveOffset: Math.random() * Math.PI * 2
     });
@@ -2877,34 +2867,29 @@ if (time - lastHeartSpawn > 20000 && lives < 5 && Math.random() < 0.05) {
 
     // Update power-up numbers
 for (let i = powerupNumbers.length - 1; i >= 0; i--) {
-    // ❤️ SWERVE for hearts!
-    if (powerupNumbers[i].type?.isHeart) {
-        powerupNumbers[i].swerveOffset += powerupNumbers[i].swerveSpeed * 0.02;
-        powerupNumbers[i].x += Math.sin(powerupNumbers[i].swerveOffset) * (powerupNumbers[i].swerveAmount || 20);
-    }
-    
-    powerupNumbers[i].y += powerupNumbers[i].speed;  // ✅ Movement!
+    powerupNumbers[i].y += powerupNumbers[i].speed;
     
     const hit = checkHit(powerupNumbers[i]);
     
     if (hit === true) {
-        // ❤️ HEARTS - No slow-mo!
+        powerupSound();
+        activateSlowMo();
+        powerupsCaught++;
+        gameAchievementTracker.powerupsCaughtThisGame++;
+        checkAchievement('powerupMaster');
+        
+        // ❤️ HEART CHECK - Extra Life!
         if (powerupNumbers[i].type?.isHeart) {
             lives = Math.min(5, lives + 1);
             updateLives();
-            lifeUpSound();
+            lifeUpSound();  // Add this sound later
             createParticles(powerupNumbers[i].x, powerupNumbers[i].y, '#ff4444', 40);
         } else {
-            // 67 Powerups - Slow-mo!
-            powerupSound();
-            activateSlowMo();
-            powerupsCaught++;
-            gameAchievementTracker.powerupsCaughtThisGame++;
-            checkAchievement('powerupMaster');
             createParticles(powerupNumbers[i].x, powerupNumbers[i].y, '#00FFFF', 30);
         }
         
         powerupNumbers.splice(i, 1);
+        
         if (navigator.vibrate) navigator.vibrate([10, 30, 10]);
         continue;
     }
@@ -2913,7 +2898,6 @@ for (let i = powerupNumbers.length - 1; i >= 0; i--) {
         powerupNumbers.splice(i, 1);
     }
 }
-
 
 
     // Update danger items
