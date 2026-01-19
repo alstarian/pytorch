@@ -1960,6 +1960,11 @@
         let lastDangerSpawn = 0;
         let lastHeartSpawn = 0;
         let currentZone = 'Training Grounds';  // ADD
+        let isDragging = false;
+        
+
+
+        const BASKET_RADIUS = 40;
         
        
         let backgroundElements = [];           // ADD
@@ -3551,20 +3556,42 @@ function startGame() {
             submitScoreToLeaderboard(playerName, score);
         });
 
-        canvas.addEventListener('touchmove', (e) => {
-            if (!gameRunning) return;
-            e.preventDefault();
-            const rect = canvas.getBoundingClientRect();
-            player.x = e.touches[0].clientX - rect.left - 40;
-            player.x = Math.max(0, Math.min(gameWidth - 80, player.x));
-        }, { passive: false });
+        // DRAG-START: Check if finger/mouse hits basket
+canvas.addEventListener('touchstart', handlePointerDown, { passive: false });
+canvas.addEventListener('mousedown', handlePointerDown);
 
-        canvas.addEventListener('mousemove', (e) => {
-            if (!gameRunning) return;
-            const rect = canvas.getBoundingClientRect();
-            player.x = e.clientX - rect.left - 40;
-            player.x = Math.max(0, Math.min(gameWidth - 80, player.x));
-        });
+function handlePointerDown(e) {
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    const x = (e.type === 'touchstart' ? e.touches[0].clientX : e.clientX) - rect.left;
+    
+    // ONLY start drag if tap hits basket area
+    const dx = x - (player.x);
+    const dist = Math.sqrt(dx * dx + 40 * 40);  // Rough basket hit check (y~constant)
+    if (dist <= BASKET_RADIUS) {
+        isDragging = true;
+    }
+}
+
+// DRAG-MOVE: Only if drag started
+canvas.addEventListener('touchmove', (e) => {
+    if (!gameRunning || !isDragging) return;
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    player.x = Math.max(0, Math.min(gameWidth - 80, e.touches[0].clientX - rect.left - 40));
+}, { passive: false });
+
+canvas.addEventListener('mousemove', (e) => {
+    if (!gameRunning || !isDragging) return;
+    const rect = canvas.getBoundingClientRect();
+    player.x = Math.max(0, Math.min(gameWidth - 80, e.clientX - rect.left - 40));
+});
+
+// DRAG-END: Stop on release/lift
+canvas.addEventListener('touchend', () => { isDragging = false; });
+canvas.addEventListener('mouseup', () => { isDragging = false; });
+document.addEventListener('touchend', () => { isDragging = false; });  // Edge case
+document.addEventListener('mouseup', () => { isDragging = false; });
 
         document.addEventListener('keydown', (e) => {
             if (!gameRunning) return;
