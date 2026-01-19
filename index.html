@@ -1960,9 +1960,54 @@
         let lastDangerSpawn = 0;
         let lastHeartSpawn = 0;
         let currentZone = 'Training Grounds';  // ADD
-        //let level = 1;                          // ADD
-        //let nextLevelScore = 1000;             // ADD
+        
+       
         let backgroundElements = [];           // ADD
+
+let currentZoneIndex = 0;  // Tracks current zone
+
+const progressionZones = [
+    {
+        name: 'Training Grounds',
+        background: 'linear-gradient(180deg, #87CEEB 0%, #B0E0E6 50%, #90EE90 100%)',
+        color: '#667eea',
+        emojiZone: 'Training Grounds'  // Triggers sun + clouds
+    },
+    {
+        name: 'Arctic Tundra ❄️',
+        background: 'linear-gradient(180deg, #1e3a5f 0%, #2e5984 40%, #87ceeb 100%)',
+        color: '#4ECDC4',
+        emojiZone: 'Arctic Tundra'     // Triggers snow + aurora
+    },
+    {
+        name: 'Jungle Paradise 🌴',
+        background: 'linear-gradient(180deg, #1a4d2e 0%, #2d5a3d 40%, #4f7942 100%)',
+        color: '#4ade80',
+        emojiZone: null
+    },
+    {
+        name: 'Savanna Sunset 🦁',
+        background: 'linear-gradient(180deg, #8B4513 0%, #CD853F 40%, #DAA520 100%)',
+        color: '#FFA500',
+        emojiZone: null
+    },
+    {
+        name: 'Mystic Forest 🌙',
+        background: 'linear-gradient(180deg, #2C1654 0%, #4A235A 40%, #6C3483 100%)',
+        color: '#9B59B6',
+        emojiZone: null
+    },
+    {
+        name: 'Volcanic Valley 🌋',
+        background: 'linear-gradient(180deg, #4A0E0E 0%, #7D2020 40%, #B22222 100%)',
+        color: '#FF6B6B',
+        emojiZone: null
+    }
+];
+
+
+
+
 
 
 
@@ -1970,7 +2015,6 @@
     backgroundElements = [];
 
     if (zoneName === 'Training Grounds') {
-        // 4 drifting clouds
         for (let i = 0; i < 4; i++) {
             backgroundElements.push({
                 emoji: '☁️',
@@ -1980,7 +2024,6 @@
                 size: 35 + Math.random() * 15
             });
         }
-        // Sun
         backgroundElements.push({
             emoji: '☀️',
             x: gameWidth / 2,
@@ -1989,7 +2032,6 @@
             size: 45
         });
     } else if (zoneName === 'Arctic Tundra') {
-        // 18 falling snowflakes
         for (let i = 0; i < 18; i++) {
             backgroundElements.push({
                 emoji: '❄️',
@@ -2004,7 +2046,6 @@
                 size: 22 + Math.random() * 18
             });
         }
-        // Aurora
         backgroundElements.push({
             emoji: '🌌',
             x: gameWidth / 2,
@@ -2013,9 +2054,7 @@
             size: 80
         });
     }
-    // Other zones = no emojis
 }
-
 
 
 
@@ -3027,6 +3066,28 @@ function drawBackground() {
     checkSlowMo(time);
 
 
+        const newZoneIndex = Math.floor(score / 5000);
+    if (newZoneIndex > currentZoneIndex && newZoneIndex < progressionZones.length) {
+        currentZoneIndex = newZoneIndex;
+        const zone = progressionZones[currentZoneIndex];
+
+        const canvas = document.getElementById('gameCanvas');
+        canvas.style.background = zone.background;
+        document.getElementById('diffLevel').style.color = zone.color;
+
+        if (zone.emojiZone) {
+            createBackgroundElements(zone.emojiZone);
+        } else {
+            backgroundElements = [];  // Clear old emojis
+        }
+
+        showZoneTransition(zone.name);
+        celebrateAchievement('levelup');
+        throwConfetti(100);
+    }
+
+
+
 
 
     const newZoneIndex = Math.floor(score / 5000);
@@ -3048,13 +3109,6 @@ if (newZoneIndex > currentZoneIndex && newZoneIndex < progressionZones.length) {
     celebrateAchievement('levelup');
     throwConfetti(100);
 }
-
-
-// LEVEL SYSTEM - FIXED
-//if (typeof level === 'undefined') level = 1;
-//if (typeof nextLevelScore === 'undefined') nextLevelScore = 1000;
-
-// console.log('DEBUG - Score:', score, 'Level:', level, 'Next:', nextLevelScore);  // TEMP
 
 
 
@@ -3344,38 +3398,20 @@ forcePortraitPause();
 function startGame() {
     initAudio();
     console.log("START GAME CALLED!");
-
     // NEW: Reset achievement tracker
     resetGameTracker();
-
     totalPlays++;
     localStorage.setItem('totalPlays', totalPlays);
-
     dangerItems = []; // Add this line
     lastDangerSpawn = performance.now() + 10000;
-
     document.getElementById('overlay').classList.add('hidden');
     document.getElementById('statsScreen').classList.add('hidden');
     document.getElementById('leaderboardScreen').classList.add('hidden');
     gameRunning = true;
-    paused = false;  // ADD THIS LINE - make sure game isn't paused
+    paused = false; // Make sure game isn't paused
+
     score = 0;
     lives = 3;
-
-
-    currentZoneIndex = 0;
-    const initialZone = progressionZones[0];
-    const canvas = document.getElementById('gameCanvas');
-    canvas.style.background = initialZone.background;
-    document.getElementById('diffLevel').style.color = initialZone.color;
-    createBackgroundElements(initialZone.emojiZone);
-
-
-    //level = 1;
-    // nextLevelScore = 1000;
-    currentZone = 'Training Grounds';
-    backgroundElements = [];
-
     combo = 0;
     streak = 0;
     maxStreak = 0;
@@ -3388,16 +3424,15 @@ function startGame() {
     slowMoActive = false;
     powerupsCaught = 0;
     player.x = gameWidth / 2 - 40;
-    
-    updateZoneTheme(1);  // ADD THIS LINE - Reset canvas background to level 1
-    createBackgroundElements('Training Grounds');  // ← ADD THIS
 
-
+    // NEW ZONE SYSTEM: Reset to first zone (Training Grounds)
+    currentZoneIndex = 0;
+    const initialZone = progressionZones[0];
     const canvas = document.getElementById('gameCanvas');
-    canvas.style.background = 'linear-gradient(180deg, #87CEEB 0%, #B0E0E6 50%, #90EE90 100%)';
-    document.getElementById('diffLevel').style.color = '#667eea'; // Optional: match Training color
+    canvas.style.background = initialZone.background;
+    document.getElementById('diffLevel').style.color = initialZone.color;
+    createBackgroundElements(initialZone.emojiZone);
 
-    
     updateScore();
     updateStreak();
     updateStreakReward();
@@ -3406,11 +3441,10 @@ function startGame() {
     lastSpawn = performance.now();
     lastPowerupSpawn = performance.now() + 10000;
     document.getElementById('pauseButton').style.display = 'flex';
-    
-    // CHANGED: Start the game loop properly
-    animationFrameId = requestAnimationFrame(gameLoop);  // Changed from requestAnimationFrame
-}
 
+    // Start the game loop
+    animationFrameId = requestAnimationFrame(gameLoop);
+}
 
 
         function endGame() {
