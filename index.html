@@ -3011,22 +3011,29 @@ function drawBackground() {
     checkSlowMo(time);
 
 
-    // ADD LEVEL SYSTEM HERE ↓
-    if (score >= nextLevelScore) {
-        level++;
-        nextLevelScore += 1000 * level;
-        updateZoneTheme(level);  // Already exists in your code!
-        
-        if (level === 11 && currentZone === 'Training Grounds') {
-            currentZone = 'Arctic Tundra';
-            createBackgroundElements(currentZone);
-        }
-    }
-    // ↑ END ADD
+// LEVEL SYSTEM - FIXED
+if (typeof level === 'undefined') level = 1;
+if (typeof nextLevelScore === 'undefined') nextLevelScore = 1000;
 
+console.log('DEBUG - Score:', score, 'Level:', level, 'Next:', nextLevelScore);  // TEMP
 
-
+if (score >= nextLevelScore) {
+    console.log('🎉 LEVEL UP! Score:', score, 'New Level:', level + 1);
+    level++;
+    nextLevelScore += 1000 * level;
+    updateZoneTheme(level);
     
+    if (level === 11 && currentZone === 'Training Grounds') {
+        console.log('🌟 ARCTIC TUNDRA UNLOCKED! ❄️');
+        currentZone = 'Arctic Tundra';
+        createBackgroundElements(currentZone);
+    }
+}
+
+
+
+
+
 
     // ALWAYS DRAW THE SCENE (even when paused)
     ctx.clearRect(0, 0, gameWidth, gameHeight);
@@ -3291,6 +3298,8 @@ function forcePortraitPause() {
         } else {
             gameRunning = true;  // Restart gameLoop
             gameLoop(performance.now());  // Restart animation
+
+
         }
     }
 }
@@ -3326,6 +3335,13 @@ function startGame() {
     paused = false;  // ADD THIS LINE - make sure game isn't paused
     score = 0;
     lives = 3;
+
+
+    level = 1;
+    nextLevelScore = 1000;
+    currentZone = 'Training Grounds';
+    backgroundElements = [];
+    
     combo = 0;
     streak = 0;
     maxStreak = 0;
