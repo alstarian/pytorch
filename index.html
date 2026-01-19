@@ -1959,6 +1959,12 @@
         let dangerItems = [];
         let lastDangerSpawn = 0;
         let lastHeartSpawn = 0;
+        let currentZone = 'Training Grounds';  // ← ADD THIS
+        let level = 1;
+        let nextLevelScore = 1000;
+        let lastHeartSpawn = 0;  // For hearts
+
+
 
 
         function createBackgroundElements(zoneName) {
@@ -2152,19 +2158,30 @@ function getCurrentZone(level) {
 }
 
 // Update zone theme
-function updateZoneTheme(level) {
-    const zone = getCurrentZone(level);
-    const canvas = document.getElementById('gameCanvas');
-    
-    canvas.style.background = zone.background;
-    document.getElementById('diffLevel').style.color = zone.color;
-    
-    if (zone.levels[0] === level) {
-        showZoneTransition(zone.name);
-        celebrateAchievement('levelup');
-       
+function getCurrentZone(level) {
+    if (level >= 11) {
+        return {
+            name: 'Arctic Tundra',
+            background: 'linear-gradient(180deg, #87CEEB 0%, #B0E0E6 50%, #E6F3FF 100%)',
+            color: '#4A90E2',
+            levels: [11, 20]  // Arctic spans levels 11-20
+        };
+    } else if (level >= 1) {
+        return {
+            name: 'Training Grounds',
+            background: 'linear-gradient(180deg, #90EE90 0%, #228B22 100%)',
+            color: '#228B22',
+            levels: [1, 10]
+        };
     }
+    return {
+        name: 'Training Grounds',
+        background: 'linear-gradient(180deg, #90EE90 0%, #228B22 100%)',
+        color: '#228B22',
+        levels: [1, 10]
+    };
 }
+
 
 // Zone transition popup
 function showZoneTransition(zoneName) {
@@ -3000,29 +3017,45 @@ function drawBackground() {
 
 
 
-      function gameLoop(time) {
+function gameLoop(time) {
     if (!gameRunning) return;
 
     checkSlowMo(time);
 
-    // ALWAYS DRAW THE SCENE (even when paused)
+    // LEVEL SYSTEM (runs every frame)
+    if(typeof level === 'undefined') level = 1;
+    if(typeof nextLevelScore === 'undefined') nextLevelScore = 1000;
+    
+    // LEVEL UP CHECK
+    if(score >= nextLevelScore) {
+        level++;
+        nextLevelScore += 1000 * level;
+        
+        // ZONE 2 UNLOCK
+        if(level === 11 && currentZone === 'Training Grounds') {
+            currentZone = 'Arctic Tundra';
+            createBackgroundElements(currentZone);
+            updateZoneTheme(11);
+            console.log('🌟 ARCTIC TUNDRA UNLOCKED! ❄️');
+        }
+    }
+
+    // DRAW SCENE (once only)
     ctx.clearRect(0, 0, gameWidth, gameHeight);
-    drawBackground();  // ← ADD THIS LINE
+    drawBackground();
     drawStars();
     drawGround();
     drawAnimals();
     updateParticles();
     drawPlayer();
 
-    // IF PAUSED: Skip all game logic updates
+    // PAUSED? Skip game logic
     if (paused) {
         animationFrameId = requestAnimationFrame(gameLoop);
-        return;  // Exit early - don't update positions, spawns, collisions
+        return;
     }
 
-    // ACTIVE GAME LOGIC (only runs when NOT paused)
-    
-    // Calculate spawn delay based on difficulty
+    // ACTIVE GAME LOGIC
     const baseSpawnDelay = 1300;
     const reductionPerLevel = 25;
     let minSpawnDelay = 700;
@@ -3030,25 +3063,25 @@ function drawBackground() {
     else if (difficulty >= 30) minSpawnDelay = 600;
     const spawnDelay = Math.max(minSpawnDelay, baseSpawnDelay - (difficulty * reductionPerLevel));
     
-    // Spawn animals
+    // Spawns...
     if (time - lastSpawn > spawnDelay) {
-        spawn();  // CHANGED: was spawnAnimal()
+        spawn();
         lastSpawn = time;
     }
-
-    // Spawn power-ups
     if (time - lastPowerupSpawn > 15000) {
         spawnPowerup();
         lastPowerupSpawn = time;
     }
-
-    // Spawn danger items
     if (time - lastDangerSpawn > 3000) {
         if (Math.random() < 0.3) {
-            spawnDanger();  // CHANGED: was spawnDangerItem()
+            spawnDanger();
         }
         lastDangerSpawn = time;
     }
+    
+    // Missing end - add this:
+    animationFrameId = requestAnimationFrame(gameLoop);
+}
 
 
 
@@ -3317,7 +3350,8 @@ function startGame() {
     player.x = gameWidth / 2 - 40;
     
     updateZoneTheme(1);  // ADD THIS LINE - Reset canvas background to level 1
-    createBackgroundElements('Training Grounds');  // ← ADD THIS
+    currentZone = 'Training Grounds';
+    createBackgroundElements(currentZone);  // Pass zone name
 
     
     updateScore();
