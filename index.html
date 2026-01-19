@@ -1985,6 +1985,31 @@
                     size: 45           // ← Slightly smaller so it doesn't overlap
                 });
             }
+
+
+            else if(zoneName === 'Arctic Tundra') {
+        // ARCTIC ZONE - snowflakes + aurora
+        for(let i = 0; i < 6; i++) {
+            backgroundElements.push({
+                emoji: '❄️',
+                x: Math.random() * gameWidth,
+                y: Math.random() * gameHeight * 0.6,
+                speed: 0.2 + Math.random() * 0.3,
+                size: 25 + Math.random() * 15,
+                rotation: 0
+            });
+        }
+        // Aurora lights (static)
+        backgroundElements.push({
+            emoji: '🌌',
+            x: gameWidth / 2,
+            y: 120,
+            speed: 0,
+            size: 60
+        });
+    }
+
+
         }
 
 
@@ -2927,9 +2952,9 @@ function checkSlowMo(time) {
 function drawBackground() {
     // Draw background elements in correct layer order
     
-    // LAYER 1: Draw sun first (back layer)
+    // LAYER 1: Static background elements first (sun, aurora)
     backgroundElements.forEach((elem) => {
-        if(elem.emoji === '☀️') {  // Only draw sun
+        if(elem.speed === 0) {  // Static elements
             ctx.save();
             ctx.font = `${elem.size}px Arial`;
             ctx.textAlign = 'center';
@@ -2939,29 +2964,38 @@ function drawBackground() {
         }
     });
     
-    // LAYER 2: Draw clouds on top (front layer)
+    // LAYER 2: Moving elements on top (clouds, snowflakes)
     backgroundElements.forEach((elem) => {
-        if(elem.emoji !== '☀️') {  // Draw everything except sun
+        if(elem.speed > 0) {  // Moving elements
             ctx.save();
             ctx.font = `${elem.size}px Arial`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
+            
+            // Rotate snowflakes (Arctic only)
+            if(elem.emoji === '❄️') {
+                ctx.translate(elem.x, elem.y);
+                ctx.rotate((elem.rotation || 0) * Math.PI / 180);
+                ctx.translate(-elem.x, -elem.y);
+                elem.rotation = (elem.rotation || 0) + 1;
+            }
+            
             ctx.fillText(elem.emoji, elem.x, elem.y);
             ctx.restore();
             
-            // Animate moving elements (clouds)
-            if(elem.speed > 0) {
-                elem.x += elem.speed * (slowMoActive ? 0.4 : 1);
-                
-                // Loop clouds back to left when they exit right
-                if(elem.x > gameWidth + 50) {
-                    elem.x = -50;
-                    elem.y = 150 + Math.random() * 200;
-                }
+            // Animate moving elements
+            elem.x += elem.speed * (slowMoActive ? 0.4 : 1);
+            
+            // Loop back when off-screen
+            if(elem.x > gameWidth + 50) {
+                elem.x = -50;
+                if(elem.emoji === '☁️') elem.y = 150 + Math.random() * 200;
+                if(elem.emoji === '❄️') elem.y = Math.random() * gameHeight * 0.6;
             }
         }
     });
 }
+
 
 
 
