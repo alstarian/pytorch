@@ -3090,28 +3090,6 @@ function drawBackground() {
 
 
 
-    const newZoneIndex = Math.floor(score / 5000);
-if (newZoneIndex > currentZoneIndex && newZoneIndex < progressionZones.length) {
-    currentZoneIndex = newZoneIndex;
-    const zone = progressionZones[currentZoneIndex];
-
-    const canvas = document.getElementById('gameCanvas');
-    canvas.style.background = zone.background;
-    document.getElementById('diffLevel').style.color = zone.color;
-
-    if (zone.emojiZone) {
-        createBackgroundElements(zone.emojiZone);
-    } else {
-        backgroundElements = [];  // Clear emojis for non-special zones
-    }
-
-    showZoneTransition(zone.name);
-    celebrateAchievement('levelup');
-    throwConfetti(100);
-}
-
-
-
 
 
 
