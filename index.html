@@ -1961,45 +1961,31 @@
         let lastHeartSpawn = 0;
 
 
-        function drawBackground() {
-    // Draw background elements in correct layer order
-    
-    // LAYER 1: Draw sun first (back layer)
-    backgroundElements.forEach((elem) => {
-        if(elem.emoji === '☀️') {  // Only draw sun
-            ctx.save();
-            ctx.font = `${elem.size}px Arial`;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(elem.emoji, elem.x, elem.y);
-            ctx.restore();
-        }
-    });
-    
-    // LAYER 2: Draw clouds on top (front layer)
-    backgroundElements.forEach((elem) => {
-        if(elem.emoji !== '☀️') {  // Draw everything except sun
-            ctx.save();
-            ctx.font = `${elem.size}px Arial`;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText(elem.emoji, elem.x, elem.y);
-            ctx.restore();
+        function createBackgroundElements(zoneName) {
+            backgroundElements = [];
             
-            // Animate moving elements (clouds)
-            if(elem.speed > 0) {
-                elem.x += elem.speed * (slowMoActive ? 0.4 : 1);
-                
-                // Loop clouds back to left when they exit right
-                if(elem.x > gameWidth + 50) {
-                    elem.x = -50;
-                    elem.y = 150 + Math.random() * 200;
+            if(zoneName === 'Training Grounds') {
+                // Add 4 drifting clouds
+                for(let i = 0; i < 4; i++) {
+                    backgroundElements.push({
+                        emoji: '☁️',
+                        x: Math.random() * gameWidth,
+                        y: 150 + Math.random() * 200,
+                        speed: 0.3 + Math.random() * 0.4,
+                        size: 35 + Math.random() * 15
+                    });
                 }
+                
+                // Sun - positioned below pause button (center-top)
+                backgroundElements.push({
+                    emoji: '☀️',
+                    x: gameWidth / 2,  // ← CHANGED: Center horizontal (where pause button is)
+                    y: 80,            // ← CHANGED: Below pause button (was 60)
+                    speed: 0,
+                    size: 45           // ← Slightly smaller so it doesn't overlap
+                });
             }
         }
-    });
-}
-
 
 
 
