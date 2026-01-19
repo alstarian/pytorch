@@ -3470,13 +3470,7 @@ function startGame() {
     powerupsCaught = 0;
     player.x = gameWidth / 2 - 40;
 
-    // NEW ZONE SYSTEM: Reset to first zone (Training Grounds)
-    currentZoneIndex = 0;
-    const initialZone = progressionZones[0];
-    const canvas = document.getElementById('gameCanvas');
-    canvas.style.background = initialZone.background;
-    document.getElementById('diffLevel').style.color = initialZone.color;
-    createBackgroundElements(initialZone.emojiZone);
+
 
 
 
