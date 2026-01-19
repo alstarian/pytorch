@@ -1991,28 +1991,31 @@
                 });
             }
 
-
-            else if(zoneName === 'Arctic Tundra') {
-        // ARCTIC ZONE - snowflakes + aurora
-        for(let i = 0; i < 6; i++) {
-            backgroundElements.push({
-                emoji: '❄️',
-                x: Math.random() * gameWidth,
-                y: Math.random() * gameHeight * 0.6,
-                speed: 0.2 + Math.random() * 0.3,
-                size: 25 + Math.random() * 15,
-                rotation: 0
-            });
-        }
-        // Aurora lights (static)
+else if(zoneName === 'Arctic Tundra') {
+    // Falling snowflakes (more of them, proper motion)
+    for(let i = 0; i < 18; i++) {
         backgroundElements.push({
-            emoji: '🌌',
-            x: gameWidth / 2,
-            y: 120,
-            speed: 0,
-            size: 60
+            emoji: '❄️',
+            x: Math.random() * gameWidth,
+            y: -50 - Math.random() * gameHeight, // Start above screen
+            speedY: 1.2 + Math.random() * 1.8,
+            swayAmount: 30 + Math.random() * 40,
+            swaySpeed: 0.02 + Math.random() * 0.03,
+            swayOffset: Math.random() * Math.PI * 2,
+            rotation: 0,
+            rotationSpeed: 0.02 + Math.random() * 0.04,
+            size: 22 + Math.random() * 18
         });
     }
+    // Aurora (move it a bit lower so it's visible below HUD)
+    backgroundElements.push({
+        emoji: '🌌',
+        x: gameWidth / 2,
+        y: 160, // Was 120 — moved down to avoid overlap with info bar
+        speed: 0,
+        size: 80
+    });
+}
 
 
         }
@@ -2161,7 +2164,7 @@ function updateZoneTheme(level) {
     const zone = getCurrentZone(level);
     const canvas = document.getElementById('gameCanvas');
     
-    canvas.style.background = zone.background;
+    // canvas.style.background = zone.background;
     document.getElementById('diffLevel').style.color = zone.color;
     
     if (zone.levels[0] === level) {
@@ -2955,52 +2958,70 @@ function checkSlowMo(time) {
 
 
 function drawBackground() {
-    // Draw background elements in correct layer order
-    
     // LAYER 1: Static background elements first (sun, aurora)
     backgroundElements.forEach((elem) => {
-        if(elem.speed === 0) {  // Static elements
+        if (elem.speed === 0 && !elem.speedY) { // Truly static (no movement at all)
             ctx.save();
-            ctx.font = `${elem.size}px Arial`;
+            ctx.font = `${elem.size}px Arial, "Apple Color Emoji", sans-serif`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(elem.emoji, elem.x, elem.y);
             ctx.restore();
         }
     });
-    
-    // LAYER 2: Moving elements on top (clouds, snowflakes)
+
+    // LAYER 2: Moving elements on top (clouds drifting horizontally, snow falling vertically)
     backgroundElements.forEach((elem) => {
-        if(elem.speed > 0) {  // Moving elements
+        if (elem.speed > 0 || elem.speedY > 0) {
             ctx.save();
-            ctx.font = `${elem.size}px Arial`;
+            ctx.font = `${elem.size}px Arial, "Apple Color Emoji", sans-serif`;
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            
-            // Rotate snowflakes (Arctic only)
-            if(elem.emoji === '❄️') {
-                ctx.translate(elem.x, elem.y);
-                ctx.rotate((elem.rotation || 0) * Math.PI / 180);
-                ctx.translate(-elem.x, -elem.y);
-                elem.rotation = (elem.rotation || 0) + 1;
+
+            let drawX = elem.x;
+            let drawY = elem.y;
+
+            if (elem.speedY) {
+                // === ARCTIC SNOWFLAKES: Vertical falling + gentle sway + rotation ===
+                elem.y += elem.speedY * (slowMoActive ? 0.4 : 1);
+                elem.swayOffset += elem.swaySpeed;
+                drawX += Math.sin(elem.swayOffset) * elem.swayAmount;
+
+                elem.rotation += elem.rotationSpeed * (slowMoActive ? 0.4 : 1);
+
+                ctx.translate(drawX, elem.y);
+                ctx.rotate(elem.rotation);
+            } else if (elem.speed > 0) {
+                // === TRAINING GROUNDS CLOUDS: Horizontal drift only ===
+                elem.x += elem.speed * (slowMoActive ? 0.4 : 1);
+                drawX = elem.x;
+                drawY = elem.y;
+                ctx.translate(drawX, drawY);
             }
-            
-            ctx.fillText(elem.emoji, elem.x, elem.y);
+
+            ctx.fillText(elem.emoji, 0, 0);
             ctx.restore();
-            
-            // Animate moving elements
-            elem.x += elem.speed * (slowMoActive ? 0.4 : 1);
-            
-            // Loop back when off-screen
-            if(elem.x > gameWidth + 50) {
-                elem.x = -50;
-                if(elem.emoji === '☁️') elem.y = 150 + Math.random() * 200;
-                if(elem.emoji === '❄️') elem.y = Math.random() * gameHeight * 0.6;
+
+            // === LOOPING LOGIC ===
+            if (elem.speedY) {
+                // Snowflakes: respawn at top when they fall off bottom
+                if (elem.y > gameHeight + 60) {
+                    elem.y = -60;
+                    elem.x = Math.random() * gameWidth;
+                    elem.swayOffset = Math.random() * Math.PI * 2;
+                }
+            } else if (elem.speed > 0) {
+                // Clouds: respawn on left when they drift off right
+                if (elem.x > gameWidth + 60) {
+                    elem.x = -60;
+                    if (elem.emoji === '☁️') {
+                        elem.y = 150 + Math.random() * 200;
+                    }
+                }
             }
         }
     });
 }
-
 
 
 
@@ -3012,24 +3033,31 @@ function drawBackground() {
 
 
 // LEVEL SYSTEM - FIXED
-if (typeof level === 'undefined') level = 1;
-if (typeof nextLevelScore === 'undefined') nextLevelScore = 1000;
+//if (typeof level === 'undefined') level = 1;
+//if (typeof nextLevelScore === 'undefined') nextLevelScore = 1000;
 
-console.log('DEBUG - Score:', score, 'Level:', level, 'Next:', nextLevelScore);  // TEMP
+// console.log('DEBUG - Score:', score, 'Level:', level, 'Next:', nextLevelScore);  // TEMP
 
 if (score >= nextLevelScore) {
-    console.log('🎉 LEVEL UP! Score:', score, 'New Level:', level + 1);
     level++;
     nextLevelScore += 1000 * level;
-    updateZoneTheme(level);
-    
-    if (level === 11 && currentZone === 'Training Grounds') {
-        console.log('🌟 ARCTIC TUNDRA UNLOCKED! ❄️');
+
+    if (level === 11) {
         currentZone = 'Arctic Tundra';
         createBackgroundElements(currentZone);
-    }
-}
 
+        const canvas = document.getElementById('gameCanvas');
+        canvas.style.background = 'linear-gradient(180deg, #1e3a5f 0%, #2e5984 40%, #87ceeb 100%)';
+        document.getElementById('diffLevel').style.color = '#4ECDC4'; // Optional: match Arctic color
+
+        showZoneTransition('Arctic Tundra ❄️');
+        celebrateAchievement('levelup');
+        throwConfetti(80); // Extra celebration for entering new zone
+    }
+
+    // Optional: show a small notification on every level up
+    showZoneTransition('Level ' + level);
+}
 
 
 
@@ -3341,7 +3369,7 @@ function startGame() {
     nextLevelScore = 1000;
     currentZone = 'Training Grounds';
     backgroundElements = [];
-    
+
     combo = 0;
     streak = 0;
     maxStreak = 0;
@@ -3357,6 +3385,11 @@ function startGame() {
     
     updateZoneTheme(1);  // ADD THIS LINE - Reset canvas background to level 1
     createBackgroundElements('Training Grounds');  // ← ADD THIS
+
+
+    const canvas = document.getElementById('gameCanvas');
+    canvas.style.background = 'linear-gradient(180deg, #87CEEB 0%, #B0E0E6 50%, #90EE90 100%)';
+    document.getElementById('diffLevel').style.color = '#667eea'; // Optional: match Training color
 
     
     updateScore();
