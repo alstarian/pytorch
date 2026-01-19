@@ -1961,31 +1961,28 @@
         let lastHeartSpawn = 0;
 
 
-                // Background decorations
-        let backgroundElements = [];
-
         function createBackgroundElements(zoneName) {
             backgroundElements = [];
             
             if(zoneName === 'Training Grounds') {
-                // Add 4 drifting clouds - LOWERED to avoid HUD
+                // Add 4 drifting clouds
                 for(let i = 0; i < 4; i++) {
                     backgroundElements.push({
                         emoji: '☁️',
                         x: Math.random() * gameWidth,
-                        y: 150 + Math.random() * 200,  // ← CHANGE THIS LINE (was 50 + Math.random() * 150)
+                        y: 150 + Math.random() * 200,
                         speed: 0.3 + Math.random() * 0.4,
                         size: 35 + Math.random() * 15
                     });
                 }
                 
-                // Sun - move down to avoid HUD
+                // Sun - positioned below pause button (center-top)
                 backgroundElements.push({
                     emoji: '☀️',
-                    x: gameWidth - 80,
-                    y: 120,  // ← CHANGE THIS LINE (was 60)
+                    x: gameWidth / 2,  // ← CHANGED: Center horizontal (where pause button is)
+                    y: 120,            // ← CHANGED: Below pause button (was 60)
                     speed: 0,
-                    size: 50
+                    size: 45           // ← Slightly smaller so it doesn't overlap
                 });
             }
         }
