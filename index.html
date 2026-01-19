@@ -1959,6 +1959,11 @@
         let dangerItems = [];
         let lastDangerSpawn = 0;
         let lastHeartSpawn = 0;
+        let currentZone = 'Training Grounds';  // ADD
+        let level = 1;                          // ADD
+        let nextLevelScore = 1000;             // ADD
+        let backgroundElements = [];           // ADD
+
 
 
         function createBackgroundElements(zoneName) {
@@ -3004,6 +3009,24 @@ function drawBackground() {
     if (!gameRunning) return;
 
     checkSlowMo(time);
+
+
+    // ADD LEVEL SYSTEM HERE ↓
+    if (score >= nextLevelScore) {
+        level++;
+        nextLevelScore += 1000 * level;
+        updateZoneTheme(level);  // Already exists in your code!
+        
+        if (level === 11 && currentZone === 'Training Grounds') {
+            currentZone = 'Arctic Tundra';
+            createBackgroundElements(currentZone);
+        }
+    }
+    // ↑ END ADD
+
+
+
+    
 
     // ALWAYS DRAW THE SCENE (even when paused)
     ctx.clearRect(0, 0, gameWidth, gameHeight);
