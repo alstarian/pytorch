@@ -2924,28 +2924,45 @@ function checkSlowMo(time) {
 
 
 
-            function drawBackground() {
-    // Draw and animate background elements
+function drawBackground() {
+    // Draw background elements in correct layer order
+    
+    // LAYER 1: Draw sun first (back layer)
     backgroundElements.forEach((elem) => {
-        ctx.save();
-        ctx.font = `${elem.size}px Arial`;
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(elem.emoji, elem.x, elem.y);
-        ctx.restore();
-        
-        // Animate moving elements (clouds)
-        if(elem.speed > 0) {
-            elem.x += elem.speed * (slowMoActive ? 0.4 : 1);
+        if(elem.emoji === '☀️') {  // Only draw sun
+            ctx.save();
+            ctx.font = `${elem.size}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(elem.emoji, elem.x, elem.y);
+            ctx.restore();
+        }
+    });
+    
+    // LAYER 2: Draw clouds on top (front layer)
+    backgroundElements.forEach((elem) => {
+        if(elem.emoji !== '☀️') {  // Draw everything except sun
+            ctx.save();
+            ctx.font = `${elem.size}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(elem.emoji, elem.x, elem.y);
+            ctx.restore();
             
-            // Loop clouds back to left when they exit right
-            if(elem.x > gameWidth + 50) {
-                elem.x = -50;
-                elem.y = 50 + Math.random() * 150; // Vary height
+            // Animate moving elements (clouds)
+            if(elem.speed > 0) {
+                elem.x += elem.speed * (slowMoActive ? 0.4 : 1);
+                
+                // Loop clouds back to left when they exit right
+                if(elem.x > gameWidth + 50) {
+                    elem.x = -50;
+                    elem.y = 150 + Math.random() * 200;
+                }
             }
         }
     });
 }
+
 
 
 
