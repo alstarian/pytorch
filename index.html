@@ -1960,66 +1960,61 @@
         let lastDangerSpawn = 0;
         let lastHeartSpawn = 0;
         let currentZone = 'Training Grounds';  // ADD
-        let level = 1;                          // ADD
-        let nextLevelScore = 1000;             // ADD
+        //let level = 1;                          // ADD
+        //let nextLevelScore = 1000;             // ADD
         let backgroundElements = [];           // ADD
 
 
 
         function createBackgroundElements(zoneName) {
-            backgroundElements = [];
-            
-            if(zoneName === 'Training Grounds') {
-                // Add 4 drifting clouds
-                for(let i = 0; i < 4; i++) {
-                    backgroundElements.push({
-                        emoji: '☁️',
-                        x: Math.random() * gameWidth,
-                        y: 150 + Math.random() * 200,
-                        speed: 0.3 + Math.random() * 0.4,
-                        size: 35 + Math.random() * 15
-                    });
-                }
-                
-                // Sun - positioned below pause button (center-top)
-                backgroundElements.push({
-                    emoji: '☀️',
-                    x: gameWidth / 2,  // ← CHANGED: Center horizontal (where pause button is)
-                    y: 80,            // ← CHANGED: Below pause button (was 60)
-                    speed: 0,
-                    size: 45           // ← Slightly smaller so it doesn't overlap
-                });
-            }
+    backgroundElements = [];
 
-else if(zoneName === 'Arctic Tundra') {
-    // Falling snowflakes (more of them, proper motion)
-    for(let i = 0; i < 18; i++) {
+    if (zoneName === 'Training Grounds') {
+        // 4 drifting clouds
+        for (let i = 0; i < 4; i++) {
+            backgroundElements.push({
+                emoji: '☁️',
+                x: Math.random() * gameWidth,
+                y: 150 + Math.random() * 200,
+                speed: 0.3 + Math.random() * 0.4,
+                size: 35 + Math.random() * 15
+            });
+        }
+        // Sun
         backgroundElements.push({
-            emoji: '❄️',
-            x: Math.random() * gameWidth,
-            y: -50 - Math.random() * gameHeight, // Start above screen
-            speedY: 1.2 + Math.random() * 1.8,
-            swayAmount: 30 + Math.random() * 40,
-            swaySpeed: 0.02 + Math.random() * 0.03,
-            swayOffset: Math.random() * Math.PI * 2,
-            rotation: 0,
-            rotationSpeed: 0.02 + Math.random() * 0.04,
-            size: 22 + Math.random() * 18
+            emoji: '☀️',
+            x: gameWidth / 2,
+            y: 80,
+            speed: 0,
+            size: 45
+        });
+    } else if (zoneName === 'Arctic Tundra') {
+        // 18 falling snowflakes
+        for (let i = 0; i < 18; i++) {
+            backgroundElements.push({
+                emoji: '❄️',
+                x: Math.random() * gameWidth,
+                y: -50 - Math.random() * gameHeight,
+                speedY: 1.2 + Math.random() * 1.8,
+                swayAmount: 30 + Math.random() * 40,
+                swaySpeed: 0.02 + Math.random() * 0.03,
+                swayOffset: Math.random() * Math.PI * 2,
+                rotation: 0,
+                rotationSpeed: 0.02 + Math.random() * 0.04,
+                size: 22 + Math.random() * 18
+            });
+        }
+        // Aurora
+        backgroundElements.push({
+            emoji: '🌌',
+            x: gameWidth / 2,
+            y: 160,
+            speed: 0,
+            size: 80
         });
     }
-    // Aurora (move it a bit lower so it's visible below HUD)
-    backgroundElements.push({
-        emoji: '🌌',
-        x: gameWidth / 2,
-        y: 160, // Was 120 — moved down to avoid overlap with info bar
-        speed: 0,
-        size: 80
-    });
+    // Other zones = no emojis
 }
-
-
-        }
-
 
 
 
@@ -3032,32 +3027,35 @@ function drawBackground() {
     checkSlowMo(time);
 
 
+
+
+    const newZoneIndex = Math.floor(score / 5000);
+if (newZoneIndex > currentZoneIndex && newZoneIndex < progressionZones.length) {
+    currentZoneIndex = newZoneIndex;
+    const zone = progressionZones[currentZoneIndex];
+
+    const canvas = document.getElementById('gameCanvas');
+    canvas.style.background = zone.background;
+    document.getElementById('diffLevel').style.color = zone.color;
+
+    if (zone.emojiZone) {
+        createBackgroundElements(zone.emojiZone);
+    } else {
+        backgroundElements = [];  // Clear emojis for non-special zones
+    }
+
+    showZoneTransition(zone.name);
+    celebrateAchievement('levelup');
+    throwConfetti(100);
+}
+
+
 // LEVEL SYSTEM - FIXED
 //if (typeof level === 'undefined') level = 1;
 //if (typeof nextLevelScore === 'undefined') nextLevelScore = 1000;
 
 // console.log('DEBUG - Score:', score, 'Level:', level, 'Next:', nextLevelScore);  // TEMP
 
-if (score >= nextLevelScore) {
-    level++;
-    nextLevelScore += 1000 * level;
-
-    if (level === 11) {
-        currentZone = 'Arctic Tundra';
-        createBackgroundElements(currentZone);
-
-        const canvas = document.getElementById('gameCanvas');
-        canvas.style.background = 'linear-gradient(180deg, #1e3a5f 0%, #2e5984 40%, #87ceeb 100%)';
-        document.getElementById('diffLevel').style.color = '#4ECDC4'; // Optional: match Arctic color
-
-        showZoneTransition('Arctic Tundra ❄️');
-        celebrateAchievement('levelup');
-        throwConfetti(80); // Extra celebration for entering new zone
-    }
-
-    // Optional: show a small notification on every level up
-    showZoneTransition('Level ' + level);
-}
 
 
 
@@ -3365,8 +3363,16 @@ function startGame() {
     lives = 3;
 
 
-    level = 1;
-    nextLevelScore = 1000;
+    currentZoneIndex = 0;
+    const initialZone = progressionZones[0];
+    const canvas = document.getElementById('gameCanvas');
+    canvas.style.background = initialZone.background;
+    document.getElementById('diffLevel').style.color = initialZone.color;
+    createBackgroundElements(initialZone.emojiZone);
+
+
+    //level = 1;
+    // nextLevelScore = 1000;
     currentZone = 'Training Grounds';
     backgroundElements = [];
 
