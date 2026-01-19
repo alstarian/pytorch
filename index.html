@@ -3438,6 +3438,158 @@ window.matchMedia('(orientation: landscape)').addEventListener('change', forcePo
 forcePortraitPause();
 
 
+function createBackgroundElements(zoneName) {
+    backgroundElements = []; // Clear previous elements
+    
+    if (zoneName === 'Training Grounds') {
+        // ☀️ SUN
+        backgroundElements.push({ 
+            emoji: '☀️', 
+            x: gameWidth / 2, 
+            y: 80, 
+            speed: 0, 
+            size: 50 
+        });
+        
+        // ☁️ CLOUDS
+        for (let i = 0; i < 5; i++) {
+            backgroundElements.push({ 
+                emoji: '☁️', 
+                x: -100 - Math.random() * 200, 
+                y: 120 + Math.random() * 180, 
+                speed: 0.3 + Math.random() * 0.4, 
+                size: 40 + Math.random() * 20 
+            });
+        }
+    } 
+    else if (zoneName === 'Arctic Tundra') {
+        // ❄️ SNOWFLAKES (reduced)
+        for (let i = 0; i < 12; i++) {
+            backgroundElements.push({ 
+                emoji: '❄️', 
+                x: Math.random() * gameWidth, 
+                y: -50 - Math.random() * gameHeight, 
+                speedY: 1.0 + Math.random() * 1.4, 
+                swayAmount: 20 + Math.random() * 40, 
+                swaySpeed: 0.02 + Math.random() * 0.03, 
+                swayOffset: Math.random() * Math.PI * 2,
+                rotation: 0,
+                rotationSpeed: 0.02 + Math.random() * 0.04,
+                size: 20 + Math.random() * 12 
+            });
+        }
+    }
+    else if (zoneName === 'Jungle Paradise') {
+        // 🍃 LEAVES
+        for (let i = 0; i < 10; i++) {
+            backgroundElements.push({ 
+                emoji: '🍃', 
+                x: Math.random() * gameWidth, 
+                y: -50 - Math.random() * gameHeight, 
+                speedY: 0.8 + Math.random() * 1.0, 
+                swayAmount: 30 + Math.random() * 50, 
+                swaySpeed: 0.01 + Math.random() * 0.03, 
+                swayOffset: Math.random() * Math.PI * 2,
+                rotation: 0,
+                rotationSpeed: 0.03 + Math.random() * 0.06,
+                size: 30 + Math.random() * 15 
+            });
+        }
+        
+        // 🦋 BUTTERFLIES
+        for (let i = 0; i < 4; i++) {
+            backgroundElements.push({ 
+                emoji: '🦋', 
+                x: -80 - Math.random() * 100, 
+                y: 100 + Math.random() * (gameHeight - 300), 
+                speed: 0.4 + Math.random() * 0.6, 
+                waveAmount: 40, 
+                waveSpeed: 0.02, 
+                waveOffset: Math.random() * Math.PI * 2, 
+                size: 35 
+            });
+        }
+    }
+    else if (zoneName === 'Savanna Sunset') {
+        // 💨 DUST
+        for (let i = 0; i < 8; i++) {
+            backgroundElements.push({ 
+                emoji: '💨', 
+                x: -100 - Math.random() * 200, 
+                y: (gameHeight / 2) + (Math.random() * 200 - 100), 
+                speed: 0.6 + Math.random() * 0.8, 
+                size: 40 + Math.random() * 25 
+            });
+        }
+        
+        // 🦅 VULTURES
+        for (let i = 0; i < 3; i++) {
+            backgroundElements.push({ 
+                emoji: '🦅', 
+                x: Math.random() * gameWidth, 
+                y: gameHeight + 100, 
+                speedY: -0.8 - Math.random() * 0.6, 
+                speed: 0.3 + Math.random() * 0.4, 
+                size: 40 
+            });
+        }
+    }
+    else if (zoneName === 'Mystic Forest') {
+        // ✨ FIREFLIES
+        for (let i = 0; i < 12; i++) {
+            backgroundElements.push({ 
+                emoji: '✨', 
+                x: Math.random() * gameWidth, 
+                y: Math.random() * (gameHeight - 200) + 100, 
+                speed: 0.2 + Math.random() * 0.4, 
+                speedY: (Math.random() - 0.5) * 0.6, 
+                pulseOffset: Math.random() * Math.PI * 2, 
+                size: 25 + Math.random() * 15 
+            });
+        }
+        
+        // 🌸 PETALS
+        for (let i = 0; i < 6; i++) {
+            backgroundElements.push({ 
+                emoji: '🌸', 
+                x: Math.random() * gameWidth, 
+                y: -50 - Math.random() * 200, 
+                speedY: 0.6 + Math.random() * 0.8, 
+                rotation: 0,
+                rotationSpeed: 0.02 + Math.random() * 0.05,
+                size: 30 
+            });
+        }
+    }
+    else if (zoneName === 'Volcanic Valley') {
+        // 🌫️ ASH
+        for (let i = 0; i < 10; i++) {
+            backgroundElements.push({ 
+                emoji: '🌫️', 
+                x: Math.random() * gameWidth, 
+                y: -50 - Math.random() * gameHeight, 
+                speedY: 0.5 + Math.random() * 0.8, 
+                swayAmount: 15 + Math.random() * 30, 
+                swaySpeed: 0.01 + Math.random() * 0.02, 
+                swayOffset: Math.random() * Math.PI * 2, 
+                size: 35 + Math.random() * 20 
+            });
+        }
+        
+        // ✨ SPARKS
+        for (let i = 0; i < 8; i++) {
+            backgroundElements.push({ 
+                emoji: '✨', 
+                x: Math.random() * gameWidth, 
+                y: gameHeight + 50, 
+                speedY: -2.0 - Math.random() * 2.0, 
+                size: 25 + Math.random() * 15 
+            });
+        }
+    }
+}
+
+
 
 
 function startGame() {
