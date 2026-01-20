@@ -3364,38 +3364,43 @@ function gameLoop(time) {
         }
     }
 
-    if (newZoneIndex > currentZoneIndex && newZoneIndex < progressionZones.length) {
-        currentZoneIndex = newZoneIndex;
-        const zone = progressionZones[currentZoneIndex];
+    // In gameLoop(time) - UPDATE the zone entry block (replace your current if-block)
 
-        // === FRESH START: clear everything from old zone ===
-        animals = [];
-        powerupNumbers = [];
-        dangerItems = [];
-        particles = [];
+if (newZoneIndex > currentZoneIndex && newZoneIndex < progressionZones.length) {
+    currentZoneIndex = newZoneIndex;
+    const zone = progressionZones[currentZoneIndex];
 
-        // Delay first spawns so animals only appear AFTER the modal fades
-        lastSpawn = time + 1200;         // ~1.2 sec delay
-        lastPowerupSpawn = time + 10000;
-        lastDangerSpawn = time + 5000;
-        if (typeof lastHeartSpawn !== 'undefined') lastHeartSpawn = time + 15000;
+    // === TRUE FRESH LEVEL START ===
+    // Clear EVERYTHING from the old zone (no carry-over animals/particles)
+    animals = [];
+    powerupNumbers = [];
+    dangerItems = [];
+    particles = [];
 
-        // Apply new visuals
-        const canvas = document.getElementById('gameCanvas');
-        canvas.style.background = zone.background;
-        document.getElementById('diffLevel').style.color = zone.color;
-        
-        if (zone.emojiZone) {
-            createBackgroundElements(zone.emojiZone);
-        } else {
-            backgroundElements = [];
-        }
-        
-        // Show modal + 2-second pause
-        showZoneTransition(zone.name);
-        
-        throwConfetti(100);
+    // FULL SPAWN RESET: Give a calm "new level" moment
+    // Animals will NOT spawn for ~2 seconds after the modal fades
+    // This creates a dramatic "breath" before the new zone's action begins
+    lastSpawn = time + 2000;         // 2-second calm (tweak if you want shorter/longer)
+    lastPowerupSpawn = time + 12000; // Slightly delayed powerups
+    lastDangerSpawn = time + 8000;   // Dangers come a bit later
+    if (typeof lastHeartSpawn !== 'undefined') lastHeartSpawn = time + 18000;
+
+    // Apply new zone visuals instantly
+    const canvas = document.getElementById('gameCanvas');
+    canvas.style.background = zone.background;
+    document.getElementById('diffLevel').style.color = zone.color;
+    
+    if (zone.emojiZone) {
+        createBackgroundElements(zone.emojiZone);
+    } else {
+        backgroundElements = [];
     }
+    
+    // Modal + 2-second pause
+    showZoneTransition(zone.name);
+    
+    throwConfetti(100);
+}
 
 
 
@@ -3723,18 +3728,20 @@ function startGame() {
 
 
 
-    // Fresh start clears (safe at game start too)
+// Fresh level start for Training Grounds
 animals = [];
 powerupNumbers = [];
 dangerItems = [];
 particles = [];
 
-// Delay first animals so they only appear after the intro modal
-lastSpawn = performance.now() + 1200;
+// Calm start: ~2 seconds before first animals appear
+lastSpawn = performance.now() + 2000;
+lastPowerupSpawn = performance.now() + 12000;
+// (keep any other lastXXXSpawn lines you have)
 
-// Show the intro modal for Training Grounds
+// Show intro modal
 showZoneTransition(initialZone.name);
-throwConfetti(100);
+// throwConfetti(100);
 
 
     updateScore();
