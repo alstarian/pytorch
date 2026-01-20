@@ -2339,20 +2339,38 @@ function getCurrentZone(level) {
     return zones[zones.length - 1];
 }
 
-// Update zone theme
+// Update zone theme - TESTING VERSION (every 1000 points)
 function updateZoneTheme(level) {
-    const zone = getCurrentZone(level);
+    let zoneIndex = 0;
+    let justUnlocked = false;
+    
+    if (score >= 5000 && score < 5050) { zoneIndex = 5; justUnlocked = true; }
+    else if (score >= 5000) zoneIndex = 5;
+    else if (score >= 4000 && score < 4050) { zoneIndex = 4; justUnlocked = true; }
+    else if (score >= 4000) zoneIndex = 4;
+    else if (score >= 3000 && score < 3050) { zoneIndex = 3; justUnlocked = true; }
+    else if (score >= 3000) zoneIndex = 3;
+    else if (score >= 2000 && score < 2050) { zoneIndex = 2; justUnlocked = true; }
+    else if (score >= 2000) zoneIndex = 2;
+    else if (score >= 1000 && score < 1050) { zoneIndex = 1; justUnlocked = true; }
+    else if (score >= 1000) zoneIndex = 1;
+    else zoneIndex = 0;
+
+    const zone = progressionZones[zoneIndex];
     const canvas = document.getElementById('gameCanvas');
     
-    // canvas.style.background = zone.background;
+    canvas.style.background = zone.background;
     document.getElementById('diffLevel').style.color = zone.color;
     
-    if (zone.levels[0] === level) {
+    if (zone.emojiZone) {
+        createBackgroundElements(zone.emojiZone);
+    }
+    
+    if (justUnlocked) {
         showZoneTransition(zone.name);
-        // celebrateAchievement('levelup');
-       
     }
 }
+
 
 // Zone transition popup
 function showZoneTransition(zoneName) {
