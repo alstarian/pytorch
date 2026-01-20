@@ -2367,7 +2367,7 @@ function checkAchievement(achievementId) {
         achievements[achievementId] = true;
         localStorage.setItem('achievements', JSON.stringify(achievements));
         showAchievement(ach.icon, ach.name, ach.desc);
-        celebrateAchievement('milestone');
+        // celebrateAchievement('milestone');
     }
 }
 
