@@ -2605,10 +2605,20 @@ function resetGameTracker() {
         }
 
         function catchSound() {
-            beep(523, 0.08);
-            setTimeout(() => beep(659, 0.08), 40);
-            setTimeout(() => beep(784, 0.12), 80);
+    beep(523, 0.08);
+    
+    // Better haptics for modern devices
+    if (navigator.vibrate) {
+        if (combo >= 10) {
+            navigator.vibrate([5, 10, 5, 10, 5]); // Triple tap for big combos
+        } else if (combo >= 5) {
+            navigator.vibrate([5, 10, 5]); // Double tap for combos
+        } else {
+            navigator.vibrate(10); // Quick tap
         }
+    }
+}
+
 
         function powerupSound() {
             for(let i = 0; i < 8; i++) {
@@ -2623,9 +2633,14 @@ function resetGameTracker() {
         }
 
         function missSound() {
-            beep(392, 0.15);
-            setTimeout(() => beep(330, 0.2), 80);
-        }
+    beep(392, 0.15);
+    
+    // Stronger "warning" pattern for misses
+    if (navigator.vibrate) {
+        navigator.vibrate([30, 20, 30]); // Heavy double-thud
+    }
+}
+
 
         function levelUpSound() {
             beep(659, 0.12);
@@ -3170,6 +3185,14 @@ function checkSlowMo(time) {
                 }
                 updateStreakReward();
             }
+
+                // Life gained haptic
+    if (navigator.vibrate) {
+        navigator.vibrate([15, 10, 15]); // Positive feedback
+    }
+
+
+
         }
 
         function updateLives() {
@@ -3193,8 +3216,7 @@ function checkSlowMo(time) {
                     if(difficulty > maxDifficulty) maxDifficulty = difficulty;
                     updateDifficultyDisplay();
                     
-                    // NEW: Update zone theme when level changes
-                    // updateZoneTheme(difficulty);
+                
                     
                     
                     showAchievement('⬆️', 'Level Up!', `Level ${difficulty}`);
