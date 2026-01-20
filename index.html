@@ -1972,42 +1972,42 @@
 let currentZoneIndex = 0;  // Tracks current zone
 
 const progressionZones = [
-    {
-        name: 'Training Grounds',
-        background: 'linear-gradient(180deg, #87CEEB 0%, #B0E0E6 50%, #90EE90 100%)',
-        color: '#667eea',
-        emojiZone: 'Training Grounds'  // Triggers sun + clouds
-    },
-    {
-        name: 'Arctic Tundra ❄️',
-        background: 'linear-gradient(180deg, #1e3a5f 0%, #2e5984 40%, #87ceeb 100%)',
-        color: '#4ECDC4',
-        emojiZone: 'Arctic Tundra'     // Triggers snow + aurora
-    },
-    {
-        name: 'Jungle Paradise 🌴',
-        background: 'linear-gradient(180deg, #1a4d2e 0%, #2d5a3d 40%, #4f7942 100%)',
-        color: '#4ade80',
-        emojiZone: null
-    },
-    {
-        name: 'Savanna Sunset 🦁',
-        background: 'linear-gradient(180deg, #8B4513 0%, #CD853F 40%, #DAA520 100%)',
-        color: '#FFA500',
-        emojiZone: null
-    },
-    {
-        name: 'Mystic Forest 🌙',
-        background: 'linear-gradient(180deg, #2C1654 0%, #4A235A 40%, #6C3483 100%)',
-        color: '#9B59B6',
-        emojiZone: null
-    },
-    {
-        name: 'Volcanic Valley 🌋',
-        background: 'linear-gradient(180deg, #4A0E0E 0%, #7D2020 40%, #B22222 100%)',
-        color: '#FF6B6B',
-        emojiZone: null
-    }
+  {
+    name: "Training Grounds",
+    background: "linear-gradient(180deg, #87CEEB 0%, #B0E0E6 50%, #90EE90 100%)",
+    color: "#667eea",
+    emojiZone: "Training Grounds" // already used for sun + clouds
+  },
+  {
+    name: "Arctic Tundra",
+    background: "linear-gradient(180deg, #1e3a5f 0%, #2e5984 40%, #87ceeb 100%)",
+    color: "#4ECDC4",
+    emojiZone: "Arctic Tundra"    // already used for snow
+  },
+  {
+    name: "Jungle Paradise",
+    background: "linear-gradient(180deg, #1a4d2e 0%, #2d5a3d 40%, #4f7942 100%)",
+    color: "#4ade80",
+    emojiZone: "Jungle Paradise"  // ✅ enable jungle emojis
+  },
+  {
+    name: "Savanna Sunset",
+    background: "linear-gradient(180deg, #8B4513 0%, #CD853F 40%, #DAA520 100%)",
+    color: "#FFA500",
+    emojiZone: null
+  },
+  {
+    name: "Mystic Forest",
+    background: "linear-gradient(180deg, #2C1654 0%, #4A235A 40%, #6C3483 100%)",
+    color: "#9B59B6",
+    emojiZone: null
+  },
+  {
+    name: "Volcanic Valley",
+    background: "linear-gradient(180deg, #4A0E0E 0%, #7D2020 40%, #B22222 100%)",
+    color: "#FF6B6B",
+    emojiZone: null
+  }
 ];
 
 
@@ -2016,13 +2016,14 @@ const progressionZones = [
 
 
 
-        function createBackgroundElements(zoneName) {
-    backgroundElements = [];
+function createBackgroundElements(zoneName) {
+    backgroundElements = []; // clear previous
 
-    if (zoneName === 'Training Grounds') {
+    if (zoneName === "Training Grounds") {
+        // existing sun + clouds...
         for (let i = 0; i < 4; i++) {
             backgroundElements.push({
-                emoji: '☁️',
+                emoji: "☁️",
                 x: Math.random() * gameWidth,
                 y: 150 + Math.random() * 200,
                 speed: 0.3 + Math.random() * 0.4,
@@ -2030,16 +2031,18 @@ const progressionZones = [
             });
         }
         backgroundElements.push({
-            emoji: '☀️',
+            emoji: "☀️",
             x: gameWidth / 2,
             y: 80,
             speed: 0,
             size: 45
         });
-    } else if (zoneName === 'Arctic Tundra') {
+    }
+    else if (zoneName === "Arctic Tundra") {
+        // existing snowflakes...
         for (let i = 0; i < 12; i++) {
             backgroundElements.push({
-                emoji: '❄️',
+                emoji: "❄️",
                 x: Math.random() * gameWidth,
                 y: -50 - Math.random() * gameHeight,
                 speedY: 1.2 + Math.random() * 1.8,
@@ -2051,9 +2054,55 @@ const progressionZones = [
                 size: 18 + Math.random() * 9
             });
         }
-    
+    }
+    else if (zoneName === "Jungle Paradise") {
+        // 🍃 FALLING LEAVES
+        for (let i = 0; i < 14; i++) {
+            backgroundElements.push({
+                emoji: "🍃",
+                x: Math.random() * gameWidth,
+                y: -50 - Math.random() * gameHeight,
+                speedY: 0.8 + Math.random() * 1.0,
+                swayAmount: 30 + Math.random() * 50,
+                swaySpeed: 0.01 + Math.random() * 0.03,
+                swayOffset: Math.random() * Math.PI * 2,
+                rotation: 0,
+                rotationSpeed: 0.03 + Math.random() * 0.06,
+                size: 30 + Math.random() * 15
+            });
+        }
+
+        // 🌿 VINES / EXTRA LEAVES (slow drifting)
+        for (let i = 0; i < 6; i++) {
+            backgroundElements.push({
+                emoji: "🌿",
+                x: Math.random() * gameWidth,
+                y: Math.random() * (gameHeight - 250),
+                speed: 0.2 + Math.random() * 0.3,
+                size: 32 + Math.random() * 10
+            });
+        }
+
+        // 🦋 BUTTERFLIES (horizontal wave motion)
+        for (let i = 0; i < 4; i++) {
+            backgroundElements.push({
+                emoji: "🦋",
+                x: -80 - Math.random() * 100,
+                y: 120 + Math.random() * (gameHeight - 320),
+                speed: 0.4 + Math.random() * 0.6,
+                waveAmount: 40,
+                waveSpeed: 0.02,
+                waveOffset: Math.random() * Math.PI * 2,
+                size: 36
+            });
+        }
+    }
+    else {
+        // other zones: no emojis yet
+        backgroundElements = [];
     }
 }
+
 
 
 
