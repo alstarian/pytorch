@@ -3278,14 +3278,12 @@ function gameLoop(time) {
     if (!gameRunning) return;
     checkSlowMo(time);
 
-    // Progressive zone unlock with debug toggle
-    let thresholdsToUse = DEBUG_FAST_ZONES 
-        ? [0, 1000, 2000, 3000, 4000, 5000]     // Fast testing thresholds (every ~1000 points)
-        : [0, 3000, 8000, 15000, 25000, 40000]; // Challenging final progression
+        // Progressive zone unlock (challenging milestones - no debug mode)
+    const zoneScoreThresholds = [0, 3000, 8000, 15000, 25000, 40000];
 
     let newZoneIndex = 0;
-    for (let i = thresholdsToUse.length - 1; i >= 0; i--) {
-        if (score >= thresholdsToUse[i]) {
+    for (let i = zoneScoreThresholds.length - 1; i >= 0; i--) {
+        if (score >= zoneScoreThresholds[i]) {
             newZoneIndex = i;
             break;
         }
@@ -3310,11 +3308,6 @@ function gameLoop(time) {
         // celebrateAchievement('levelup'); // uncomment if you want it back
         throwConfetti(100); // Big celebration for hard-earned zones!
     }
-
-    // ... (the rest of your gameLoop code continues exactly as before)
-    // ALL THE ORIGINAL CODE BELOW THIS POINT STAYS UNCHANGED
-    // (spawning, animal updates, collisions, danger items, etc.)
-}
 
 
 
