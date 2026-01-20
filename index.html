@@ -1986,6 +1986,10 @@ const progressionZones = [
 ];
 
 
+// Custom score thresholds for each zone (index matches progressionZones)
+// Zone 0: 0 points, Zone 1: 3000+, Zone 2: 8000+, etc.
+const zoneScoreThresholds = [0, 3000, 8000, 15000, 25000, 40000];
+
 
 
 
@@ -3270,32 +3274,46 @@ function drawBackground() {
 
 
 
-      function gameLoop(time) {
+function gameLoop(time) {
     if (!gameRunning) return;
-
     checkSlowMo(time);
 
+    // Progressive zone unlock with debug toggle
+    let thresholdsToUse = DEBUG_FAST_ZONES 
+        ? [0, 1000, 2000, 3000, 4000, 5000]     // Fast testing thresholds (every ~1000 points)
+        : [0, 3000, 8000, 15000, 25000, 40000]; // Challenging final progression
 
-   let zoneDivider = DEBUG_FAST_ZONES ? 1000 : 2000;
-const newZoneIndex = Math.floor(score / zoneDivider);
-
-if (newZoneIndex > currentZoneIndex && newZoneIndex < progressionZones.length) {
-    currentZoneIndex = newZoneIndex;
-    const zone = progressionZones[currentZoneIndex];
-    const canvas = document.getElementById('gameCanvas');
-    
-    canvas.style.background = zone.background;
-    document.getElementById('diffLevel').style.color = zone.color;
-    
-    if (zone.emojiZone) {
-        createBackgroundElements(zone.emojiZone);
-    } else {
-        backgroundElements = []; // Clear old emojis if no theme
+    let newZoneIndex = 0;
+    for (let i = thresholdsToUse.length - 1; i >= 0; i--) {
+        if (score >= thresholdsToUse[i]) {
+            newZoneIndex = i;
+            break;
+        }
     }
-    
-    showZoneTransition(zone.name);
-    // celebrateAchievement('levelup'); // uncomment if you want it back
-    throwConfetti(100);
+
+    // Only trigger when actually entering a new zone
+    if (newZoneIndex > currentZoneIndex && newZoneIndex < progressionZones.length) {
+        currentZoneIndex = newZoneIndex;
+        const zone = progressionZones[currentZoneIndex];
+        const canvas = document.getElementById('gameCanvas');
+        
+        canvas.style.background = zone.background;
+        document.getElementById('diffLevel').style.color = zone.color;
+        
+        if (zone.emojiZone) {
+            createBackgroundElements(zone.emojiZone);
+        } else {
+            backgroundElements = []; // Clear old emojis if no theme
+        }
+        
+        showZoneTransition(zone.name);
+        // celebrateAchievement('levelup'); // uncomment if you want it back
+        throwConfetti(100); // Big celebration for hard-earned zones!
+    }
+
+    // ... (the rest of your gameLoop code continues exactly as before)
+    // ALL THE ORIGINAL CODE BELOW THIS POINT STAYS UNCHANGED
+    // (spawning, animal updates, collisions, danger items, etc.)
 }
 
 
