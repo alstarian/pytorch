@@ -1971,6 +1971,11 @@
 
 let currentZoneIndex = 0;  // Tracks current zone
 
+// ADD THE DEBUG TOGGLE HERE
+const DEBUG_FAST_ZONES = true; // Set to true for testing 1000-point zones, false for normal 2000-point progression
+
+
+
 const progressionZones = [
     { name: "Training Grounds", background: "linear-gradient(180deg, #87CEEB 0%, #B0E0E6 50%, #90EE90 100%)", color: "#667eea", emojiZone: "Training Grounds" },
     { name: "Arctic Tundra", background: "linear-gradient(180deg, #1e3a5f 0%, #2e5984 40%, #87ceeb 100%)", color: "#4ECDC4", emojiZone: "Arctic Tundra" },
@@ -3271,25 +3276,27 @@ function drawBackground() {
     checkSlowMo(time);
 
 
-        const newZoneIndex = Math.floor(score / 2000);
-    if (newZoneIndex > currentZoneIndex && newZoneIndex < progressionZones.length) {
-        currentZoneIndex = newZoneIndex;
-        const zone = progressionZones[currentZoneIndex];
+   let zoneDivider = DEBUG_FAST_ZONES ? 1000 : 2000;
+const newZoneIndex = Math.floor(score / zoneDivider);
 
-        const canvas = document.getElementById('gameCanvas');
-        canvas.style.background = zone.background;
-        document.getElementById('diffLevel').style.color = zone.color;
-
-        if (zone.emojiZone) {
-            createBackgroundElements(zone.emojiZone);
-        } else {
-            backgroundElements = [];  // Clear old emojis
-        }
-
-        showZoneTransition(zone.name);
-        // celebrateAchievement('levelup');
-        throwConfetti(100);
+if (newZoneIndex > currentZoneIndex && newZoneIndex < progressionZones.length) {
+    currentZoneIndex = newZoneIndex;
+    const zone = progressionZones[currentZoneIndex];
+    const canvas = document.getElementById('gameCanvas');
+    
+    canvas.style.background = zone.background;
+    document.getElementById('diffLevel').style.color = zone.color;
+    
+    if (zone.emojiZone) {
+        createBackgroundElements(zone.emojiZone);
+    } else {
+        backgroundElements = []; // Clear old emojis if no theme
     }
+    
+    showZoneTransition(zone.name);
+    // celebrateAchievement('levelup'); // uncomment if you want it back
+    throwConfetti(100);
+}
 
 
 
