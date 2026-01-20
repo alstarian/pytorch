@@ -1994,19 +1994,19 @@ const progressionZones = [
     name: "Savanna Sunset",
     background: "linear-gradient(180deg, #8B4513 0%, #CD853F 40%, #DAA520 100%)",
     color: "#FFA500",
-    emojiZone: null
+    emojiZone: "Savanna Sunset" 
   },
   {
     name: "Mystic Forest",
     background: "linear-gradient(180deg, #2C1654 0%, #4A235A 40%, #6C3483 100%)",
     color: "#9B59B6",
-    emojiZone: null
+    emojiZone: "Mystic Forest"
   },
   {
     name: "Volcanic Valley",
     background: "linear-gradient(180deg, #4A0E0E 0%, #7D2020 40%, #B22222 100%)",
     color: "#FF6B6B",
-    emojiZone: null
+    emojiZone: "Volcanic Valley"
   }
 ];
 
@@ -2096,6 +2096,154 @@ function createBackgroundElements(zoneName) {
                 size: 36
             });
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            else if (zoneName === "Savanna Sunset") {
+    // 🦅 FLYING EAGLES
+    for (let i = 0; i < 3; i++) {
+        backgroundElements.push({
+            emoji: "🦅",
+            x: -100 - Math.random() * 150,
+            y: 80 + Math.random() * 200,
+            speed: 0.5 + Math.random() * 0.4,
+            waveAmount: 20,
+            waveSpeed: 0.015,
+            waveOffset: Math.random() * Math.PI * 2,
+            size: 40
+        });
+    }
+
+    // 🌾 GRASS BLOWING
+    for (let i = 0; i < 8; i++) {
+        backgroundElements.push({
+            emoji: "🌾",
+            x: Math.random() * gameWidth,
+            y: Math.random() * (gameHeight - 200),
+            speed: 0.15 + Math.random() * 0.2,
+            size: 28 + Math.random() * 8
+        });
+    }
+
+    // 🌳 ACACIA TREE (static, background)
+    backgroundElements.push({
+        emoji: "🌳",
+        x: gameWidth * 0.75,
+        y: gameHeight - 180,
+        speed: 0,
+        size: 50
+    });
+
+    // ☀️ SETTING SUN
+    backgroundElements.push({
+        emoji: "☀️",
+        x: gameWidth * 0.2,
+        y: gameHeight - 120,
+        speed: 0,
+        size: 60
+    });
+}
+
+else if (zoneName === "Mystic Forest") {
+    // 🍄 FLOATING MUSHROOMS
+    for (let i = 0; i < 10; i++) {
+        backgroundElements.push({
+            emoji: "🍄",
+            x: Math.random() * gameWidth,
+            y: 100 + Math.random() * (gameHeight - 300),
+            speedY: -0.3 - Math.random() * 0.4,  // Float upward
+            swayAmount: 20 + Math.random() * 30,
+            swaySpeed: 0.02 + Math.random() * 0.02,
+            swayOffset: Math.random() * Math.PI * 2,
+            size: 24 + Math.random() * 12
+        });
+    }
+
+    // ✨ SPARKLES
+    for (let i = 0; i < 15; i++) {
+        backgroundElements.push({
+            emoji: "✨",
+            x: Math.random() * gameWidth,
+            y: Math.random() * gameHeight,
+            speedY: -0.5 - Math.random() * 0.8,
+            swayAmount: 15,
+            swaySpeed: 0.03,
+            swayOffset: Math.random() * Math.PI * 2,
+            size: 16 + Math.random() * 8
+        });
+    }
+
+    // 🌙 MYSTIC MOON
+    backgroundElements.push({
+        emoji: "🌙",
+        x: gameWidth * 0.8,
+        y: 60,
+        speed: 0,
+        size: 50
+    });
+}
+
+else if (zoneName === "Volcanic Valley") {
+    // 🔥 RISING FLAMES
+    for (let i = 0; i < 12; i++) {
+        backgroundElements.push({
+            emoji: "🔥",
+            x: Math.random() * gameWidth,
+            y: gameHeight + Math.random() * 100,  // Start below screen
+            speedY: -1.5 - Math.random() * 1.5,  // Rise fast
+            swayAmount: 40 + Math.random() * 30,
+            swaySpeed: 0.04 + Math.random() * 0.03,
+            swayOffset: Math.random() * Math.PI * 2,
+            rotation: 0,
+            rotationSpeed: 0.05 + Math.random() * 0.05,
+            size: 28 + Math.random() * 16
+        });
+    }
+
+    // 💥 EXPLOSIONS (slow pulse)
+    for (let i = 0; i < 5; i++) {
+        backgroundElements.push({
+            emoji: "💥",
+            x: Math.random() * gameWidth,
+            y: gameHeight - 100 - Math.random() * 150,
+            speed: 0,
+            pulse: true,  // Special flag for pulsing
+            pulseSpeed: 0.03,
+            pulseOffset: Math.random() * Math.PI * 2,
+            size: 35 + Math.random() * 15
+        });
+    }
+
+    // 🌋 VOLCANO (static)
+    backgroundElements.push({
+        emoji: "🌋",
+        x: gameWidth * 0.15,
+        y: gameHeight - 140,
+        speed: 0,
+        size: 70
+    });
+}
+
+
+
+
+
+
+
+
+
     }
     else {
         // other zones: no emojis yet
