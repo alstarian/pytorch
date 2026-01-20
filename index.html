@@ -1972,43 +1972,14 @@
 let currentZoneIndex = 0;  // Tracks current zone
 
 const progressionZones = [
-  {
-    name: "Training Grounds",
-    background: "linear-gradient(180deg, #87CEEB 0%, #B0E0E6 50%, #90EE90 100%)",
-    color: "#667eea",
-    emojiZone: "Training Grounds" // already used for sun + clouds
-  },
-  {
-    name: "Arctic Tundra",
-    background: "linear-gradient(180deg, #1e3a5f 0%, #2e5984 40%, #87ceeb 100%)",
-    color: "#4ECDC4",
-    emojiZone: "Arctic Tundra"    // already used for snow
-  },
-  {
-    name: "Jungle Paradise",
-    background: "linear-gradient(180deg, #1a4d2e 0%, #2d5a3d 40%, #4f7942 100%)",
-    color: "#4ade80",
-    emojiZone: "Jungle Paradise"  // ✅ enable jungle emojis
-  },
-  {
-    name: "Savanna Sunset",
-    background: "linear-gradient(180deg, #8B4513 0%, #CD853F 40%, #DAA520 100%)",
-    color: "#FFA500",
-    emojiZone: null
-  },
-  {
-    name: "Mystic Forest",
-    background: "linear-gradient(180deg, #2C1654 0%, #4A235A 40%, #6C3483 100%)",
-    color: "#9B59B6",
-    emojiZone: null
-  },
-  {
-    name: "Volcanic Valley",
-    background: "linear-gradient(180deg, #4A0E0E 0%, #7D2020 40%, #B22222 100%)",
-    color: "#FF6B6B",
-    emojiZone: null
-  }
+    { name: "Training Grounds", background: "linear-gradient(180deg, #87CEEB 0%, #B0E0E6 50%, #90EE90 100%)", color: "#667eea", emojiZone: "Training Grounds" },
+    { name: "Arctic Tundra", background: "linear-gradient(180deg, #1e3a5f 0%, #2e5984 40%, #87ceeb 100%)", color: "#4ECDC4", emojiZone: "Arctic Tundra" },
+    { name: "Jungle Paradise", background: "linear-gradient(180deg, #1a4d2e 0%, #2d5a3d 40%, #4f7942 100%)", color: "#4ade80", emojiZone: "Jungle Paradise" },
+    { name: "Savanna Sunset", background: "linear-gradient(180deg, #8B4513 0%, #CD853F 40%, #DAA520 100%)", color: "#FFA500", emojiZone: "Savanna Sunset" },  // ← Change
+    { name: "Mystic Forest", background: "linear-gradient(180deg, #2C1654 0%, #4A235A 40%, #6C3483 100%)", color: "#9B59B6", emojiZone: "Mystic Forest" },  // ← Change
+    { name: "Volcanic Valley", background: "linear-gradient(180deg, #4A0E0E 0%, #7D2020 40%, #B22222 100%)", color: "#FF6B6B", emojiZone: "Volcanic Valley" }  // ← Change
 ];
+
 
 
 
@@ -2097,10 +2068,131 @@ function createBackgroundElements(zoneName) {
             });
         }
     }
-    else {
-        // other zones: no emojis yet
+  
+
+        else if (zoneName === "Savanna Sunset") {
+        // 🦅 FLYING EAGLES (horizontal wave motion)
+        for (let i = 0; i < 3; i++) {
+            backgroundElements.push({
+                emoji: "🦅",
+                x: -100 - Math.random() * 150,
+                y: 80 + Math.random() * 200,
+                speed: 0.5 + Math.random() * 0.4,
+                waveAmount: 20,
+                waveSpeed: 0.015,
+                waveOffset: Math.random() * Math.PI * 2,
+                size: 40
+            });
+        }
+        
+        // 🌾 GRASS BLOWING (slow drift)
+        for (let i = 0; i < 8; i++) {
+            backgroundElements.push({
+                emoji: "🌾",
+                x: Math.random() * gameWidth,
+                y: gameHeight - 200 + Math.random() * 80,
+                speed: 0.15 + Math.random() * 0.2,
+                size: 28 + Math.random() * 8
+            });
+        }
+        
+        // 🌳 ACACIA TREE (static, background)
+        backgroundElements.push({
+            emoji: "🌳",
+            x: gameWidth * 0.75,
+            y: gameHeight - 180,
+            speed: 0,
+            size: 50
+        });
+        
+    } else if (zoneName === "Mystic Forest") {
+        // 🍄 FLOATING MUSHROOMS (drift upward)
+        for (let i = 0; i < 10; i++) {
+            backgroundElements.push({
+                emoji: "🍄",
+                x: Math.random() * gameWidth,
+                y: 100 + Math.random() * (gameHeight - 300),
+                speedY: -0.3 - Math.random() * 0.4,  // Float upward
+                swayAmount: 20 + Math.random() * 30,
+                swaySpeed: 0.02 + Math.random() * 0.02,
+                swayOffset: Math.random() * Math.PI * 2,
+                size: 24 + Math.random() * 12
+            });
+        }
+        
+        // ✨ SPARKLES (floating upward)
+        for (let i = 0; i < 15; i++) {
+            backgroundElements.push({
+                emoji: "✨",
+                x: Math.random() * gameWidth,
+                y: Math.random() * gameHeight,
+                speedY: -0.5 - Math.random() * 0.8,
+                swayAmount: 15,
+                swaySpeed: 0.03,
+                swayOffset: Math.random() * Math.PI * 2,
+                size: 16 + Math.random() * 8
+            });
+        }
+        
+        // 🌙 MYSTIC MOON (static)
+        backgroundElements.push({
+            emoji: "🌙",
+            x: gameWidth * 0.8,
+            y: 60,
+            speed: 0,
+            size: 50
+        });
+        
+    } else if (zoneName === "Volcanic Valley") {
+        // 🔥 RISING FLAMES (fast vertical rise)
+        for (let i = 0; i < 12; i++) {
+            backgroundElements.push({
+                emoji: "🔥",
+                x: Math.random() * gameWidth,
+                y: gameHeight + Math.random() * 100,  // Start below screen
+                speedY: -1.5 - Math.random() * 1.5,  // Rise fast
+                swayAmount: 40 + Math.random() * 30,
+                swaySpeed: 0.04 + Math.random() * 0.03,
+                swayOffset: Math.random() * Math.PI * 2,
+                rotation: 0,
+                rotationSpeed: 0.05 + Math.random() * 0.05,
+                size: 28 + Math.random() * 16
+            });
+        }
+        
+        // 💥 EXPLOSIONS (pulsing, static position)
+        for (let i = 0; i < 5; i++) {
+            backgroundElements.push({
+                emoji: "💥",
+                x: Math.random() * gameWidth,
+                y: gameHeight - 100 - Math.random() * 150,
+                speed: 0,
+                pulse: true,  // Special flag for pulsing
+                pulseSpeed: 0.03,
+                pulseOffset: Math.random() * Math.PI * 2,
+                size: 35 + Math.random() * 15
+            });
+        }
+        
+        // 🌋 VOLCANO (static, bottom-left)
+        backgroundElements.push({
+            emoji: "🌋",
+            x: gameWidth * 0.15,
+            y: gameHeight - 140,
+            speed: 0,
+            size: 70
+        });
+        
+    } else {
+        // Other zones: no emojis
         backgroundElements = [];
     }
+
+
+
+
+
+
 }
 
 
@@ -3040,9 +3132,9 @@ function checkSlowMo(time) {
 
 
 function drawBackground() {
-    // LAYER 1: Static background elements first (sun, aurora)
+    // LAYER 1: Static background elements first (sun, moon, tree, volcano)
     backgroundElements.forEach((elem) => {
-        if (elem.speed === 0 && !elem.speedY) { // Truly static (no movement at all)
+        if (elem.speed === 0 && !elem.speedY && !elem.pulse) { // Truly static (no movement at all)
             ctx.save();
             ctx.font = `${elem.size}px Arial, "Apple Color Emoji", sans-serif`;
             ctx.textAlign = 'center';
@@ -3052,9 +3144,9 @@ function drawBackground() {
         }
     });
 
-    // LAYER 2: Moving elements on top (clouds drifting horizontally, snow falling vertically)
+    // LAYER 2: Moving and animated elements
     backgroundElements.forEach((elem) => {
-        if (elem.speed > 0 || elem.speedY > 0) {
+        if (elem.speed > 0 || elem.speedY || elem.pulse) {
             ctx.save();
             ctx.font = `${elem.size}px Arial, "Apple Color Emoji", sans-serif`;
             ctx.textAlign = 'center';
@@ -3063,47 +3155,78 @@ function drawBackground() {
             let drawX = elem.x;
             let drawY = elem.y;
 
+            // === VERTICAL MOVEMENT (snow, leaves, flames, mushrooms, sparkles) ===
             if (elem.speedY) {
-                // === ARCTIC SNOWFLAKES: Vertical falling + gentle sway + rotation ===
                 elem.y += elem.speedY * (slowMoActive ? 0.4 : 1);
-                elem.swayOffset += elem.swaySpeed;
-                drawX += Math.sin(elem.swayOffset) * elem.swayAmount;
+                
+                // Sway side-to-side
+                if (elem.swayAmount) {
+                    elem.swayOffset += elem.swaySpeed;
+                    drawX += Math.sin(elem.swayOffset) * elem.swayAmount;
+                }
 
-                elem.rotation += elem.rotationSpeed * (slowMoActive ? 0.4 : 1);
+                // Rotation (for leaves, snowflakes, flames)
+                if (elem.rotationSpeed) {
+                    elem.rotation = (elem.rotation || 0) + elem.rotationSpeed * (slowMoActive ? 0.4 : 1);
+                }
 
-                ctx.translate(drawX, elem.y);
-                ctx.rotate(elem.rotation);
-            } else if (elem.speed > 0) {
-                // === TRAINING GROUNDS CLOUDS: Horizontal drift only ===
-                elem.x += elem.speed * (slowMoActive ? 0.4 : 1);
-                drawX = elem.x;
-                drawY = elem.y;
-                ctx.translate(drawX, drawY);
-            }
+                // Draw with rotation if needed
+                if (elem.rotation) {
+                    ctx.translate(drawX, elem.y);
+                    ctx.rotate(elem.rotation);
+                    ctx.fillText(elem.emoji, 0, 0);
+                } else {
+                    ctx.fillText(elem.emoji, drawX, elem.y);
+                }
 
-            ctx.fillText(elem.emoji, 0, 0);
-            ctx.restore();
-
-            // === LOOPING LOGIC ===
-            if (elem.speedY) {
-                // Snowflakes: respawn at top when they fall off bottom
-                if (elem.y > gameHeight + 60) {
+                // Wrap logic
+                if (elem.speedY > 0 && elem.y > gameHeight + 60) {
+                    // Falling elements: respawn at top
                     elem.y = -60;
                     elem.x = Math.random() * gameWidth;
                     elem.swayOffset = Math.random() * Math.PI * 2;
+                } else if (elem.speedY < 0 && elem.y < -60) {
+                    // Rising elements: respawn at bottom
+                    elem.y = gameHeight + 60;
+                    elem.x = Math.random() * gameWidth;
                 }
+
+            // === HORIZONTAL MOVEMENT (clouds, eagles, butterflies, grass) ===
             } else if (elem.speed > 0) {
-                // Clouds: respawn on left when they drift off right
+                elem.x += elem.speed * (slowMoActive ? 0.4 : 1);
+                drawX = elem.x;
+                
+                // Vertical wave motion (for eagles and butterflies)
+                if (elem.waveAmount) {
+                    elem.waveOffset = (elem.waveOffset || 0) + elem.waveSpeed;
+                    drawY += Math.sin(elem.waveOffset) * elem.waveAmount;
+                }
+
+                ctx.fillText(elem.emoji, drawX, drawY);
+
+                // Wrap horizontally when off-screen
                 if (elem.x > gameWidth + 60) {
                     elem.x = -60;
                     if (elem.emoji === '☁️') {
-                        elem.y = 150 + Math.random() * 200;
+                        elem.y = 150 + Math.random() * 200; // Randomize cloud height
                     }
                 }
+
+            // === PULSING EFFECT (explosions) ===
+            } else if (elem.pulse) {
+                const scale = 1 + Math.sin(elem.pulseOffset) * 0.2;
+                ctx.globalAlpha = 0.6 + Math.sin(elem.pulseOffset) * 0.3;
+                elem.pulseOffset += elem.pulseSpeed;
+                
+                ctx.font = `${elem.size * scale}px Arial, "Apple Color Emoji", sans-serif`;
+                ctx.fillText(elem.emoji, elem.x, elem.y);
             }
+
+            ctx.restore();
         }
     });
 }
+
 
 
 
