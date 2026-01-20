@@ -2218,15 +2218,15 @@ function celebrateAchievement(type) {
             shakeScreen();
             break;
         case 'combo':
-            throwConfetti(30);
+            //throwConfetti(30);
             break;
         case 'milestone':
             launchFirework(window.innerWidth / 2, 200);
-            throwConfetti(50);
+            // throwConfetti(50);
             break;
         case 'levelup':
             shakeScreen();
-            throwConfetti(40);
+            //throwConfetti(40);
             break;
     }
 }
@@ -3130,7 +3130,7 @@ function drawBackground() {
         }
 
         showZoneTransition(zone.name);
-        celebrateAchievement('levelup');
+        // celebrateAchievement('levelup');
         throwConfetti(100);
     }
 
