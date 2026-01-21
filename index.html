@@ -2146,6 +2146,7 @@
         let lastHeartSpawn = 0;
         let currentZone = 'Training Grounds';  // ADD
         let isDragging = false;
+        let premiumUnlocked = true; // Set to true for testing, false for production
         
 
 
@@ -2910,7 +2911,7 @@ const gameHeight = window.innerHeight;
 }
 
 
-   
+
     document.getElementById('highestLevel').textContent = highestLevelReached;
 
     // FIX: Capitalize animal name before searching
