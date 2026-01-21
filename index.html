@@ -1894,7 +1894,7 @@
                 <p class="stats" id="stats">0 animals rescued</p>
                 <p class="stats" id="streakStats">Best Streak: 0</p>
                 <p class="stats" id="diffStats">Reached Level: 1</p>
-                <p class="stats" id="powerupStats">6️⃣7️⃣ Caught: 0</p>
+                <p class="stats" id="premiumStats">⭐ Premium: 0 (0/14 species)</p>
                 <p class="stats" id="almostMsg" style="color: #FFD700;"></p>
 
                 <input type="text" id="playerNameInput" class="name-input" placeholder="Enter your name" maxlength="20" />
@@ -1932,11 +1932,15 @@
                         <div class="stat-card-value" id="longestStreak">0</div>
                         <div class="stat-card-label">Best Streak</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-card-value" id="totalPowerups">0</div>
-                        <div class="stat-card-label">6️⃣7️⃣ Caught</div>
-                    </div>
+                   <div class="stat-card">
+                    <div class="stat-card-value" id="totalPremiums">0</div>
+                    <div class="stat-card-label">⭐ Total Caught</div>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-card-value" id="premiumCollection">0/14</div>
+                    <div class="stat-card-label">Species Found</div>
+                </div>
+                                    </div>
 
                 <p class="stats" style="margin-top: 20px;">🏆 Highest Level: <span id="highestLevel">1</span></p>
                 <p class="stats">⭐ Favorite Animal: <span id="favAnimal">🐇 Rabbit</span></p>
@@ -2124,7 +2128,16 @@
         let totalPlays = parseInt(localStorage.getItem('totalPlays') || 0);
         let totalAnimalsCaught = parseInt(localStorage.getItem('totalAnimalsCaught') || 0);
         let totalPointsEarned = parseInt(localStorage.getItem('totalPointsEarned') || 0);
-        let totalPowerupsCaught = parseInt(localStorage.getItem('totalPowerupsCaught') || 0);
+        // let totalPowerupsCaught = parseInt(localStorage.getItem('totalPowerupsCaught') || 0);
+
+
+        let totalPremiumsCaught = parseInt(localStorage.getItem('totalPremiumsCaught') || 0);
+        let premiumSpeciesCaught = JSON.parse(localStorage.getItem('premiumSpeciesCaught') || '[]');
+
+
+        // let totalPremiumsCaught = parseInt(localStorage.getItem('totalPremiumsCaught') || 0)
+
+
         let highestLevelReached = parseInt(localStorage.getItem('highestLevelReached') || 1);
         let animalCounts = JSON.parse(localStorage.getItem('animalCounts') || '{}');
         let achievements = JSON.parse(localStorage.getItem('achievements') || '{}');
@@ -2886,7 +2899,18 @@ const gameHeight = window.innerHeight;
     document.getElementById('totalPoints').textContent = totalPointsEarned.toLocaleString();
     document.getElementById('bestScore').textContent = currentHighScore;
     document.getElementById('longestStreak').textContent = bestStreak;
-    document.getElementById('totalPowerups').textContent = totalPowerupsCaught;
+    //document.getElementById('totalPowerups').textContent = totalPowerupsCaught;
+   
+    if (premiumUnlocked) {
+    document.getElementById('totalPremiums').textContent = totalPremiumsCaught;
+    document.getElementById('premiumCollection').textContent = `${premiumSpeciesCaught.length}/14`;
+} else {
+    document.getElementById('totalPremiums').textContent = '🔒';
+    document.getElementById('premiumCollection').textContent = '🔒';
+}
+
+
+   
     document.getElementById('highestLevel').textContent = highestLevelReached;
 
     // FIX: Capitalize animal name before searching
@@ -3683,8 +3707,18 @@ if (time - lastHeartSpawn > 20000 && lives < 5 && Math.random() < 0.05) {
 
 
 
-                if (animals[i].type.premium) {
-    createParticles(animals[i].x, animals[i].y, '#FFD700', 60); // Gold sparkle
+
+
+
+
+
+               if (animals[i].type.premium) {
+    createParticles(animals[i].x, animals[i].y, '#FFD700', 60);
+    
+    // ✅ NEW: Track premium catches
+    totalPremiumsCaught++;
+    localStorage.setItem('totalPremiumsCaught', totalPremiumsCaught);
+    
     if (lives < 5) {
         lives++;
         updateLives();
@@ -3695,14 +3729,14 @@ if (time - lastHeartSpawn > 20000 && lives < 5 && Math.random() < 0.05) {
             setTimeout(() => hearts[lives - 1].classList.remove('gained'), 500);
         }
         showAchievement('❤️', 'Premium Life!', `+1 Life from ${animals[i].type.name}!`);
-        createParticles(animals[i].x, animals[i].y, '#FF1493', 40); // Heart particles
+        createParticles(animals[i].x, animals[i].y, '#FF1493', 40);
     } else {
         score += 100;
         updateScore();
         showAchievement('💰', 'Max Lives Bonus!', '+100 points from premium!');
         createParticles(animals[i].x, animals[i].y, '#FFD700', 50);
     }
-    beep(1000, 0.2); // Victory sound
+    beep(1000, 0.2);
     if (navigator.vibrate) navigator.vibrate([20, 30, 20]);
 }
 
@@ -3944,7 +3978,7 @@ showZoneTransition(initialZone.name);
             const total = Object.values(rescued).reduce((a, b) => a + b, 0);
             totalAnimalsCaught += total;
             totalPointsEarned += score;
-            totalPowerupsCaught += powerupsCaught;
+            // totalPowerupsCaught += powerupsCaught;
             if(maxDifficulty > highestLevelReached) {
                 highestLevelReached = maxDifficulty;
                 localStorage.setItem('highestLevelReached', highestLevelReached);
@@ -3952,7 +3986,7 @@ showZoneTransition(initialZone.name);
 
             localStorage.setItem('totalAnimalsCaught', totalAnimalsCaught);
             localStorage.setItem('totalPointsEarned', totalPointsEarned);
-            localStorage.setItem('totalPowerupsCaught', totalPowerupsCaught);
+            // localStorage.setItem('totalPowerupsCaught', totalPowerupsCaught);
             localStorage.setItem('animalCounts', JSON.stringify(animalCounts));
 
             setTimeout(() => {
@@ -3965,7 +3999,9 @@ showZoneTransition(initialZone.name);
                 document.getElementById('stats').textContent = `${total} animals rescued`;
                 document.getElementById('streakStats').textContent = `Best Streak: ${maxStreak} 🔥`;
                 document.getElementById('diffStats').textContent = `Reached Level: ${maxDifficulty}`;
-                document.getElementById('powerupStats').textContent = `6️⃣7️⃣ Caught: ${powerupsCaught}`;
+                // document.getElementById('powerupStats').textContent = `6️⃣7️⃣ Caught: ${powerupsCaught}`;
+
+                document.getElementById('premiumStats').textContent = `⭐ Premium: ${totalPremiumsCaught} (${premiumSpeciesCaught.length}/14 species)`;
 
                 const savedName = localStorage.getItem('playerName') || '';
                 document.getElementById('playerNameInput').value = savedName;
