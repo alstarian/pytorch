@@ -842,7 +842,7 @@
             border-radius: 20px;
             padding: 8px;
             border: 1px solid rgba(255, 255, 255, 0.05);
-            max-height: 40vh;
+            max-height: 60vh;
             overflow-y: auto;
         }
 
@@ -1745,6 +1745,123 @@
                         <span class="animal-emoji">🦒</span>
                         <span class="animal-name">Giraffe</span>
                     </div>
+
+
+
+
+<!-- PREMIUM ZONE ANIMALS - Complete List -->
+<div class="animal-item" style="border: 2px solid #FFD700; background: rgba(255, 215, 0, 0.1);">
+    <div class="animal-left">
+        <span class="animal-emoji">🦄</span>
+        <span class="animal-name">Unicorn ⭐</span>
+    </div>
+    <span class="animal-points">100</span>
+</div>
+<div class="animal-item" style="border: 2px solid #FFD700; background: rgba(255, 215, 0, 0.1);">
+    <div class="animal-left">
+        <span class="animal-emoji">🦚</span>
+        <span class="animal-name">Peacock ⭐</span>
+    </div>
+    <span class="animal-points">110</span>
+</div>
+<!-- Arctic Tundra (Blue) -->
+<div class="animal-item" style="border: 2px solid #4ECDC4; background: rgba(78, 205, 196, 0.1);">
+    <div class="animal-left">
+        <span class="animal-emoji">🐺</span>
+        <span class="animal-name">Wolf ❄️</span>
+    </div>
+    <span class="animal-points">120</span>
+</div>
+<div class="animal-item" style="border: 2px solid #4ECDC4; background: rgba(78, 205, 196, 0.1);">
+    <div class="animal-left">
+        <span class="animal-emoji">🦭</span>
+        <span class="animal-name">Seal ❄️</span>
+    </div>
+    <span class="animal-points">130</span>
+</div>
+<!-- Jungle Paradise (Green) -->
+<div class="animal-item" style="border: 2px solid #4ade80; background: rgba(74, 222, 128, 0.1);">
+    <div class="animal-left">
+        <span class="animal-emoji">🐒</span>
+        <span class="animal-name">Monkey 🌿</span>
+    </div>
+    <span class="animal-points">140</span>
+</div>
+<div class="animal-item" style="border: 2px solid #4ade80; background: rgba(74, 222, 128, 0.1);">
+    <div class="animal-left">
+        <span class="animal-emoji">🦜</span>
+        <span class="animal-name">Parrot 🌿</span>
+    </div>
+    <span class="animal-points">150</span>
+</div>
+<!-- Savanna Sunset (Orange) -->
+<div class="animal-item" style="border: 2px solid #FFA500; background: rgba(255, 165, 0, 0.1);">
+    <div class="animal-left">
+        <span class="animal-emoji">🦅</span>
+        <span class="animal-name">Eagle 🦁</span>
+    </div>
+    <span class="animal-points">160</span>
+</div>
+<div class="animal-item" style="border: 2px solid #FFA500; background: rgba(255, 165, 0, 0.1);">
+    <div class="animal-left">
+        <span class="animal-emoji">🦓</span>
+        <span class="animal-name">Zebra 🦁</span>
+    </div>
+    <span class="animal-points">170</span>
+</div>
+<!-- Mystic Forest (Purple) -->
+<div class="animal-item" style="border: 2px solid #9B59B6; background: rgba(155, 89, 182, 0.1);">
+    <div class="animal-left">
+        <span class="animal-emoji">🦉</span>
+        <span class="animal-name">Owl ✨</span>
+    </div>
+    <span class="animal-points">180</span>
+</div>
+<div class="animal-item" style="border: 2px solid #9B59B6; background: rgba(155, 89, 182, 0.1);">
+    <div class="animal-left">
+        <span class="animal-emoji">🦇</span>
+        <span class="animal-name">Bat ✨</span>
+    </div>
+    <span class="animal-points">190</span>
+</div>
+<!-- Volcanic Valley (Red) -->
+<div class="animal-item" style="border: 2px solid #FF6B6B; background: rgba(255, 107, 107, 0.1);">
+    <div class="animal-left">
+        <span class="animal-emoji">🐲</span>
+        <span class="animal-name">Dragon 🔥</span>
+    </div>
+    <span class="animal-points">200</span>
+</div>
+<div class="animal-item" style="border: 2px solid #FF6B6B; background: rgba(255, 107, 107, 0.1);">
+    <div class="animal-left">
+        <span class="animal-emoji">🕊️</span>
+        <span class="animal-name">Phoenix 🔥</span>
+    </div>
+    <span class="animal-points">210</span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                     <span class="animal-points">+45</span>
                 </div>
                 <div class="animal-item" style="border: 2px solid #00FFFF; background: rgba(0, 255, 255, 0.1);">
@@ -2725,17 +2842,41 @@ const gameHeight = window.innerHeight;
             radius: 38
         };
 
-        const types = [
-            { emoji: '🐇', name: 'rabbit', points: 10, baseSpeed: 1.8, color: '#FF69B4', isPowerup: false },
-            { emoji: '🐨', name: 'koala', points: 15, baseSpeed: 2.0, color: '#87CEEB', isPowerup: false },
-            { emoji: '🦊', name: 'fox', points: 20, baseSpeed: 2.2, color: '#FF8C00', isPowerup: false },
-            { emoji: '🦁', name: 'lion', points: 25, baseSpeed: 2.4, color: '#FFD700', isPowerup: false },
-            { emoji: '🐼', name: 'panda', points: 30, baseSpeed: 2.6, color: '#FFFFFF', isPowerup: false },
-            { emoji: '🐯', name: 'tiger', points: 35, baseSpeed: 2.8, color: '#FF6347', isPowerup: false },
-            { emoji: '🐘', name: 'elephant', points: 40, baseSpeed: 3.0, color: '#A9A9A9', isPowerup: false },
-            { emoji: '🦒', name: 'giraffe', points: 45, baseSpeed: 3.2, color: '#DAA520', isPowerup: false }
-        ];
+  const types = [
+    // REGULAR ANIMALS (available in all zones)
+    { emoji: "🐰", name: "Rabbit", points: 10, color: "#FFB6C1", premium: false, zone: "all", baseSpeed: 1.8 },
+    { emoji: "🐨", name: "Koala", points: 15, color: "#A9A9A9", premium: false, zone: "all", baseSpeed: 2.0 },
+    { emoji: "🦊", name: "Fox", points: 20, color: "#FF4500", premium: false, zone: "all", baseSpeed: 2.2 },
+    { emoji: "🦁", name: "Lion", points: 25, color: "#DAA520", premium: false, zone: "all", baseSpeed: 2.4 },
+    { emoji: "🐼", name: "Panda", points: 30, color: "#000000", premium: false, zone: "all", baseSpeed: 2.6 },
+    { emoji: "🐯", name: "Tiger", points: 35, color: "#FF8C00", premium: false, zone: "all", baseSpeed: 2.8 },
+    { emoji: "🐘", name: "Elephant", points: 40, color: "#808080", premium: false, zone: "all", baseSpeed: 3.0 },
+    { emoji: "🦒", name: "Giraffe", points: 45, color: "#F4A460", premium: false, zone: "all", baseSpeed: 3.2 },
 
+    // PREMIUM ANIMALS - TRAINING GROUNDS
+    { emoji: "🦄", name: "Unicorn", points: 100, color: "#FF69B4", premium: true, zone: "Training Grounds", baseSpeed: 3.0 },
+    { emoji: "🦚", name: "Peacock", points: 110, color: "#4169E1", premium: true, zone: "Training Grounds", baseSpeed: 3.2 },
+
+    // PREMIUM ANIMALS - ARCTIC TUNDRA
+    { emoji: "🐺", name: "Arctic Wolf", points: 120, color: "#B0E0E6", premium: true, zone: "Arctic Tundra", baseSpeed: 3.4 },
+    { emoji: "🦭", name: "Seal", points: 130, color: "#4682B4", premium: true, zone: "Arctic Tundra", baseSpeed: 3.6 },
+
+    // PREMIUM ANIMALS - JUNGLE PARADISE
+    { emoji: "🐒", name: "Golden Monkey", points: 140, color: "#FFD700", premium: true, zone: "Jungle Paradise", baseSpeed: 3.8 },
+    { emoji: "🦜", name: "Macaw", points: 150, color: "#00CED1", premium: true, zone: "Jungle Paradise", baseSpeed: 4.0 },
+
+    // PREMIUM ANIMALS - SAVANNA SUNSET
+    { emoji: "🦅", name: "Golden Eagle", points: 160, color: "#B8860B", premium: true, zone: "Savanna Sunset", baseSpeed: 4.1 },
+    { emoji: "🦓", name: "Zebra", points: 170, color: "#2F4F4F", premium: true, zone: "Savanna Sunset", baseSpeed: 4.2 },
+
+    // PREMIUM ANIMALS - MYSTIC FOREST
+    { emoji: "🦉", name: "Moon Owl", points: 180, color: "#9370DB", premium: true, zone: "Mystic Forest", baseSpeed: 4.3 },
+    { emoji: "🦇", name: "Mystic Bat", points: 190, color: "#8B008B", premium: true, zone: "Mystic Forest", baseSpeed: 4.4 },
+
+    // PREMIUM ANIMALS - VOLCANIC VALLEY
+    { emoji: "🐉", name: "Dragon", points: 200, color: "#FF4500", premium: true, zone: "Volcanic Valley", baseSpeed: 4.5 },
+    { emoji: "🕊️", name: "Phoenix", points: 220, color: "#FF6347", premium: true, zone: "Volcanic Valley", baseSpeed: 4.7 }
+];
 
      
 
@@ -2978,19 +3119,33 @@ function checkSlowMo(time) {
             }
 
                  function spawn() {
-    const type = types[Math.floor(Math.random() * types.length)];
-    
+    const currentZoneName = progressionZones[currentZoneIndex].name;
+
+    // All regular animals (always available)
+    const regularTypes = types.filter(t => !t.premium);
+
+    // Premium animals only in their correct zone
+    const premiumTypes = types.filter(t => t.premium && t.zone === currentZoneName);
+
+    // Choose: 10% chance for premium if available, otherwise regular
+    let type;
+    if (premiumTypes.length > 0 && Math.random() < 0.1) { // Change 0.1 to 0.2 for more premium, etc.
+        type = premiumTypes[Math.floor(Math.random() * premiumTypes.length)];
+    } else {
+        type = regularTypes[Math.floor(Math.random() * regularTypes.length)];
+    }
+
     let speedMultiplier = slowMoActive ? 0.3 : (Math.min(1 + (difficulty * 0.06), 1.8));
+
+    if (difficulty >= 40) {
+        speedMultiplier = slowMoActive ? 0.3 : 2.2;
+    } else if (difficulty >= 30) {
+        speedMultiplier = slowMoActive ? 0.3 : 2.0;
+    }
+
     const swerveSpeedMultiplier = slowMoActive ? 0.3 : (Math.min(1 + (difficulty * 0.05), 1.5));
     const swerveAmountMultiplier = Math.min(1 + (difficulty * 0.08), 1.6);
-    
-    // NEW: Gentle speed boost at high levels
-    if (difficulty >= 40) {
-        speedMultiplier = slowMoActive ? 0.3 : 2.2; // 20% faster
-    } else if (difficulty >= 30) {
-        speedMultiplier = slowMoActive ? 0.3 : 2.0; // 10% faster
-    }
-    
+
     animals.push({
         x: Math.random() * (gameWidth - 60) + 30,
         y: -50,
@@ -3003,6 +3158,7 @@ function checkSlowMo(time) {
         vx: (Math.random() - 0.5) * 4
     });
 }
+
 
 
         function spawnDanger() {
@@ -3528,6 +3684,34 @@ if (time - lastHeartSpawn > 20000 && lives < 5 && Math.random() < 0.05) {
             
             const points = animals[i].type.points * Math.max(1, combo);
             score += points;
+
+
+
+                if (animals[i].type.premium) {
+    createParticles(animals[i].x, animals[i].y, '#FFD700', 60); // Gold sparkle
+    if (lives < 5) {
+        lives++;
+        updateLives();
+        lifeUpSound();
+        const hearts = document.querySelectorAll('.heart');
+        if (hearts[lives - 1]) {
+            hearts[lives - 1].classList.add('gained');
+            setTimeout(() => hearts[lives - 1].classList.remove('gained'), 500);
+        }
+        showAchievement('❤️', 'Premium Life!', `+1 Life from ${animals[i].type.name}!`);
+        createParticles(animals[i].x, animals[i].y, '#FF1493', 40); // Heart particles
+    } else {
+        score += 100;
+        updateScore();
+        showAchievement('💰', 'Max Lives Bonus!', '+100 points from premium!');
+        createParticles(animals[i].x, animals[i].y, '#FFD700', 50);
+    }
+    beep(1000, 0.2); // Victory sound
+    if (navigator.vibrate) navigator.vibrate([20, 30, 20]);
+}
+
+
+
             
             rescued[animals[i].type.name] = (rescued[animals[i].type.name] || 0) + 1;
             animalCounts[animals[i].type.name] = (animalCounts[animals[i].type.name] || 0) + 1;
