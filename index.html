@@ -3221,72 +3221,80 @@ function checkSlowMo(time) {
 
         function drawAnimals() {
     const emojiSize = window.innerWidth > 768 ? 64 : 48;
-    
-    // Draw animals
 
+    // Draw animals with premium flair
     animals.forEach(a => {
         ctx.save();
         ctx.translate(a.x, a.y);
         ctx.rotate(a.rotation);
 
+        if (a.type.premium) {
+            // Pulsing golden glow
+            const pulse = 1 + Math.sin(performance.now() / 200) * 0.2;
+            ctx.shadowColor = '#FFD700';
+            ctx.shadowBlur = 35 * pulse;
+
+            // Larger size for premium
+            ctx.font = `${emojiSize * 1.25}px Arial, "Apple Color Emoji", sans-serif`;
+        } else {
+            ctx.font = `${emojiSize}px Arial, "Apple Color Emoji", sans-serif`;
+        }
+
         ctx.fillStyle = '#000000';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.font = `${emojiSize}px Arial, "Apple Color Emoji", sans-serif`;
         ctx.fillText(a.type.emoji, 0, 0);
+
+        // Reset shadow
+        ctx.shadowBlur = 0;
 
         ctx.restore();
 
+        // Rotation update
         a.rotation += slowMoActive ? 0.015 : (0.04 + (difficulty * 0.003));
         a.currentX = a.x;
+
+        // Premium trailing sparkles (magical trail)
+        if (a.type.premium && Math.random() < 0.35) {
+            createParticles(a.x, a.y + 20, '#FFD700', 4);
+        }
     });
 
-    // NEW: Draw danger items with warning glow
+    // Danger items (unchanged - keep red glow)
     dangerItems.forEach(d => {
         d.swerveOffset += d.swerveSpeed;
         const swerveX = Math.sin(d.swerveOffset) * d.swerveAmount;
-
         ctx.save();
         ctx.translate(d.x + swerveX, d.y);
         ctx.rotate(d.rotation);
-
-        // Red warning glow
         ctx.shadowColor = '#FF0000';
         ctx.shadowBlur = 25;
-
         ctx.fillStyle = '#000000';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.font = `${emojiSize}px Arial, "Apple Color Emoji", sans-serif`;
         ctx.fillText(d.type.emoji, 0, 0);
-
         ctx.shadowBlur = 0;
         ctx.restore();
-
-        d.rotation += slowMoActive ? 0.02 : 0.06; // Spins faster for warning
+        d.rotation += slowMoActive ? 0.02 : 0.06;
         d.currentX = d.x + swerveX;
     });
 
-    // Draw powerups
+    // Powerups (unchanged - keep cyan glow)
     powerupNumbers.forEach(p => {
         p.swerveOffset += p.swerveSpeed;
         const swerveX = Math.sin(p.swerveOffset) * p.swerveAmount;
-
         ctx.save();
         ctx.translate(p.x + swerveX, p.y);
-
         ctx.shadowColor = '#00FFFF';
         ctx.shadowBlur = 20;
-
         ctx.fillStyle = '#000000';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.font = `${emojiSize}px Arial, "Apple Color Emoji", sans-serif`;
         ctx.fillText(p.type.emoji, 0, 0);
-
         ctx.shadowBlur = 0;
         ctx.restore();
-
         p.rotation += slowMoActive ? 0.015 : 0.04;
         p.currentX = p.x + swerveX;
     });
