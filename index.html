@@ -2902,13 +2902,19 @@ const gameHeight = window.innerHeight;
     document.getElementById('longestStreak').textContent = bestStreak;
     //document.getElementById('totalPowerups').textContent = totalPowerupsCaught;
    
-    if (premiumUnlocked) {
+    /*if (premiumUnlocked) {
     document.getElementById('totalPremiums').textContent = totalPremiumsCaught;
     document.getElementById('premiumCollection').textContent = `${premiumSpeciesCaught.length}/14`;
 } else {
     document.getElementById('totalPremiums').textContent = '🔒';
     document.getElementById('premiumCollection').textContent = '🔒';
 }
+*/
+
+
+// For testing - always show counts (remove the if/else check)
+document.getElementById('totalPremiums').textContent = totalPremiumsCaught;
+document.getElementById('premiumCollection').textContent = `${premiumSpeciesCaught.length}/14`;
 
 
 
