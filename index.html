@@ -29,16 +29,6 @@
 
 
 
-
-            #totalPremium {
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-size: 36px !important;
-}
-
-
-
             .premium-item {
     border: 2px solid #FFD700 !important;
     background: rgba(255, 215, 0, 0.15) !important;
@@ -1921,49 +1911,41 @@
             <div class="modal">
                 <h2>📊 Player Stats</h2>
 
-
-
-
-
                 <div class="stats-grid">
-    <div class="stat-card">
-        <div class="stat-card-value" id="totalGames">0</div>
-        <div class="stat-card-label">Games Played 🎮</div>
+                    <div class="stat-card">
+                        <div class="stat-card-value" id="totalGames">0</div>
+                        <div class="stat-card-label">Games Played</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-value" id="totalAnimals">0</div>
+                        <div class="stat-card-label">Total Caught</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-value" id="totalPoints">0</div>
+                        <div class="stat-card-label">Total Points</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-value" id="bestScore">0</div>
+                        <div class="stat-card-label">High Score</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-value" id="longestStreak">0</div>
+                        <div class="stat-card-label">Best Streak</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-card-value" id="totalPowerups">0</div>
+                        <div class="stat-card-label">6️⃣7️⃣ Caught</div>
+                    </div>
+                </div>
+
+                <p class="stats" style="margin-top: 20px;">🏆 Highest Level: <span id="highestLevel">1</span></p>
+                <p class="stats">⭐ Favorite Animal: <span id="favAnimal">🐇 Rabbit</span></p>
+                <p class="stats" style="margin-top: 15px; color: rgba(255,255,255,0.4); font-size: 12px;">Keep playing to improve your stats!</p>
+
+                <button id="closeStatsBtn">Back to Menu</button>
+            </div>
+        </div>
     </div>
-    <div class="stat-card">
-        <div class="stat-card-value" id="totalAnimals">0</div>
-        <div class="stat-card-label">Animals Caught 🦒</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-card-value" id="totalPoints">0</div>
-        <div class="stat-card-label">Total Points 💰</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-card-value" id="bestScore">0</div>
-        <div class="stat-card-label">High Score 🏆</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-card-value" id="longestStreak">0</div>
-        <div class="stat-card-label">Best Streak 🔥</div>
-    </div>
-    <div class="stat-card">
-        <div class="stat-card-value" id="totalPremium">0</div>
-        <div class="stat-card-label">Premium Caught ⭐</div>
-    </div>
-</div>
-
-<!-- Highest Zone as name (not number) -->
-<p class="stats" style="margin-top: 20px;">🌋 Highest Zone: <span id="highestZone">Training Grounds</span></p>
-<p class="stats">❤️ Favorite Animal: <span id="favAnimal">🐇 Rabbit</span></p>
-<p class="stats" style="margin-top: 15px; color: rgba(255,255,255,0.4); font-size: 12px;">Keep playing to unlock more!</p>
-
-
-
-
-
-
-
-
 
     <div id="leaderboardScreen" class="hidden">
         <div id="overlay">
@@ -2137,7 +2119,6 @@
             return div.innerHTML;
         }
 
-        let totalPremiumCaught = parseInt(localStorage.getItem('totalPremiumCaught') || 0);
         let highScore = parseInt(localStorage.getItem('zooKeeperHighScore') || 0);
         let bestStreak = parseInt(localStorage.getItem('bestStreak') || 0);
         let totalPlays = parseInt(localStorage.getItem('totalPlays') || 0);
@@ -2895,42 +2876,30 @@ const gameHeight = window.innerHeight;
         };
 
         function showStats() {
-    document.getElementById('overlay').classList.add('hidden');
-    document.getElementById('statsScreen').classList.remove('hidden');
-    
-    const currentHighScore = parseInt(localStorage.getItem('zooKeeperHighScore') || 0);
-    
-    document.getElementById('totalGames').textContent = totalPlays;
-    document.getElementById('totalAnimals').textContent = totalAnimalsCaught;
-    document.getElementById('totalPoints').textContent = totalPointsEarned.toLocaleString();
-    document.getElementById('bestScore').textContent = currentHighScore;
-    document.getElementById('longestStreak').textContent = bestStreak;
-    document.getElementById('totalPremium').textContent = totalPremiumCaught;
-    
-    // Highest Zone as name instead of number
-    const zoneNames = [
-        "Training Grounds",
-        "Arctic Tundra",
-        "Jungle Paradise",
-        "Savanna Sunset",
-        "Mystic Forest",
-        "Volcanic Valley"
-    ];
-    const highestZoneIndex = Math.min(highestLevelReached - 1, zoneNames.length - 1);
-    document.getElementById('highestLevel').textContent = zoneNames[highestZoneIndex] || "Training Grounds";
-    
-    // Favorite Animal
-    let maxCount = 0;
-    let favAnimal = 'None';
-    for (let animal in animalCounts) {
-        if (animalCounts[animal] > maxCount) {
-            maxCount = animalCounts[animal];
-            const type = types.find(t => t.name === animal);
-            if (type) favAnimal = type.emoji + ' ' + animal.charAt(0).toUpperCase() + animal.slice(1);
+            document.getElementById('overlay').classList.add('hidden');
+            document.getElementById('statsScreen').classList.remove('hidden');
+
+            const currentHighScore = parseInt(localStorage.getItem('zooKeeperHighScore') || 0);
+
+            document.getElementById('totalGames').textContent = totalPlays;
+            document.getElementById('totalAnimals').textContent = totalAnimalsCaught;
+            document.getElementById('totalPoints').textContent = totalPointsEarned.toLocaleString();
+            document.getElementById('bestScore').textContent = currentHighScore;
+            document.getElementById('longestStreak').textContent = bestStreak;
+            document.getElementById('totalPowerups').textContent = totalPowerupsCaught;
+            document.getElementById('highestLevel').textContent = highestLevelReached;
+
+            let maxCount = 0;
+            let favAnimal = 'None';
+            for(let animal in animalCounts) {
+                if(animalCounts[animal] > maxCount) {
+                    maxCount = animalCounts[animal];
+                    const type = types.find(t => t.name === animal);
+                    if(type) favAnimal = type.emoji + ' ' + animal.charAt(0).toUpperCase() + animal.slice(1);
+                }
+            }
+            document.getElementById('favAnimal').textContent = favAnimal;
         }
-    }
-    document.getElementById('favAnimal').textContent = favAnimal;
-}
 
         function updateDifficultyDisplay() {
             const el = document.getElementById('diffLevel');
@@ -3714,7 +3683,6 @@ if (time - lastHeartSpawn > 20000 && lives < 5 && Math.random() < 0.05) {
         lives++;
         updateLives();
         lifeUpSound();
-       
         const hearts = document.querySelectorAll('.heart');
         if (hearts[lives - 1]) {
             hearts[lives - 1].classList.add('gained');
@@ -3730,8 +3698,6 @@ if (time - lastHeartSpawn > 20000 && lives < 5 && Math.random() < 0.05) {
     }
     beep(1000, 0.2); // Victory sound
     if (navigator.vibrate) navigator.vibrate([20, 30, 20]);
-
-    totalPremiumCaught++; // Track it!
 }
 
 
@@ -3982,7 +3948,6 @@ showZoneTransition(initialZone.name);
             localStorage.setItem('totalPointsEarned', totalPointsEarned);
             localStorage.setItem('totalPowerupsCaught', totalPowerupsCaught);
             localStorage.setItem('animalCounts', JSON.stringify(animalCounts));
-            localStorage.setItem('totalPremiumCaught', totalPremiumCaught);
 
             setTimeout(() => {
                 gameOverAnim.remove();
