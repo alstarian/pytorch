@@ -1925,7 +1925,7 @@
 
 
 
-                <div class="stats-grid">
+<div class="stats-grid">
     <div class="stat-card">
         <div class="stat-card-value" id="totalGames">0</div>
         <div class="stat-card-label">Games Played 🎮</div>
@@ -1952,11 +1952,11 @@
     </div>
 </div>
 
-<!-- Highest Zone as name (not number) -->
 <p class="stats" style="margin-top: 20px;">🌋 Highest Zone: <span id="highestZone">Training Grounds</span></p>
 <p class="stats">❤️ Favorite Animal: <span id="favAnimal">🐇 Rabbit</span></p>
 <p class="stats" style="margin-top: 15px; color: rgba(255,255,255,0.4); font-size: 12px;">Keep playing to unlock more!</p>
 
+<button id="closeStatsBtn">Back to Menu</button>
 
 
 
@@ -1965,20 +1965,18 @@
 
 
 
-    <div id="leaderboardScreen" class="hidden">
-        <div id="overlay">
-            <div class="modal">
-                <h2>🏆 Global Leaderboard</h2>
-                <p class="subtitle">Top Players Worldwide</p>
 
-                <div id="leaderboardList" class="leaderboard-list">
-                    <p class="loading">Loading leaderboard...</p>
-                </div>
 
-                <button id="closeLeaderboardBtn">Back to Menu</button>
-            </div>
+<div id="leaderboardScreen" class="hidden">
+    <div class="modal">
+        <h2>🏆 Global Leaderboard</h2>
+        <p class="subtitle">Top Players Worldwide</p>
+        <div id="leaderboardList" class="leaderboard-list">
+            <p class="loading">Loading leaderboard...</p>
         </div>
+        <button id="closeLeaderboardBtn">Back to Menu</button>
     </div>
+</div>
 
     <div id="achievementPopup" class="achievement">
         <div class="achievement-icon" id="achIcon">🏆</div>
@@ -2907,7 +2905,7 @@ const gameHeight = window.innerHeight;
     document.getElementById('longestStreak').textContent = bestStreak;
     document.getElementById('totalPremium').textContent = totalPremiumCaught;
     
-    // Highest Zone as name instead of number
+    // Highest Zone as name (epic!)
     const zoneNames = [
         "Training Grounds",
         "Arctic Tundra",
@@ -2917,7 +2915,7 @@ const gameHeight = window.innerHeight;
         "Volcanic Valley"
     ];
     const highestZoneIndex = Math.min(highestLevelReached - 1, zoneNames.length - 1);
-    document.getElementById('highestLevel').textContent = zoneNames[highestZoneIndex] || "Training Grounds";
+    document.getElementById('highestZone').textContent = zoneNames[highestZoneIndex] || "Training Grounds";
     
     // Favorite Animal
     let maxCount = 0;
