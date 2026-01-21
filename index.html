@@ -2876,30 +2876,36 @@ const gameHeight = window.innerHeight;
         };
 
         function showStats() {
-            document.getElementById('overlay').classList.add('hidden');
-            document.getElementById('statsScreen').classList.remove('hidden');
+    document.getElementById('overlay').classList.add('hidden');
+    document.getElementById('statsScreen').classList.remove('hidden');
 
-            const currentHighScore = parseInt(localStorage.getItem('zooKeeperHighScore') || 0);
+    const currentHighScore = parseInt(localStorage.getItem('zooKeeperHighScore') || 0);
 
-            document.getElementById('totalGames').textContent = totalPlays;
-            document.getElementById('totalAnimals').textContent = totalAnimalsCaught;
-            document.getElementById('totalPoints').textContent = totalPointsEarned.toLocaleString();
-            document.getElementById('bestScore').textContent = currentHighScore;
-            document.getElementById('longestStreak').textContent = bestStreak;
-            document.getElementById('totalPowerups').textContent = totalPowerupsCaught;
-            document.getElementById('highestLevel').textContent = highestLevelReached;
+    document.getElementById('totalGames').textContent = totalPlays;
+    document.getElementById('totalAnimals').textContent = totalAnimalsCaught;
+    document.getElementById('totalPoints').textContent = totalPointsEarned.toLocaleString();
+    document.getElementById('bestScore').textContent = currentHighScore;
+    document.getElementById('longestStreak').textContent = bestStreak;
+    document.getElementById('totalPowerups').textContent = totalPowerupsCaught;
+    document.getElementById('highestLevel').textContent = highestLevelReached;
 
-            let maxCount = 0;
-            let favAnimal = 'None';
-            for(let animal in animalCounts) {
-                if(animalCounts[animal] > maxCount) {
-                    maxCount = animalCounts[animal];
-                    const type = types.find(t => t.name === animal);
-                    if(type) favAnimal = type.emoji + ' ' + animal.charAt(0).toUpperCase() + animal.slice(1);
-                }
+    // FIX: Capitalize animal name before searching
+    let maxCount = 0;
+    let favAnimal = 'None';
+    for(let animal in animalCounts) {
+        if(animalCounts[animal] > maxCount) {
+            maxCount = animalCounts[animal];
+            // Capitalize first letter to match types array
+            const capitalizedName = animal.charAt(0).toUpperCase() + animal.slice(1);
+            const type = types.find(t => t.name === capitalizedName);
+            if(type) {
+                favAnimal = type.emoji + ' ' + capitalizedName;
             }
-            document.getElementById('favAnimal').textContent = favAnimal;
         }
+    }
+    document.getElementById('favAnimal').textContent = favAnimal;
+}
+
 
         function updateDifficultyDisplay() {
             const el = document.getElementById('diffLevel');
