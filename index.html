@@ -28,17 +28,23 @@
     <style>
 
 
+/* Leaderboard Screen Fix */
+#leaderboardScreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(10, 14, 26, 0.97);
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
 
-            #leaderboardScreen {
-    display: none; /* Hidden by default */
-}
-#leaderboardScreen.active {
-    display: flex !important; /* Show when active */
-}
-#leaderboardOverlay {
-    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(10, 14, 26, 0.97); backdrop-filter: blur(20px);
-    display: flex; align-items: center; justify-content: center; z-index: 1000;
+#leaderboardScreen.hidden {
+    display: none !important;
 }
 
 
