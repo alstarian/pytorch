@@ -1967,14 +1967,17 @@
 
 
 
+<div id="overlay">
+    <div class="modal">...</div>
+</div>
+
+<!-- Leaderboard - OUTSIDE overlay -->
 <div id="leaderboardScreen" class="hidden">
-    <div class="modal">
-        <h2>🏆 Global Leaderboard</h2>
-        <p class="subtitle">Top Players Worldwide</p>
-        <div id="leaderboardList" class="leaderboard-list">
-            <p class="loading">Loading leaderboard...</p>
+    <div id="overlay">
+        <div class="modal">
+            <h2>🏆 Global Leaderboard</h2>
+            <!-- rest of leaderboard -->
         </div>
-        <button id="closeLeaderboardBtn">Back to Menu</button>
     </div>
 </div>
 
@@ -4076,11 +4079,11 @@ showZoneTransition(initialZone.name);
             updateMainMenuHighScore();
         });
 
-        document.getElementById('leaderboardBtn').addEventListener('click', () => {
-            document.getElementById('overlay').classList.add('hidden');
-            document.getElementById('leaderboardScreen').classList.remove('hidden');
-            loadLeaderboard();
-        });
+      document.getElementById('leaderboardBtn').addEventListener('click', () => {
+    document.getElementById('overlay').classList.add('hidden');
+    document.getElementById('leaderboardScreen').classList.remove('hidden');
+    loadLeaderboard();
+});
 
         document.getElementById('closeLeaderboardBtn').addEventListener('click', () => {
             document.getElementById('leaderboardScreen').classList.add('hidden');
