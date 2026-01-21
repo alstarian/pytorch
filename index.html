@@ -3719,12 +3719,27 @@ if (time - lastHeartSpawn > 20000 && lives < 5 && Math.random() < 0.05) {
 
 
 
-               if (animals[i].type.premium) {
+              if (animals[i].type.premium) {
     createParticles(animals[i].x, animals[i].y, '#FFD700', 60);
     
-    // ✅ NEW: Track premium catches
+    // ✅ Track total premium catches
     totalPremiumsCaught++;
     localStorage.setItem('totalPremiumsCaught', totalPremiumsCaught);
+    
+    // ✅ Track unique species caught (THIS WAS MISSING!)
+    if (!premiumSpeciesCaught.includes(animals[i].type.name)) {
+        premiumSpeciesCaught.push(animals[i].type.name);
+        localStorage.setItem('premiumSpeciesCaught', JSON.stringify(premiumSpeciesCaught));
+        
+        // Show special achievement for first catch of this species
+        showAchievement('✨', 'New Discovery!', `First ${animals[i].type.name} caught!`);
+        
+        // Master collector achievement (caught all 14)
+        if (premiumSpeciesCaught.length === 14) {
+            showAchievement('👑', 'Master Collector!', 'All premium animals caught!');
+            celebrateAchievement('milestone');
+        }
+    }
     
     if (lives < 5) {
         lives++;
