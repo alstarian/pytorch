@@ -1880,6 +1880,15 @@
             <button id="startBtn">Start Playing</button>
             <button class="secondary" id="statsBtn">View Stats 📊</button>
             <button class="secondary" id="leaderboardBtn">🏆 Leaderboard</button>
+
+
+
+            <button id="buyPremiumBtn">🔓 Unlock Premium Animals ($2.99)</button>
+            <button class="secondary" id="restoreBtn">Restore Purchases</button>
+
+
+
+
         </div>
     </div>
 
@@ -1974,7 +1983,14 @@
         </div>
     </div>
 
-    <script>
+
+
+
+
+
+
+    <script type="module">
+        import { Purchases } from '@revenuecat/purchases-capacitor';
         const firebaseConfig = {
             apiKey: "AIzaSyDWLgSdmM1E3Mq0_oVQK3H6UfvJWv0A8HM",
             authDomain: "zookeeper-b75c4.firebaseapp.com",
@@ -2175,6 +2191,7 @@ const progressionZones = [
 // Custom score thresholds for each zone (index matches progressionZones)
 // Zone 0: 0 points, Zone 1: 3000+, Zone 2: 8000+, etc.
 const zoneScoreThresholds = [0, 3000, 8000, 15000, 25000, 40000];
+const REVENUECAT_IOS_KEY = 'test_mnppwxZpTeBoKaJsHsIgHTDznRf'; // Your test key
 
 
 
@@ -3139,6 +3156,12 @@ function checkSlowMo(time) {
 
                  function spawn() {
     const currentZoneName = progressionZones[currentZoneIndex].name;
+
+
+    let premiumTypes = [];
+if (premiumUnlocked) {
+    premiumTypes = types.filter(t => t.premium && t.zone === currentZoneName);
+}
 
     // All regular animals (always available)
     const regularTypes = types.filter(t => !t.premium);
@@ -4325,6 +4348,75 @@ document.getElementById('quitButton').addEventListener('click', () => {
         }
     }, 300);
 });
+
+
+
+
+
+
+
+// ===================================
+// REVENUECAT IAP (Test/Local Mode)
+// ===================================
+let premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
+
+async function setupRevenueCat() {
+    try {
+        await Purchases.setDebugLogsEnabled({ enabled: true });
+        await Purchases.configure({ apiKey: REVENUECAT_IOS_KEY });
+
+        const info = await Purchases.getCustomerInfo();
+        if (info.entitlements.active['premium_unlock']) {
+            unlockPremiumAnimals();
+        }
+    } catch (err) {
+        console.error('RevenueCat setup error:', err);
+    }
+}
+
+function unlockPremiumAnimals() {
+    premiumUnlocked = true;
+    localStorage.setItem('premiumUnlocked', 'true');
+    showAchievement('⭐', 'Premium Unlocked!', 'All rare animals available!');
+    throwConfetti(100);
+    // Add any other UI updates (hide buy button, etc.)
+}
+
+// Buy button
+document.getElementById('buyPremiumBtn')?.addEventListener('click', async () => {
+    try {
+        const offerings = await Purchases.getOfferings();
+        const pkg = offerings.current?.availablePackages[0];
+        if (pkg) {
+            const result = await Purchases.purchasePackage({ aPackage: pkg });
+            if (result.customerInfo.entitlements.active['premium_unlock']) {
+                unlockPremiumAnimals();
+            }
+        }
+    } catch (err) {
+        alert('Purchase cancelled or failed');
+    }
+});
+
+// Restore button
+document.getElementById('restoreBtn')?.addEventListener('click', async () => {
+    try {
+        const result = await Purchases.restorePurchases();
+        if (result.customerInfo.entitlements.active['premium_unlock']) {
+            unlockPremiumAnimals();
+            alert('Restore successful!');
+        } else {
+            alert('No purchases to restore');
+        }
+    } catch (err) {
+        alert('Restore failed');
+    }
+});
+
+// Call on app start (add this in startGame() or after initAudio())
+setupRevenueCat();
+
+
 
 
 
