@@ -4354,68 +4354,66 @@ document.getElementById('quitButton').addEventListener('click', () => {
 
 
 
+if (typeof window.Capacitor !== 'undefined') {
+    // ===================================
+    // REVENUECAT IAP (Native Only)
+    // ===================================
+    let premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
 
-// ===================================
-// REVENUECAT IAP (Test/Local Mode)
-// ===================================
-let premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
+    async function setupRevenueCat() {
+        try {
+            await Purchases.setDebugLogsEnabled({ enabled: true });
+            await Purchases.configure({ apiKey: REVENUECAT_IOS_KEY });
 
-async function setupRevenueCat() {
-    try {
-        await Purchases.setDebugLogsEnabled({ enabled: true });
-        await Purchases.configure({ apiKey: REVENUECAT_IOS_KEY });
-
-        const info = await Purchases.getCustomerInfo();
-        if (info.entitlements.active['premium_unlock']) {
-            unlockPremiumAnimals();
-        }
-    } catch (err) {
-        console.error('RevenueCat setup error:', err);
-    }
-}
-
-function unlockPremiumAnimals() {
-    premiumUnlocked = true;
-    localStorage.setItem('premiumUnlocked', 'true');
-    showAchievement('⭐', 'Premium Unlocked!', 'All rare animals available!');
-    throwConfetti(100);
-    // Add any other UI updates (hide buy button, etc.)
-}
-
-// Buy button
-document.getElementById('buyPremiumBtn')?.addEventListener('click', async () => {
-    try {
-        const offerings = await Purchases.getOfferings();
-        const pkg = offerings.current?.availablePackages[0];
-        if (pkg) {
-            const result = await Purchases.purchasePackage({ aPackage: pkg });
-            if (result.customerInfo.entitlements.active['premium_unlock']) {
+            const info = await Purchases.getCustomerInfo();
+            if (info.entitlements.active['premium_unlock']) {
                 unlockPremiumAnimals();
             }
+        } catch (err) {
+            console.error('RevenueCat setup error:', err);
         }
-    } catch (err) {
-        alert('Purchase cancelled or failed');
     }
-});
 
-// Restore button
-document.getElementById('restoreBtn')?.addEventListener('click', async () => {
-    try {
-        const result = await Purchases.restorePurchases();
-        if (result.customerInfo.entitlements.active['premium_unlock']) {
-            unlockPremiumAnimals();
-            alert('Restore successful!');
-        } else {
-            alert('No purchases to restore');
+    function unlockPremiumAnimals() {
+        premiumUnlocked = true;
+        localStorage.setItem('premiumUnlocked', 'true');
+        showAchievement('⭐', 'Premium Unlocked!', 'All rare animals available!');
+        throwConfetti(100);
+    }
+
+    document.getElementById('buyPremiumBtn')?.addEventListener('click', async () => {
+        try {
+            const offerings = await Purchases.getOfferings();
+            const pkg = offerings.current?.availablePackages[0];
+            if (pkg) {
+                const result = await Purchases.purchasePackage({ aPackage: pkg });
+                if (result.customerInfo.entitlements.active['premium_unlock']) {
+                    unlockPremiumAnimals();
+                }
+            }
+        } catch (err) {
+            alert('Purchase cancelled or failed');
         }
-    } catch (err) {
-        alert('Restore failed');
-    }
-});
+    });
 
-// Call on app start (add this in startGame() or after initAudio())
-setupRevenueCat();
+    document.getElementById('restoreBtn')?.addEventListener('click', async () => {
+        try {
+            const result = await Purchases.restorePurchases();
+            if (result.customerInfo.entitlements.active['premium_unlock']) {
+                unlockPremiumAnimals();
+                alert('Restore successful!');
+            } else {
+                alert('No purchases to restore');
+            }
+        } catch (err) {
+            alert('Restore failed');
+        }
+    });
 
+    setupRevenueCat();
+} else {
+    console.log('Running in browser — IAP skipped (test in Simulator for full flow)');
+}
 
 
 
