@@ -4544,14 +4544,14 @@ initIAP();
 
 
 
-<script>
+
     function updateMainMenuHighScore() {
         const currentHighScore = parseInt(localStorage.getItem('zooKeeperHighScore') || 0);
         document.getElementById('highScoreText').textContent = currentHighScore.toLocaleString();
     }
     window.addEventListener('load', updateMainMenuHighScore);
     // Also call when returning to menu (e.g., in quitButton handler)
-</script>
+
 
 
 
