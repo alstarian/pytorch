@@ -38,7 +38,18 @@
 
 
 
+            .premium-item {
+    border: 2px solid #FFD700 !important;
+    background: rgba(255, 215, 0, 0.15) !important;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
 
+.premium-points {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: 800;
+}
 
 
 
@@ -207,9 +218,42 @@
         padding: 55px 45px;
     }
     
-   
+    h1 {
+        font-size: 58px;
+    }
     
- 
+    h2 {
+        font-size: 48px;
+    }
+    
+    .subtitle, .pause-subtitle {
+        font-size: 19px;
+    }
+    
+    button {
+        padding: 24px 60px;
+        font-size: 20px;
+    }
+    
+    /* Larger animal emojis for iPad */
+    .animal-item {
+        padding: 18px 22px;
+    }
+    
+    .animal-emoji {
+        font-size: 40px;
+    }
+    
+    .animal-name {
+        font-size: 18px;
+    }
+    
+    .animal-points {
+        font-size: 16px;
+    }
+}
+
+
 
 /* iPad-specific canvas fix - doesn't affect iPhone */
 @media (min-width: 768px) and (orientation: portrait) {
@@ -724,11 +768,38 @@
         .diff-hard { color: #f87171; }
         .diff-expert { color: #dc2626; }
 
-
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 14, 26, 0.97);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
 
       
 
-
+.modal {
+    background: rgba(20, 25, 40, 0.95);
+    border: 1px solid rgba(102, 126, 234, 0.2);
+    border-radius: 0; /* Remove rounded corners for full screen */
+    padding: 60px 24px 44px; /* Add more top padding for status bar */
+    width: 100%; /* Full width */
+    height: 100vh; /* Full viewport height */
+    max-width: 100%; /* Override the 370px limit */
+    max-height: 100vh; /* Full height */
+    margin: 0; /* Remove auto margins */
+    text-align: center;
+    box-shadow: none; /* Remove shadow for cleaner full-screen look */
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
 
 /* Optional: Add safe area padding for iPhone notch */
 @supports (padding: env(safe-area-inset-top)) {
@@ -745,6 +816,20 @@
 }
 
 
+/* If you want to keep the rounded modal on larger screens: */
+@media (min-width: 768px) {
+    .modal {
+        border-radius: 28px;
+        padding: 44px 36px;
+        max-width: 90%;
+        width: 370px;
+        height: auto;
+        max-height: 90vh;
+        margin: 0 auto;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+}
 
 
         h1 {
@@ -776,13 +861,55 @@
             font-weight: 600;
         }
 
+        .animal-list {
+            margin: 24px 0;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 20px;
+            padding: 8px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            max-height: 60vh;
+            overflow-y: auto;
+        }
 
+        .animal-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            margin: 5px 0;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
 
-  
+        .animal-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
+        .animal-emoji {
+            font-size: 28px;
+        }
 
+        .animal-name {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.95);
+            font-weight: 700;
+        }
 
-
+        .animal-points {
+            font-size: 13px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            padding: 5px 12px;
+            background-color: rgba(255, 215, 0, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 215, 0, 0.2);
+        }
 
         button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -1419,248 +1546,20 @@
 
 
 
+        
+    </style>
+
+
+
+</style>
 
 
 
 
 
 
-/* ========== MODERN HOME SCREEN STYLES ========== */
-.modern-home {
-    background: linear-gradient(180deg, #1a1f35 0%, #0f1424 100%) !important;
-    padding: 40px 24px !important;
-    overflow-y: auto;
-}
-
-.home-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 30px;
-}
-
-.logo-section {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.logo-emoji {
-    font-size: 36px;
-    filter: drop-shadow(0 4px 12px rgba(138, 107, 234, 0.6));
-}
-
-.home-title {
-    font-size: 32px;
-    font-weight: 800;
-    background: linear-gradient(135deg, #8A6BEA 0%, #B794F6 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin: 0;
-}
-
-.highscore-badge {
-    background: rgba(102, 126, 234, 0.15);
-    border: 1px solid rgba(102, 126, 234, 0.3);
-    border-radius: 12px;
-    padding: 8px 16px;
-    text-align: right;
-}
-
-.badge-label {
-    font-size: 10px;
-    color: rgba(255, 255, 255, 0.5);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    margin-bottom: 2px;
-}
-
-.badge-value {
-    font-size: 18px;
-    font-weight: 800;
-    color: #FFD700;
-}
-
-.hero-animals {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 30px 0;
-    min-height: 120px;
-}
-
-.hero-animal {
-    display: inline-block;
-    animation: float 3s ease-in-out infinite;
-}
-
-.hero-animal:nth-child(1) {
-    animation-delay: 0s;
-}
-
-.hero-animal:nth-child(2) {
-    animation-delay: 0.3s;
-}
-
-.hero-animal:nth-child(3) {
-    animation-delay: 0.6s;
-}
-
-@keyframes float {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-15px); }
-}
-
-.catch-title {
-    font-size: 36px;
-    font-weight: 800;
-    color: white;
-    text-align: center;
-    margin: 20px 0 8px;
-}
-
-.catch-subtitle {
-    font-size: 16px;
-    color: rgba(255, 255, 255, 0.6);
-    text-align: center;
-    margin-bottom: 30px;
-}
-
-.main-start-btn {
-    background: linear-gradient(135deg, #8A6BEA 0%, #6B4BEA 100%);
-    color: white;
-    border: none;
-    padding: 20px 40px;
-    font-size: 20px;
-    font-weight: 700;
-    border-radius: 16px;
-    width: 100%;
-    margin-bottom: 16px;
-    box-shadow: 0 12px 32px rgba(138, 107, 234, 0.4);
-    transition: all 0.2s;
-}
-
-.main-start-btn:active {
-    transform: translateY(2px);
-    box-shadow: 0 8px 24px rgba(138, 107, 234, 0.3);
-}
-
-.button-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-bottom: 20px;
-}
-
-.icon-button {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 16px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.2s;
-}
-
-.stats-btn {
-    background: linear-gradient(135deg, rgba(34, 193, 195, 0.2) 0%, rgba(45, 253, 187, 0.1) 100%);
-    border-color: rgba(34, 193, 195, 0.3);
-}
-
-.leader-btn {
-    background: linear-gradient(135deg, rgba(255, 193, 7, 0.2) 0%, rgba(255, 152, 0, 0.1) 100%);
-    border-color: rgba(255, 193, 7, 0.3);
-}
-
-.btn-icon {
-    font-size: 32px;
-}
-
-.btn-label {
-    font-size: 14px;
-    font-weight: 600;
-    color: white;
-}
-
-.premium-card {
-    background: linear-gradient(135deg, rgba(138, 107, 234, 0.15) 0%, rgba(107, 75, 234, 0.1) 100%);
-    border: 2px solid rgba(138, 107, 234, 0.3);
-    border-radius: 20px;
-    padding: 20px;
-    display: flex;
-    gap: 16px;
-    align-items: center;
-    margin-bottom: 20px;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.premium-card:active {
-    transform: scale(0.98);
-}
-
-.premium-icon {
-    flex-shrink: 0;
-}
-
-.premium-info {
-    flex: 1;
-}
-
-.premium-title {
-    font-size: 18px;
-    font-weight: 800;
-    color: white;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    margin-bottom: 4px;
-}
-
-.star-badge {
-    font-size: 16px;
-}
-
-.premium-subtitle {
-    font-size: 13px;
-    color: rgba(255, 255, 255, 0.6);
-    margin-bottom: 12px;
-}
-
-.premium-actions {
-    display: flex;
-    gap: 8px;
-}
-
-.unlock-btn {
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    color: #1a1f35;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-size: 14px;
-    font-weight: 700;
-    flex: 1;
-}
-
-.restore-btn {
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 10px 16px;
-    border-radius: 10px;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-.unlock-btn:active, .restore-btn:active {
-    transform: scale(0.95);
-}
-
-
-
+<!-- ADD NEW CELEBRATION & ZONE CSS HERE -->
+<style>
 /* Confetti particles */
 .confetti {
     position: fixed;
@@ -1731,16 +1630,9 @@
     80% { transform: translate(-50%, 0) scale(1); opacity: 1; }
     100% { transform: translate(-50%, -20px) scale(0.8); opacity: 0; }
 }
+</style>
 
-
-
-
-        
-    </style>
-
-
-
-
+</head>
 
 
 
@@ -1819,159 +1711,203 @@
     <div class="slowmo-overlay" id="slowmoOverlay"></div>
 
     <div id="overlay">
-        <!-- Floating background animals for ambiance -->
-        <div class="floating-animal" style="left: 8%; animation-delay: 0s;">🐘</div>
-        <div class="floating-animal" style="left: 25%; animation-delay: 5s;">🦒</div>
-        <div class="floating-animal" style="left: 45%; animation-delay: 10s;">🐯</div>
-        <div class="floating-animal" style="left: 65%; animation-delay: 15s;">🦁</div>
-        <div class="floating-animal" style="left: 85%; animation-delay: 20s;">🐨</div>
-        <div class="floating-animal" style="left: 15%; animation-delay: 8s;">🦊</div>
-        <div class="floating-animal" style="left: 75%; animation-delay: 12s;">🐼</div>
+        <div class="modal">
+            <h1>Zoo Keeper</h1>
+            <p class="subtitle">Catch 6️⃣7️⃣ to slow time!</p>
 
-        <h1 class="hero-title">Zoo Keeper</h1>
-        <p class="hero-subtitle">Rescue falling animals · Catch 6️⃣7️⃣ for slow-motion!</p>
-
-        <div class="high-score">🏆 High Score: <span id="mainHighScore">0</span></div>
-
-        <div class="animal-grid">
-            <!-- Regular Animals -->
-            <div class="animal-card">
-                <div class="animal-emoji">🐇</div>
-                <div class="animal-name">Rabbit</div>
-                <div class="animal-points">+10</div>
-            </div>
-            <div class="animal-card">
-                <div class="animal-emoji">🐨</div>
-                <div class="animal-name">Koala</div>
-                <div class="animal-points">+15</div>
-            </div>
-            <div class="animal-card">
-                <div class="animal-emoji">🦊</div>
-                <div class="animal-name">Fox</div>
-                <div class="animal-points">+20</div>
-            </div>
-            <div class="animal-card">
-                <div class="animal-emoji">🦁</div>
-                <div class="animal-name">Lion</div>
-                <div class="animal-points">+25</div>
-            </div>
-            <div class="animal-card">
-                <div class="animal-emoji">🐼</div>
-                <div class="animal-name">Panda</div>
-                <div class="animal-points">+30</div>
-            </div>
-            <div class="animal-card">
-                <div class="animal-emoji">🐯</div>
-                <div class="animal-name">Tiger</div>
-                <div class="animal-points">+35</div>
-            </div>
-            <div class="animal-card">
-                <div class="animal-emoji">🐘</div>
-                <div class="animal-name">Elephant</div>
-                <div class="animal-points">+40</div>
-            </div>
-            <div class="animal-card">
-                <div class="animal-emoji">🦒</div>
-                <div class="animal-name">Giraffe</div>
-                <div class="animal-points">+45</div>
-            </div>
-
-            <!-- Premium Animals -->
-            <div class="animal-card premium">
-                <div class="animal-emoji">🦄</div>
-                <div class="animal-name">Unicorn ⭐</div>
-                <div class="animal-points">+100</div>
-            </div>
-            <div class="animal-card premium">
-                <div class="animal-emoji">🦚</div>
-                <div class="animal-name">Peacock ⭐</div>
-                <div class="animal-points">+110</div>
-            </div>
-            <div class="animal-card premium">
-                <div class="animal-emoji">🐺</div>
-                <div class="animal-name">Arctic Wolf ⭐</div>
-                <div class="animal-points">+120</div>
-            </div>
-            <div class="animal-card premium">
-                <div class="animal-emoji">🦭</div>
-                <div class="animal-name">Seal ⭐</div>
-                <div class="animal-points">+130</div>
-            </div>
-            <div class="animal-card premium">
-                <div class="animal-emoji">🐒</div>
-                <div class="animal-name">Golden Monkey ⭐</div>
-                <div class="animal-points">+140</div>
-            </div>
-            <div class="animal-card premium">
-                <div class="animal-emoji">🦜</div>
-                <div class="animal-name">Macaw ⭐</div>
-                <div class="animal-points">+150</div>
-            </div>
-            <div class="animal-card premium">
-                <div class="animal-emoji">🦅</div>
-                <div class="animal-name">Golden Eagle ⭐</div>
-                <div class="animal-points">+160</div>
-            </div>
-            <div class="animal-card premium">
-                <div class="animal-emoji">🦓</div>
-                <div class="animal-name">Zebra ⭐</div>
-                <div class="animal-points">+170</div>
-            </div>
-            <div class="animal-card premium">
-                <div class="animal-emoji">🦉</div>
-                <div class="animal-name">Moon Owl ⭐</div>
-                <div class="animal-points">+180</div>
-            </div>
-            <div class="animal-card premium">
-                <div class="animal-emoji">🦇</div>
-                <div class="animal-name">Mystic Bat ⭐</div>
-                <div class="animal-points">+190</div>
-            </div>
-            <div class="animal-card premium">
-                <div class="animal-emoji">🐉</div>
-                <div class="animal-name">Dragon ⭐</div>
-                <div class="animal-points">+200</div>
-            </div>
-            <div class="animal-card premium">
-                <div class="animal-emoji">🕊️</div>
-                <div class="animal-name">Phoenix ⭐</div>
-                <div class="animal-points">+220</div>
-            </div>
-
-            <!-- Power-Up & Dangers -->
-            <div class="animal-card powerup-card">
-                <div class="animal-emoji">6️⃣7️⃣</div>
-                <div class="animal-name">Power-Up</div>
-                <div class="animal-points" style="color:#00FFFF;">SLOW-MO</div>
-            </div>
-            <div class="animal-card danger-card">
-                <div class="animal-emoji">💣🧨</div>
-                <div class="animal-name">Danger!</div>
-                <div class="animal-points" style="color:#FF4444;">-1 LIFE</div>
-            </div>
-            <div class="animal-card danger-card">
-                <div class="animal-emoji">❤️</div>
-                <div class="animal-name">Heart Life</div>
-                <div class="animal-points" style="color:#ff4444;">+1 LIFE</div>
-            </div>
+       <div class="animal-list">
+    <!-- Regular Animals -->
+    <div class="animal-item">
+        <div class="animal-left">
+            <span class="animal-emoji">🐇</span>
+            <span class="animal-name">Rabbit</span>
         </div>
+        <span class="animal-points">+10</span>
+    </div>
+    <div class="animal-item">
+        <div class="animal-left">
+            <span class="animal-emoji">🐨</span>
+            <span class="animal-name">Koala</span>
+        </div>
+        <span class="animal-points">+15</span>
+    </div>
+    <div class="animal-item">
+        <div class="animal-left">
+            <span class="animal-emoji">🦊</span>
+            <span class="animal-name">Fox</span>
+        </div>
+        <span class="animal-points">+20</span>
+    </div>
+    <div class="animal-item">
+        <div class="animal-left">
+            <span class="animal-emoji">🦁</span>
+            <span class="animal-name">Lion</span>
+        </div>
+        <span class="animal-points">+25</span>
+    </div>
+    <div class="animal-item">
+        <div class="animal-left">
+            <span class="animal-emoji">🐼</span>
+            <span class="animal-name">Panda</span>
+        </div>
+        <span class="animal-points">+30</span>
+    </div>
+    <div class="animal-item">
+        <div class="animal-left">
+            <span class="animal-emoji">🐯</span>
+            <span class="animal-name">Tiger</span>
+        </div>
+        <span class="animal-points">+35</span>
+    </div>
+    <div class="animal-item">
+        <div class="animal-left">
+            <span class="animal-emoji">🐘</span>
+            <span class="animal-name">Elephant</span>
+        </div>
+        <span class="animal-points">+40</span>
+    </div>
+    <div class="animal-item">
+        <div class="animal-left">
+            <span class="animal-emoji">🦒</span>
+            <span class="animal-name">Giraffe</span>
+        </div>
+        <span class="animal-points">+45</span>
+    </div>
 
-        <button id="startBtn" class="btn-primary">🚀 Start Playing</button>
-        <button id="statsBtn" class="btn-secondary">📊 View Stats</button>
-        <button id="leaderboardBtn" class="btn-secondary">🏆 Leaderboard</button>
+    <!-- Premium Animals (gold border + star) -->
+    <div class="animal-item premium-item">
+        <div class="animal-left">
+            <span class="animal-emoji">🦄</span>
+            <span class="animal-name">Unicorn ⭐</span>
+        </div>
+        <span class="animal-points premium-points">+100</span>
+    </div>
+    <div class="animal-item premium-item">
+        <div class="animal-left">
+            <span class="animal-emoji">🦚</span>
+            <span class="animal-name">Peacock ⭐</span>
+        </div>
+        <span class="animal-points premium-points">+110</span>
+    </div>
+    <div class="animal-item premium-item">
+        <div class="animal-left">
+            <span class="animal-emoji">🐺</span>
+            <span class="animal-name">Arctic Wolf ⭐</span>
+        </div>
+        <span class="animal-points premium-points">+120</span>
+    </div>
+    <div class="animal-item premium-item">
+        <div class="animal-left">
+            <span class="animal-emoji">🦭</span>
+            <span class="animal-name">Seal ⭐</span>
+        </div>
+        <span class="animal-points premium-points">+130</span>
+    </div>
+    <div class="animal-item premium-item">
+        <div class="animal-left">
+            <span class="animal-emoji">🐒</span>
+            <span class="animal-name">Golden Monkey ⭐</span>
+        </div>
+        <span class="animal-points premium-points">+140</span>
+    </div>
+    <div class="animal-item premium-item">
+        <div class="animal-left">
+            <span class="animal-emoji">🦜</span>
+            <span class="animal-name">Macaw ⭐</span>
+        </div>
+        <span class="animal-points premium-points">+150</span>
+    </div>
+    <div class="animal-item premium-item">
+        <div class="animal-left">
+            <span class="animal-emoji">🦅</span>
+            <span class="animal-name">Golden Eagle ⭐</span>
+        </div>
+        <span class="animal-points premium-points">+160</span>
+    </div>
+    <div class="animal-item premium-item">
+        <div class="animal-left">
+            <span class="animal-emoji">🦓</span>
+            <span class="animal-name">Zebra ⭐</span>
+        </div>
+        <span class="animal-points premium-points">+170</span>
+    </div>
+    <div class="animal-item premium-item">
+        <div class="animal-left">
+            <span class="animal-emoji">🦉</span>
+            <span class="animal-name">Moon Owl ⭐</span>
+        </div>
+        <span class="animal-points premium-points">+180</span>
+    </div>
+    <div class="animal-item premium-item">
+        <div class="animal-left">
+            <span class="animal-emoji">🦇</span>
+            <span class="animal-name">Mystic Bat ⭐</span>
+        </div>
+        <span class="animal-points premium-points">+190</span>
+    </div>
+    <div class="animal-item premium-item">
+        <div class="animal-left">
+            <span class="animal-emoji">🐉</span>
+            <span class="animal-name">Dragon ⭐</span>
+        </div>
+        <span class="animal-points premium-points">+200</span>
+    </div>
+    <div class="animal-item premium-item">
+        <div class="animal-left">
+            <span class="animal-emoji">🕊️</span>
+            <span class="animal-name">Phoenix ⭐</span>
+        </div>
+        <span class="animal-points premium-points">+220</span>
+    </div>
 
-        <button id="premiumBtn" onclick="buyPremiumAnimals()" class="btn-premium">
-            🦄 Unlock Premium Animals (14 Rare Species)
-        </button>
-        <button onclick="restorePurchases()" class="btn-secondary">
-            🔄 Restore Purchases
-        </button>
+    <!-- Power-Up & Dangers (keep at bottom) -->
+    <div class="animal-item" style="border: 2px solid #00FFFF; background: rgba(0, 255, 255, 0.1);">
+        <div class="animal-left">
+            <span class="animal-emoji">6️⃣7️⃣</span>
+            <span class="animal-name">Power-Up</span>
+        </div>
+        <span class="animal-points" style="color: #00FFFF;">SLOW-MO</span>
+    </div>
+    <div class="animal-item" style="border: 2px solid #FF0000; background: rgba(255, 0, 0, 0.1);">
+        <div class="animal-left">
+            <span class="animal-emoji">💣🧨</span>
+            <span class="animal-name">Danger!</span>
+        </div>
+        <span class="animal-points" style="color: #FF0000;">-1 LIFE</span>
+    </div>
+    <div class="animal-item" style="border: 2px solid #ff4444; background: rgba(255, 68, 68, 0.1);">
+        <div class="animal-left">
+            <span class="animal-emoji">❤️</span>
+            <span class="animal-name">Heart Life</span>
+        </div>
+        <span class="animal-points" style="color: #ff4444;">+1 LIFE</span>
+    </div>
+</div>
 
-        <p class="firebase-status" id="firebaseStatus">Connecting to leaderboard...</p>
+            
+            <p class="firebase-status" id="firebaseStatus">Connecting to leaderboard...</p>
+            <button id="startBtn">Start Playing</button>
+            <button class="secondary" id="statsBtn">View Stats 📊</button>
+            <button class="secondary" id="leaderboardBtn">🏆 Leaderboard</button>
 
 
 
-
+            <!-- ADD THESE IAP BUTTONS HERE: -->
+<button id="premiumBtn" onclick="buyPremiumAnimals()" 
+        style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+               color: white; border: 2px solid #FFD700; 
+               box-shadow: 0 10px 20px rgba(255,215,0,0.3); 
+               font-size: 18px; font-weight: bold; padding: 16px 32px; 
+               margin: 10px 0; border-radius: 12px; 
+               animation: pulse 2s infinite;">
+  🦄 Unlock Premium Animals
+</button>
+<button onclick="restorePurchases()" 
+        style="background: #f0f0f0; color: #333; border: 1px solid #ddd; 
+               font-size: 14px; padding: 12px 28px; margin: 5px 0; 
+               border-radius: 8px;">
+  🔄 Restore Purchases
+</button>
 
 
 
@@ -2048,88 +1984,27 @@
     </div>
 
     <div id="leaderboardScreen" class="hidden">
+        <div id="overlay">
+            <div class="modal">
+                <h2>🏆 Global Leaderboard</h2>
+                <p class="subtitle">Top Players Worldwide</p>
 
-
-
-
-
-
-
-
-
-<div class="modal modern-home">
-        <!-- Header with Logo and High Score -->
-        <div class="home-header">
-            <div class="logo-section">
-                <span class="logo-emoji">🦁</span>
-                <h1 class="home-title">Zoo Keeper</h1>
-            </div>
-            <div class="highscore-badge">
-                <div class="badge-label">High Score</div>
-                <div class="badge-value" id="homeHighScore">0</div>
-            </div>
-        </div>
-
-        <!-- Hero Image Section -->
-        <div class="hero-animals">
-            <span class="hero-animal" style="font-size: 80px;">🐘</span>
-            <span class="hero-animal" style="font-size: 70px; margin-left: -20px;">🦁</span>
-            <span class="hero-animal" style="font-size: 65px; margin-left: -15px; margin-top: 20px;">🐵</span>
-        </div>
-
-        <!-- Main Title -->
-        <h2 class="catch-title">Catch Animals</h2>
-        <p class="catch-subtitle">67 to slow time!</p>
-
-        <!-- Main Start Button -->
-        <button id="startBtn" class="main-start-btn">
-            <span style="font-size: 20px;">▶</span> Start Playing
-        </button>
-
-        <!-- Stats and Leaderboard Row -->
-        <div class="button-row">
-            <button id="statsBtn" class="icon-button stats-btn">
-                <span class="btn-icon">📊</span>
-                <span class="btn-label">Stats</span>
-            </button>
-            <button id="leaderboardBtn" class="icon-button leader-btn">
-                <span class="btn-icon">🏆</span>
-                <span class="btn-label">Leaderboard</span>
-            </button>
-        </div>
-
-        <!-- Premium Animals Card -->
-        <div class="premium-card" id="premiumBtn" onclick="buyPremiumAnimals()">
-            <div class="premium-icon">
-                <span style="font-size: 60px;">🦄</span>
-            </div>
-            <div class="premium-info">
-                <div class="premium-title">
-                    Premium Animals
-                    <span class="star-badge">⭐</span>
+                <div id="leaderboardList" class="leaderboard-list">
+                    <p class="loading">Loading leaderboard...</p>
                 </div>
-                <div class="premium-subtitle">14 Rare Species</div>
-                <div class="premium-actions">
-                    <button class="unlock-btn" onclick="event.stopPropagation(); buyPremiumAnimals();">
-                        Unlock $2.99
-                    </button>
-                    <button class="restore-btn" onclick="event.stopPropagation(); restorePurchases();">
-                        🔄 Restore Purchases
-                    </button>
-                </div>
+
+                <button id="closeLeaderboardBtn">Back to Menu</button>
             </div>
         </div>
+    </div>
 
-        <p class="firebase-status" id="firebaseStatus">Connecting to leaderboard...</p>
-
-
-</div>
-</div>
-
-
-
-
-
+    <div id="achievementPopup" class="achievement">
+        <div class="achievement-icon" id="achIcon">🏆</div>
+        <div class="achievement-content">
+            <div class="achievement-text" id="achText">Achievement!</div>
+            <div class="achievement-desc" id="achDesc">You did it!</div>
+        </div>
+    </div>
 
     <script>
         const firebaseConfig = {
@@ -2335,32 +2210,7 @@ const zoneScoreThresholds = [0, 3000, 8000, 15000, 25000, 40000];
 
 
 
-function updateHomeHighScore() {
-    const homeHighScore = document.getElementById('homeHighScore');
-    if (homeHighScore) {
-        homeHighScore.textContent = parseInt(localStorage.getItem('zooKeeperHighScore') || 0).toLocaleString();
-    }
-}
 
-// Call it when showing the home screen
-document.getElementById('closeStatsBtn').addEventListener('click', () => {
-    document.getElementById('statsScreen').classList.add('hidden');
-    document.getElementById('overlay').classList.remove('hidden');
-    updateHomeHighScore();
-});
-
-// Call it on page load
-updateHomeHighScore();
-
-function updateMainMenuHighScore() {
-    const currentHighScore = parseInt(localStorage.getItem('zooKeeperHighScore') || 0);
-    document.getElementById('mainHighScore').textContent = currentHighScore.toLocaleString();
-}
-
-
-updateMainMenuHighScore(); // Show it immediately
-
-// Also call this whenever you set a new high score (you already have logic in endGame)
 
 
 
@@ -2864,7 +2714,13 @@ function resetGameTracker() {
 
 
 
-       
+        function updateMainMenuHighScore() {
+            const currentHighScore = parseInt(localStorage.getItem('zooKeeperHighScore') || 0);
+            highScore = currentHighScore;
+            document.getElementById('highScoreText').textContent = `High Score: ${currentHighScore}`;
+        }
+
+        // updateMainMenuHighScore();
 
         let audioCtx = null;
         let audioInitialized = false;
@@ -4163,7 +4019,6 @@ showZoneTransition(initialZone.name);
 
 
         function endGame() {
-            updateMainMenuHighScore();
             gameRunning = false;
             slowMoActive = false;
             document.getElementById('slowmoOverlay').classList.remove('active');
