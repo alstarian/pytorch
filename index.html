@@ -31,10 +31,10 @@
 
 
 
-/* FULL-SCREEN HOME SCREEN - NO BOX FEEL */
+/* FULL IMMERSIVE HOME SCREEN - BLUE STAGE STYLE */
 #overlay {
-    background: linear-gradient(180deg, #0a0e1a 0%, #0f1729 50%, #1a2332 100%);
-    backdrop-filter: blur(10px); /* Subtle blur for depth */
+    background: linear-gradient(180deg, #0a0e2e 0%, #0f1a3d 40%, #1a2a5a 100%);
+    backdrop-filter: blur(8px);
 }
 
 .modal.home-screen {
@@ -43,180 +43,163 @@
     max-width: none;
     max-height: none;
     margin: 0;
-    padding: 20px 24px 40px; /* Comfortable edge padding */
+    padding: 30px 24px 50px; /* More top/bottom space for stage feel */
     border: none !important;
     border-radius: 0 !important;
     box-shadow: none !important;
-    background: transparent !important; /* No background/box */
+    background: transparent !important;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Pushes header top, buttons bottom */
+    justify-content: flex-start;
     align-items: center;
-    overflow: hidden; /* Clean edges */
-    box-sizing: border-box;
+    overflow: hidden;
+    position: relative;
 }
 
-/* Header - pinned top */
+/* Header */
 .home-header {
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
+    z-index: 10;
 }
 .home-header h1 {
-    font-size: 40px;
-    background: linear-gradient(135deg, #a855f7 0%, #e879f9 100%);
+    font-size: 48px;
+    background: linear-gradient(135deg, #c084fc 0%, #e879f9 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin: 0;
 }
-.logo-heart { font-size: 32px; }
+.logo-heart {
+    font-size: 40px;
+    display: block;
+    text-align: center;
+    width: 100%;
+    margin: 10px 0 30px;
+}
 .home-status {
     text-align: right;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
-    color: #4ade80;
     line-height: 1.4;
 }
+.connected-text {
+    color: #4ade80;
+    display: block;
+}
+.high-score-text {
+    color: #4ade80;
+    display: block;
+}
 
-/* Hero Animals - large, centered, responsive */
+/* Hero Animals - REMOVE BOX, FULL BLEED */
 .hero-animals {
     position: relative;
-    width: 90%; /* Takes most of screen width */
-    max-width: 500px; /* Caps size on large screens */
-    margin: 20px auto;
-    animation: gentleFloat 8s ease-in-out infinite;
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto 40px;
+    pointer-events: none; /* Prevents touch interference */
 }
 .hero-group {
     width: 100%;
     height: auto;
     display: block;
-    border-radius: 20px; /* Optional soft edges */
+    border-radius: 30px; /* Keep soft corners like reference */
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6); /* Subtle lift */
 }
 
-/* Gentle float + subtle rotate */
-@keyframes gentleFloat {
-    0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-12px) rotate(1deg); }
+/* Spotlight from top */
+.spotlight {
+    position: absolute;
+    top: -100%;
+    left: 50%;
+    width: 1000px;
+    height: 1000px;
+    background: radial-gradient(circle, rgba(100,150,255,0.25) 0%, transparent 60%);
+    transform: translateX(-50%);
+    pointer-events: none;
+    animation: spotlightPulse 8s ease-in-out infinite;
+}
+@keyframes spotlightPulse {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
 }
 
-/* Bubbles & spotlight effects */
-.bubbles::before, .bubbles::after,
-.bubbles::before:nth-child(3), .bubbles::after:nth-child(3) {
+/* Water splash at bottom */
+.hero-animals::after {
     content: '';
     position: absolute;
-    width: 20px;
-    height: 20px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 50%;
-    animation: bubbleRise 5s infinite ease-in-out;
+    bottom: -30px;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(transparent, rgba(100,200,255,0.3));
+    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 100"><path fill="rgba(100,200,255,0.4)" d="M0,50 Q250,0 500,50 T1000,50 L1000,100 L0,100 Z"/></svg>');
+    background-size: 100% 100%;
+    pointer-events: none;
+    animation: waterWave 6s ease-in-out infinite;
 }
-.bubbles::before { bottom: 20px; left: 20%; animation-delay: 0s; }
-.bubbles::after { bottom: 40px; right: 30%; animation-delay: 1s; }
-.bubbles::before:nth-child(3) { bottom: 60px; left: 50%; animation-delay: 2s; width: 15px; height: 15px; }
-.bubbles::after:nth-child(3) { bottom: 30px; right: 15%; animation-delay: 3s; width: 25px; height: 25px; }
+@keyframes waterWave {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Bubbles */
+.bubbles::before, .bubbles::after, .bubbles::before:nth-child(3) {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    animation: bubbleRise 6s infinite ease-out;
+}
+.bubbles::before { bottom: 50px; left: 20%; animation-delay: 0s; }
+.bubbles::after { bottom: 80px; right: 25%; animation-delay: 2s; }
+.bubbles::before:nth-child(3) { bottom: 60px; left: 60%; animation-delay: 4s; width: 18px; height: 18px; }
 
 @keyframes bubbleRise {
     0% { transform: translateY(0); opacity: 0; }
-    50% { opacity: 0.6; }
-    100% { transform: translateY(-300px); opacity: 0; }
-}
-
-.spotlight {
-    position: absolute;
-    top: -60%;
-    left: 50%;
-    width: 800px;
-    height: 800px;
-    background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 65%);
-    transform: translateX(-50%);
-    pointer-events: none;
-    animation: spotlightPulse 7s ease-in-out infinite;
-}
-@keyframes spotlightPulse {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 0.8; }
+    40% { opacity: 0.8; }
+    100% { transform: translateY(-400px); opacity: 0; }
 }
 
 /* Titles */
-.main-title { font-size: 36px; margin: 10px 0 0; font-weight: 800; }
-.main-subtitle { font-size: 18px; color: rgba(255,255,255,0.7); margin: 0 0 30px; }
+.main-title {
+    font-size: 42px;
+    background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0 0 10px;
+}
+.main-subtitle {
+    font-size: 20px;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 50px;
+}
 
-/* Big Start Button */
+/* Start Button */
 .big-start-btn {
-    background: linear-gradient(135deg, #a855f7 0%, #e879f9 100%);
-    padding: 22px 70px;
-    font-size: 22px;
-    border-radius: 50px;
-    margin: 20px 0;
-    box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
+    background: linear-gradient(135deg, #c084fc 0%, #e879f9 100%);
+    padding: 26px 90px;
+    font-size: 26px;
+    border-radius: 60px;
+    box-shadow: 0 15px 40px rgba(168,85,247,0.5);
+    margin-bottom: 40px;
 }
 
-/* Bottom Row */
-.bottom-row {
-    display: flex;
-    gap: 16px;
+/* Bottom buttons and premium - pushed lower */
+.bottom-row, .premium-section {
     width: 100%;
-    max-width: 400px;
-    margin: 10px 0;
+    max-width: 500px;
 }
-.bottom-btn {
-    flex: 1;
-    background: rgba(20, 25, 40, 0.85);
-    border: 1px solid rgba(102, 126, 234, 0.3);
-    border-radius: 20px;
-    padding: 18px;
-    font-size: 17px;
-    backdrop-filter: blur(15px);
-}
-.btn-icon { font-size: 26px; display: block; margin-bottom: 6px; }
 
-/* Premium Section - compact */
+/* Premium tweaks */
 .premium-section {
-    width: 100%;
-    max-width: 400px;
-    background: rgba(20, 25, 40, 0.6);
-    border-radius: 20px;
-    padding: 14px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-top: 10px;
+    margin-top: auto; /* Pushes to bottom */
 }
-.unicorn-icon {
-    width: 70px;
-    height: 70px;
-    border-radius: 14px;
-    flex-shrink: 0;
-}
-.premium-info { flex: 1; text-align: left; }
-.premium-title { font-size: 17px; font-weight: 800; }
-.premium-desc { font-size: 13px; color: rgba(255,255,255,0.7); }
-.premium-buttons { display: flex; flex-direction: column; gap: 6px; }
-.unlock-btn {
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    color: black;
-    font-weight: bold;
-    padding: 10px 18px;
-    border-radius: 12px;
-    font-size: 15px;
-}
-.restore-btn {
-    font-size: 12px;
-    color: rgba(255,255,255,0.6);
-    background: none;
-    border: none;
-    text-decoration: underline;
-}
-
-/* Firebase status tiny at bottom */
-.firebase-status.small { 
-    font-size: 11px; 
-    margin-top: 10px; 
-    color: rgba(255,255,255,0.5);
-}
-
 
 
 
