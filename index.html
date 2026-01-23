@@ -31,193 +31,220 @@
 
 
 
-/* FULL-SCREEN HOME SCREEN - NO BOX FEEL */
+/* IMMERSIVE BLUE STAGE HOME SCREEN */
 #overlay {
-    background: linear-gradient(180deg, #0a0e1a 0%, #0f1729 50%, #1a2332 100%);
-    backdrop-filter: blur(10px); /* Subtle blur for depth */
+    background: linear-gradient(180deg, #0a0e2e 0%, #0f1a3d 50%, #1a2a6a 100%);
 }
 
 .modal.home-screen {
     width: 100vw;
     height: 100vh;
-    max-width: none;
-    max-height: none;
+    padding: 20px;
     margin: 0;
-    padding: 20px 24px 40px; /* Comfortable edge padding */
-    border: none !important;
-    border-radius: 0 !important;
-    box-shadow: none !important;
-    background: transparent !important; /* No background/box */
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    background: transparent;
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Pushes header top, buttons bottom */
     align-items: center;
-    overflow: hidden; /* Clean edges */
-    box-sizing: border-box;
+    justify-content: flex-start;
+    position: relative;
+    overflow: hidden;
 }
 
-/* Header - pinned top */
-.home-header {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 10px;
-}
-.home-header h1 {
-    font-size: 40px;
-    background: linear-gradient(135deg, #a855f7 0%, #e879f9 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin: 0;
-}
-.logo-heart { font-size: 32px; }
-.home-status {
+/* Top Status - right aligned */
+.top-status {
+    position: absolute;
+    top: 30px;
+    right: 24px;
     text-align: right;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 600;
     color: #4ade80;
-    line-height: 1.4;
+    line-height: 1.5;
+    z-index: 10;
 }
 
-/* Hero Animals - large, centered, responsive */
+/* Title */
+.main-title {
+    font-size: 48px;
+    background: linear-gradient(135deg, #c084fc 0%, #e879f9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 60px 0 0;
+    text-align: center;
+}
+.logo-heart {
+    font-size: 50px;
+    margin: 10px 0 40px;
+}
+
+/* Hero Animals */
 .hero-animals {
     position: relative;
-    width: 90%; /* Takes most of screen width */
-    max-width: 500px; /* Caps size on large screens */
-    margin: 20px auto;
-    animation: gentleFloat 8s ease-in-out infinite;
-}
-.hero-group {
     width: 100%;
+    max-width: 600px;
+    height: 400px;
+    margin: 20px 0;
+}
+.animal {
+    position: absolute;
+    width: 220px;
     height: auto;
-    display: block;
-    border-radius: 20px; /* Optional soft edges */
+    animation: float 7s ease-in-out infinite;
 }
-
-/* Gentle float + subtle rotate */
-@keyframes gentleFloat {
+.elephant {
+    bottom: 0;
+    left: 10%;
+    animation-delay: 0s;
+}
+.lion {
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    animation-delay: 1s;
+}
+.monkey {
+    top: 0;
+    right: 10%;
+    animation-delay: 2s;
+}
+@keyframes float {
     0%, 100% { transform: translateY(0) rotate(0deg); }
-    50% { transform: translateY(-12px) rotate(1deg); }
+    50% { transform: translateY(-20px) rotate(3deg); }
 }
 
-/* Bubbles & spotlight effects */
-.bubbles::before, .bubbles::after,
-.bubbles::before:nth-child(3), .bubbles::after:nth-child(3) {
+/* Spotlight */
+.hero-animals::before {
     content: '';
     position: absolute;
-    width: 20px;
-    height: 20px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 50%;
-    animation: bubbleRise 5s infinite ease-in-out;
-}
-.bubbles::before { bottom: 20px; left: 20%; animation-delay: 0s; }
-.bubbles::after { bottom: 40px; right: 30%; animation-delay: 1s; }
-.bubbles::before:nth-child(3) { bottom: 60px; left: 50%; animation-delay: 2s; width: 15px; height: 15px; }
-.bubbles::after:nth-child(3) { bottom: 30px; right: 15%; animation-delay: 3s; width: 25px; height: 25px; }
-
-@keyframes bubbleRise {
-    0% { transform: translateY(0); opacity: 0; }
-    50% { opacity: 0.6; }
-    100% { transform: translateY(-300px); opacity: 0; }
-}
-
-.spotlight {
-    position: absolute;
-    top: -60%;
+    top: -200px;
     left: 50%;
     width: 800px;
     height: 800px;
-    background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 65%);
+    background: radial-gradient(circle, rgba(150,200,255,0.3) 0%, transparent 70%);
     transform: translateX(-50%);
     pointer-events: none;
-    animation: spotlightPulse 7s ease-in-out infinite;
+    animation: spotlight 8s ease-in-out infinite;
 }
-@keyframes spotlightPulse {
-    0%, 100% { opacity: 0.5; }
-    50% { opacity: 0.8; }
-}
-
-/* Titles */
-.main-title { font-size: 36px; margin: 10px 0 0; font-weight: 800; }
-.main-subtitle { font-size: 18px; color: rgba(255,255,255,0.7); margin: 0 0 30px; }
-
-/* Big Start Button */
-.big-start-btn {
-    background: linear-gradient(135deg, #a855f7 0%, #e879f9 100%);
-    padding: 22px 70px;
-    font-size: 22px;
-    border-radius: 50px;
-    margin: 20px 0;
-    box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
+@keyframes spotlight {
+    0%, 100% { opacity: 0.7; }
+    50% { opacity: 1; }
 }
 
-/* Bottom Row */
-.bottom-row {
-    display: flex;
-    gap: 16px;
+/* Water Splash Bottom */
+.water-splash {
+    position: absolute;
+    bottom: -40px;
+    left: 0;
     width: 100%;
-    max-width: 400px;
-    margin: 10px 0;
+    height: 100px;
+    background: linear-gradient(transparent, rgba(100,200,255,0.4));
+    background-image: radial-gradient(circle at 30% 50%, rgba(100,200,255,0.5) 10%, transparent 50%),
+                      radial-gradient(circle at 70% 50%, rgba(100,200,255,0.5) 10%, transparent 50%);
+    pointer-events: none;
+    animation: wave 6s ease-in-out infinite;
+}
+@keyframes wave {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Bubbles */
+.bubbles::before, .bubbles::after {
+    content: '';
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    background: rgba(255,255,255,0.3);
+    border-radius: 50%;
+    animation: rise 6s infinite;
+}
+.bubbles::before { bottom: 20px; left: 20%; animation-delay: 0s; }
+.bubbles::after { bottom: 40px; right: 30%; animation-delay: 2s; }
+@keyframes rise {
+    0% { transform: translateY(0); opacity: 0; }
+    50% { opacity: 0.6; }
+    100% { transform: translateY(-500px); opacity: 0; }
+}
+
+/* Catch Text */
+.catch-title {
+    font-size: 44px;
+    background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 20px 0 10px;
+}
+.catch-subtitle {
+    font-size: 22px;
+    color: rgba(255,255,255,0.8);
+    margin-bottom: 50px;
+}
+
+/* Start Button - big pill */
+.start-btn {
+    background: linear-gradient(135deg, #c084fc 0%, #e879f9 100%);
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    padding: 28px 100px;
+    border-radius: 70px;
+    box-shadow: 0 15px 40px rgba(192,132,252,0.5);
+    margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.play-icon {
+    font-size: 36px;
+}
+
+/* Bottom Buttons */
+.bottom-buttons {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+    max-width: 500px;
+    margin-bottom: 20px;
 }
 .bottom-btn {
     flex: 1;
-    background: rgba(20, 25, 40, 0.85);
-    border: 1px solid rgba(102, 126, 234, 0.3);
-    border-radius: 20px;
-    padding: 18px;
-    font-size: 17px;
-    backdrop-filter: blur(15px);
+    background: rgba(20,25,40,0.8);
+    border: 1px solid rgba(102,126,234,0.3);
+    border-radius: 24px;
+    padding: 20px;
+    font-size: 18px;
+    backdrop-filter: blur(10px);
 }
-.btn-icon { font-size: 26px; display: block; margin-bottom: 6px; }
 
-/* Premium Section - compact */
+/* Premium */
 .premium-section {
     width: 100%;
-    max-width: 400px;
-    background: rgba(20, 25, 40, 0.6);
-    border-radius: 20px;
-    padding: 14px;
+    max-width: 500px;
+    background: rgba(20,25,40,0.6);
+    border-radius: 24px;
+    padding: 16px;
     display: flex;
     align-items: center;
-    gap: 14px;
-    margin-top: 10px;
+    gap: 16px;
 }
-.unicorn-icon {
-    width: 70px;
-    height: 70px;
-    border-radius: 14px;
-    flex-shrink: 0;
-}
-.premium-info { flex: 1; text-align: left; }
-.premium-title { font-size: 17px; font-weight: 800; }
-.premium-desc { font-size: 13px; color: rgba(255,255,255,0.7); }
-.premium-buttons { display: flex; flex-direction: column; gap: 6px; }
+.unicorn-icon { width: 80px; height: 80px; border-radius: 16px; }
+.premium-text { flex: 1; }
+.premium-title { font-size: 18px; font-weight: bold; }
+.premium-desc { font-size: 14px; color: rgba(255,255,255,0.7); }
 .unlock-btn {
     background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
     color: black;
+    padding: 12px 24px;
+    border-radius: 16px;
     font-weight: bold;
-    padding: 10px 18px;
-    border-radius: 12px;
-    font-size: 15px;
 }
-.restore-btn {
-    font-size: 12px;
-    color: rgba(255,255,255,0.6);
-    background: none;
-    border: none;
-    text-decoration: underline;
-}
+.restore-btn { font-size: 13px; color: rgba(255,255,255,0.6); text-decoration: underline; background: none; border: none; }
 
-/* Firebase status tiny at bottom */
-.firebase-status.small { 
-    font-size: 11px; 
-    margin-top: 10px; 
-    color: rgba(255,255,255,0.5);
-}
-
-
+/* Firebase small */
+.firebase-status { font-size: 12px; color: rgba(255,255,255,0.5); margin-top: 10px; }
 
 
 
@@ -1908,55 +1935,52 @@
     <div id="overlay">
         <div class="modal">
 <div class="modal home-screen">
-    <!-- Header -->
-    <div class="home-header">
-        <h1>Zoo Keeper <span class="logo-heart">❤️</span></h1>
-        <div class="home-status">
-            <span class="connected-text" id="connectedText">Connected</span>
-            <span class="high-score-text">High Score: <span id="homeHighScore">0</span></span>
-        </div>
+    <!-- Top Status -->
+    <div class="top-status">
+        <span class="connected-text" id="connectedText">Connected</span>
+        <span class="high-score-text">High Score: <span id="homeHighScore">0</span></span>
     </div>
 
- <!-- Hero Animals -->
-<div class="hero-animals">
-    <img src="animals.png" class="hero-group" alt="Zoo Animals" style="max-width:100%; height:auto;">
-    <div class="bubbles"></div>
-    <div class="spotlight"></div>
-</div>
+    <!-- Title + Heart -->
+    <h1 class="main-title">Zoo Keeper</h1>
+    <div class="logo-heart">❤️</div>
+
+    <!-- Hero Animals - 3 separate for perfect positioning/animation -->
+    <div class="hero-animals">
+        <img src="elephant.png" class="animal elephant" alt="Elephant">
+        <img src="lion.png" class="animal lion" alt="Lion">
+        <img src="monkey.png" class="animal monkey" alt="Monkey">
+        <div class="water-splash"></div>
+        <div class="bubbles"></div>
+    </div>
 
     <!-- Subtitle -->
-    <h2 class="main-title">Catch Animals</h2>
-    <p class="main-subtitle">67 to slow time!</p>
+    <h2 class="catch-title">Catch Animals</h2>
+    <p class="catch-subtitle">67 to slow time!</p>
 
-    <!-- Start Button -->
-    <button id="startBtn" class="big-start-btn">▶ Start Playing</button>
+    <!-- Start Button - pill with play icon -->
+    <button id="startBtn" class="start-btn">
+        <span class="play-icon">▶</span> Start Playing
+    </button>
 
-    <!-- Bottom Row Buttons -->
-    <div class="bottom-row">
-        <button class="bottom-btn" id="statsBtn">
-            <span class="btn-icon">🌀</span> Stats
-        </button>
-        <button class="bottom-btn" id="leaderboardBtn">
-            <span class="btn-icon">🏆</span> Leaderboard
-        </button>
+    <!-- Bottom Buttons -->
+    <div class="bottom-buttons">
+        <button class="bottom-btn" id="statsBtn">🌀 Stats</button>
+        <button class="bottom-btn" id="leaderboardBtn">🏆 Leaderboard</button>
     </div>
 
     <!-- Premium Section -->
     <div class="premium-section">
-       <!-- Premium unicorn -->
-<img src="unicorn.png" class="unicorn-icon" alt="Unicorn" style="max-width:100%; height:auto;">
-        <div class="premium-info">
+        <img src="unicorn.png" class="unicorn-icon" alt="Unicorn">
+        <div class="premium-text">
             <div class="premium-title">Premium Animals</div>
             <div class="premium-desc">14 Rare Species</div>
         </div>
-        <div class="premium-buttons">
-            <button id="premiumBtn" class="unlock-btn">Unlock $2.99</button>
-            <button onclick="restorePurchases()" class="restore-btn">Restore Purchases</button>
-        </div>
+        <button id="premiumBtn" class="unlock-btn">Unlock $2.99</button>
+        <button onclick="restorePurchases()" class="restore-btn">Restore Purchases</button>
     </div>
 
-    <!-- Firebase status (kept small) -->
-    <p class="firebase-status small" id="firebaseStatus">Connecting to leaderboard...</p>
+    <p class="firebase-status" id="firebaseStatus">Connecting...</p>
 </div>
     </div>
 
