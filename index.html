@@ -38,18 +38,7 @@
 
 
 
-            .premium-item {
-    border: 2px solid #FFD700 !important;
-    background: rgba(255, 215, 0, 0.15) !important;
-    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
-}
 
-.premium-points {
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    font-weight: 800;
-}
 
 
 
@@ -218,42 +207,9 @@
         padding: 55px 45px;
     }
     
-    h1 {
-        font-size: 58px;
-    }
+   
     
-    h2 {
-        font-size: 48px;
-    }
-    
-    .subtitle, .pause-subtitle {
-        font-size: 19px;
-    }
-    
-    button {
-        padding: 24px 60px;
-        font-size: 20px;
-    }
-    
-    /* Larger animal emojis for iPad */
-    .animal-item {
-        padding: 18px 22px;
-    }
-    
-    .animal-emoji {
-        font-size: 40px;
-    }
-    
-    .animal-name {
-        font-size: 18px;
-    }
-    
-    .animal-points {
-        font-size: 16px;
-    }
-}
-
-
+ 
 
 /* iPad-specific canvas fix - doesn't affect iPhone */
 @media (min-width: 768px) and (orientation: portrait) {
@@ -768,38 +724,11 @@
         .diff-hard { color: #f87171; }
         .diff-expert { color: #dc2626; }
 
-        #overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 14, 26, 0.97);
-            backdrop-filter: blur(20px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-        }
+
 
       
 
-.modal {
-    background: rgba(20, 25, 40, 0.95);
-    border: 1px solid rgba(102, 126, 234, 0.2);
-    border-radius: 0; /* Remove rounded corners for full screen */
-    padding: 60px 24px 44px; /* Add more top padding for status bar */
-    width: 100%; /* Full width */
-    height: 100vh; /* Full viewport height */
-    max-width: 100%; /* Override the 370px limit */
-    max-height: 100vh; /* Full height */
-    margin: 0; /* Remove auto margins */
-    text-align: center;
-    box-shadow: none; /* Remove shadow for cleaner full-screen look */
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-}
+
 
 /* Optional: Add safe area padding for iPhone notch */
 @supports (padding: env(safe-area-inset-top)) {
@@ -816,20 +745,6 @@
 }
 
 
-/* If you want to keep the rounded modal on larger screens: */
-@media (min-width: 768px) {
-    .modal {
-        border-radius: 28px;
-        padding: 44px 36px;
-        max-width: 90%;
-        width: 370px;
-        height: auto;
-        max-height: 90vh;
-        margin: 0 auto;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.05);
-    }
-}
 
 
         h1 {
@@ -861,55 +776,13 @@
             font-weight: 600;
         }
 
-        .animal-list {
-            margin: 24px 0;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 20px;
-            padding: 8px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            max-height: 60vh;
-            overflow-y: auto;
-        }
 
-        .animal-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            margin: 5px 0;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-        }
 
-        .animal-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+  
 
-        .animal-emoji {
-            font-size: 28px;
-        }
 
-        .animal-name {
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.95);
-            font-weight: 700;
-        }
 
-        .animal-points {
-            font-size: 13px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            padding: 5px 12px;
-            background-color: rgba(255, 215, 0, 0.1);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 215, 0, 0.2);
-        }
+
 
         button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -1553,7 +1426,7 @@
 
 
 
-/* ====================== IMPROVED MODERN HOME SCREEN ====================== */
+/* ====================== FINAL CLEAN HOME SCREEN ====================== */
 #overlay {
     position: fixed; top: 0; left: 0; width: 100%; height: 100%;
     background: rgba(10, 14, 26, 0.92);
@@ -1561,7 +1434,7 @@
     display: flex; align-items: center; justify-content: center;
     z-index: 1000;
 }
-.modal {
+#overlay .modal {
     width: 92%;
     max-width: 440px;
     background: rgba(20, 25, 40, 0.95);
@@ -1569,19 +1442,16 @@
     border-radius: 34px;
     padding: 36px 24px;
     text-align: center;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8),
-                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
     overflow-y: auto;
     max-height: 96vh;
 }
-/* Hero Title */
-.hero-title {
+#overlay .hero-title {
     font-size: 58px;
     font-weight: 900;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
     letter-spacing: -1.5px;
     margin-bottom: 6px;
     animation: titleGlow 3s ease-in-out infinite alternate;
@@ -1590,45 +1460,39 @@
     0% { text-shadow: 0 0 20px rgba(102, 126, 234, 0.5); }
     100% { text-shadow: 0 0 40px rgba(102, 126, 234, 0.8); }
 }
-.hero-subtitle {
+#overlay .hero-subtitle {
     font-size: 17px;
     color: rgba(255, 255, 255, 0.78);
     margin-bottom: 28px;
     font-weight: 600;
 }
-.high-score {
+#overlay .high-score {
     font-size: 23px;
     font-weight: 800;
     color: #FFD700;
-    margin: 16px 0 28px;
+    margin: 16px 0 32px;
     text-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
 }
-/* Animal Grid - tighter, more compact */
-.animal-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
-    gap: 10px;
-    margin: 20px 0 32px;
-    padding: 12px;
+#overlay .animal-grid {
+    display: grid !important;
+    grid-template-columns: repeat(auto-fit, minmax(108px, 1fr)) !important;
+    gap: 11px !important;
+    margin: 20px 0 32px !important;
+    padding: 14px !important;
     background: rgba(255, 255, 255, 0.03);
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
-.animal-card {
-    background: rgba(255, 255, 255, 0.06);
-    border-radius: 16px;
-    padding: 12px 8px;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+#overlay .animal-card {
+    background: rgba(255, 255, 255, 0.06) !important;
+    border-radius: 16px !important;
+    padding: 11px 8px !important;
+    border: 1px solid rgba(255, 255, 255, 0.12) !important;
     transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
 }
-.animal-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-}
-.animal-card.premium {
-    border: 2px solid #FFD700;
-    background: rgba(255, 215, 0, 0.12);
+#overlay .animal-card.premium {
+    border: 2px solid #FFD700 !important;
+    background: rgba(255, 215, 0, 0.12) !important;
     box-shadow: 0 0 18px rgba(255, 215, 0, 0.35);
     animation: premiumPulse 3s ease-in-out infinite;
 }
@@ -1636,70 +1500,60 @@
     0%, 100% { box-shadow: 0 0 18px rgba(255, 215, 0, 0.35); }
     50% { box-shadow: 0 0 28px rgba(255, 215, 0, 0.55); }
 }
-.animal-emoji { font-size: 36px; margin-bottom: 6px; }
-.animal-name { 
-    font-size: 13px; 
+#overlay .animal-emoji { font-size: 34px !important; margin-bottom: 5px; }
+#overlay .animal-name { 
+    font-size: 12.5px !important; 
     font-weight: 700; 
     color: rgba(255, 255, 255, 0.95); 
-    margin-bottom: 4px; 
+    margin-bottom: 3px; 
 }
-.animal-points {
-    font-size: 15px;
+#overlay .animal-points {
+    font-size: 14.5px !important;
     font-weight: 800;
     background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
-.powerup-card, .danger-card { 
-    grid-column: span 2; 
-    padding: 14px 10px;
+#overlay .powerup-card, #overlay .danger-card { 
+    grid-column: 1 / -1 !important; 
+    padding: 13px 10px !important;
 }
-.powerup-card { border: 2px solid #00FFFF; background: rgba(0, 255, 255, 0.12); }
-.danger-card { border: 2px solid #FF4444; background: rgba(255, 68, 68, 0.12); }
-/* Buttons - slightly smaller, better spacing */
-.btn-primary {
+#overlay .powerup-card { border: 2px solid #00FFFF !important; background: rgba(0, 255, 255, 0.12) !important; }
+#overlay .danger-card { border: 2px solid #FF4444 !important; background: rgba(255, 68, 68, 0.12) !important; }
+/* Buttons */
+#overlay .btn-primary, #overlay .btn-secondary, #overlay .btn-premium {
+    width: 100% !important;
+    margin: 10px 0 !important;
+    border-radius: 20px !important;
+    font-weight: 800 !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4) !important;
+}
+#overlay .btn-primary {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
-    border: none;
     padding: 17px 30px;
     font-size: 18px;
-    font-weight: 800;
-    border-radius: 20px;
-    width: 100%;
-    margin: 12px 0;
-    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
     animation: startPulse 2s infinite;
 }
-@keyframes startPulse {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.04); }
-}
-.btn-secondary {
+#overlay .btn-secondary {
     background: rgba(255, 255, 255, 0.08);
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.2);
     padding: 13px 22px;
     font-size: 16px;
-    font-weight: 600;
-    border-radius: 16px;
-    width: 100%;
-    margin: 8px 0;
 }
-.btn-premium {
+#overlay .btn-premium {
     background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
     color: #000;
-    border: none;
     padding: 17px 30px;
     font-size: 18px;
-    font-weight: 800;
-    border-radius: 20px;
-    width: 100%;
-    margin: 16px 0 20px;
-    box-shadow: 0 10px 30px rgba(255, 215, 0, 0.4);
     animation: premiumPulse 3s infinite;
 }
-/* Floating animals */
-.floating-animal {
+@keyframes startPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.04); }
+}
+#overlay .floating-animal {
     position: absolute;
     font-size: 38px;
     opacity: 0.14;
@@ -1710,8 +1564,6 @@
     0% { transform: translateY(100vh) rotate(0deg); }
     100% { transform: translateY(-120px) rotate(360deg); }
 }
-
-
 
 
 
