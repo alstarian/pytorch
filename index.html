@@ -29,117 +29,154 @@
 
 
 
-/* Main menu modal - more Apple-like */
-.modal {
-    background: rgba(25, 30, 50, 0.92); /* Slightly lighter for depth */
-    backdrop-filter: blur(32px);
-    -webkit-backdrop-filter: blur(32px);
-    border: none;
-    padding: 80px 32px 60px; /* More breathing room */
-    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6);
+
+/* Main overlay background - subtle premium particles */
+#overlay {
+    background: rgba(10, 14, 26, 0.96);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    position: relative;
+    overflow: hidden;
+}
+#overlay::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(circle at 50% 30%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, rgba(255, 215, 0, 0.1) 0%, transparent 40%);
+    pointer-events: none;
+    animation: float 20s infinite linear;
+}
+@keyframes float {
+    0% { transform: translate(0, 0); }
+    50% { transform: translate(20px, -30px); }
+    100% { transform: translate(0, 0); }
 }
 
+/* Modal - no border, full bleed, maximum premium feel */
+.modal {
+    background: transparent; /* No solid background */
+    border: none;
+    border-radius: 0;
+    padding: 100px 32px 80px;
+    width: 100%;
+    height: 100%;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* Title gradient exactly like mockup */
 h1 {
-    font-size: 64px;              /* Bigger impact */
+    font-size: 68px;
     font-weight: 900;
-    color: #ffffff;               /* Pure white - no gradient */
-    margin-bottom: 8px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0 0 12px;
     letter-spacing: -2px;
 }
 
+/* Subtitle */
 .subtitle {
     font-size: 19px;
-    color: rgba(255, 255, 255, 0.75);
-    margin-bottom: 40px;
-    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 50px;
     font-weight: 600;
 }
 
-/* New high score display on menu */
+/* High score with glow */
 .high-score {
-    font-size: 28px;
+    font-size: 36px;
     font-weight: 800;
     color: #FFD700;
-    margin: 20px 0 40px;
-    text-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+    margin: 0 0 30px;
 }
 
-.animal-list {
-    background: rgba(255, 255, 255, 0.06);
+/* Animal emoji showcase row */
+.emoji-showcase {
+    display: flex;
+    gap: 20px;
+    margin: 20px 0 60px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+.showcase-emoji {
+    font-size: 48px;
+    filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.3));
+}
+
+/* Buttons - larger, more premium */
+button {
+    width: 90%;
+    max-width: 380px;
+    padding: 24px;
+    font-size: 22px;
+    font-weight: 700;
     border-radius: 28px;
-    padding: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    max-height: 55vh;
-    overflow-y: auto;
-    margin: 32px 0;
+    margin: 12px 0;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    transition: all 0.3s ease;
+}
+button:active {
+    transform: translateY(4px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
-.animal-item {
-    padding: 20px 18px;
-    margin: 10px 0;
+/* Start button - prominent gradient */
+#startBtn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+/* Secondary buttons - dark frosted */
+.secondary {
     background: rgba(255, 255, 255, 0.08);
-    border-radius: 22px;
+    color: rgba(255, 255, 255, 0.8);
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.animal-emoji {
-    font-size: 48px; /* Larger emojis */
+/* Premium button - glowing gold border + unicorn */
+#premiumBtn {
+    position: relative;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: 3px solid #FFD700;
+    box-shadow: 0 0 40px rgba(255, 215, 0, 0.4);
+}
+#premiumBtn::after {
+    content: '🦄';
+    position: absolute;
+    bottom: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 60px;
 }
 
-.animal-name {
-    font-size: 18px;
-    color: #ffffff;
-    font-weight: 800;
-}
-
-.animal-points {
+/* Restore smaller */
+#restoreBtn, .secondary {
     font-size: 17px;
-    padding: 10px 18px;
-    border-radius: 18px;
+    padding: 18px;
 }
 
-button {
-    padding: 22px 50px;
-    font-size: 20px;
-    font-weight: 700;
-    border-radius: 22px;
-    margin: 14px 0;
-    width: 100%;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
-    transition: all 0.25s ease;
+/* Firebase status - small and centered */
+.firebase-status {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 20px 0 40px;
 }
+.connected { color: #4ade80; }
 
-button:active {
-    transform: translateY(4px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
-}
 
-/* Tablet/iPad grid layout for animal list */
-@media (min-width: 768px) and (orientation: portrait) {
-    .animal-list {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 18px;
-        padding: 24px;
-    }
-    
-    .animal-item {
-        margin: 0;
-        flex-direction: column;
-        text-align: center;
-        padding: 24px 16px;
-    }
-    
-    .animal-left {
-        flex-direction: column;
-        gap: 12px;
-    }
-    
-    button {
-        padding: 26px 60px;
-        font-size: 22px;
-    }
-}
+
+
+
+
+
 
 
 
@@ -1826,83 +1863,39 @@ button:active {
     <div class="slowmo-overlay" id="slowmoOverlay"></div>
 
     <div id="overlay">
-
-
-
-
-
-
-
-<div class="modal">
-    <h1>Zoo Keeper</h1>
-    <p class="subtitle">Rescue falling animals • Catch 6️⃣7️⃣ for Slow-Mo!</p>
-    
-    <!-- New high score display -->
-    <p class="high-score">High Score: <span id="highScoreText">0</span></p>
-
-    <div class="animal-list">
-        <!-- Your full animal list stays exactly the same here -->
-        <!-- (I kept it identical - just copied from your code) -->
-        <!-- Regular Animals -->
-        <div class="animal-item">
-            <div class="animal-left">
-                <span class="animal-emoji">🐇</span>
-                <span class="animal-name">Rabbit</span>
-            </div>
-            <span class="animal-points">+10</span>
-        </div>
-        <!-- ... all your other animals ... -->
-        <!-- Premium Animals -->
-        <div class="animal-item premium-item">
-            <div class="animal-left">
-                <span class="animal-emoji">🐉</span>
-                <span class="animal-name">Dragon ⭐</span>
-            </div>
-            <span class="animal-points premium-points">+200</span>
-        </div>
-        <!-- Power-Up & Dangers -->
-        <div class="animal-item" style="border: 2px solid #00FFFF; background: rgba(0, 255, 255, 0.1);">
-            <div class="animal-left">
-                <span class="animal-emoji">6️⃣7️⃣</span>
-                <span class="animal-name">Power-Up</span>
-            </div>
-            <span class="animal-points" style="color: #00FFFF;">SLOW-MO</span>
-        </div>
-        <!-- ... rest of your list ... -->
-    </div>
-
-    <p class="firebase-status" id="firebaseStatus">Connecting to leaderboard...</p>
-    
-    <button id="startBtn">Start Playing</button>
-    <button class="secondary" id="statsBtn">View Stats 📊</button>
-    <button class="secondary" id="leaderboardBtn">Leaderboard 🏆</button>
-    
-    <!-- Premium buttons -->
-    <button id="premiumBtn" onclick="buyPremiumAnimals()"
-            style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                   color: white; border: 2px solid #FFD700;
-                   box-shadow: 0 10px 30px rgba(255,215,0,0.3);
-                   font-size: 20px; font-weight: bold; padding: 20px 32px;
-                   margin: 20px 0 10px; border-radius: 20px;
-                   animation: pulse 3s infinite;">
-      Unlock Premium Animals 🦄
-    </button>
-    <button onclick="restorePurchases()"
-            style="background: rgba(255,255,255,0.1); color: #ccc; border: 1px solid rgba(255,255,255,0.2);
-                   font-size: 15px; padding: 14px 28px; margin: 5px 0;
-                   border-radius: 16px;">
-      Restore Purchases
-    </button>
-</div>
-
-
-
-
-
-
-
+        <div class="modal">
+    <div>
+        <h1>Zoo Keeper</h1>
+        <p class="subtitle">Rescue falling animals • Catch 6️⃣7️⃣ for Slow-Mo!</p>
         
+        <p class="high-score">High Score: <span id="highScoreText">0</span></p>
+        
+        <!-- Animal emoji showcase row -->
+        <div class="emoji-showcase">
+            <span class="showcase-emoji">🐇</span>
+            <span class="showcase-emoji">🐨</span>
+            <span class="showcase-emoji">🦊</span>
+            <span class="showcase-emoji">🦁</span>
+            <span class="showcase-emoji">🐼</span>
+            <span class="showcase-emoji">🐯</span>
+            <span class="showcase-emoji">🐘</span>
+            <span class="showcase-emoji">🦒</span>
+            <span class="showcase-emoji">🦄</span> <!-- Premium tease -->
+        </div>
+        
+        <p class="firebase-status" id="firebaseStatus">✓ Connected to leaderboard</p>
     </div>
+    
+    <div>
+        <button id="startBtn">START PLAYING</button>
+        <button class="secondary" id="statsBtn">VIEW STATS 📊</button>
+        <button class="secondary" id="leaderboardBtn">LEADERBOARD 🏆</button>
+        
+        <button id="premiumBtn" onclick="buyPremiumAnimals()">UNLOCK PREMIUM ANIMALS</button>
+        
+        <button class="secondary" onclick="restorePurchases()">RESTORE PURCHASES</button>
+    </div>
+</div>
 
     <div id="gameOverScreen" class="hidden">
         <div id="overlay">
@@ -4448,16 +4441,14 @@ initIAP();
 
 
 
-// Update high score on menu (uncommented and fixed ID)
+<script>
     function updateMainMenuHighScore() {
         const currentHighScore = parseInt(localStorage.getItem('zooKeeperHighScore') || 0);
         document.getElementById('highScoreText').textContent = currentHighScore.toLocaleString();
     }
-    
-    // Call it when page loads and when returning to menu
     window.addEventListener('load', updateMainMenuHighScore);
-    
-    // Also call it when quitting to menu (add to your quitButton handler if needed)
+    // Also call when returning to menu (e.g., in quitButton handler)
+</script>
 
 
 
