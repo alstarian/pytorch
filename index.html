@@ -29,6 +29,201 @@
 
 
 
+
+
+/* FULL-SCREEN HOME SCREEN - NO BOX FEEL */
+#overlay {
+    background: linear-gradient(180deg, #0a0e1a 0%, #0f1729 50%, #1a2332 100%);
+    backdrop-filter: blur(10px); /* Subtle blur for depth */
+}
+
+.modal.home-screen {
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 20px 24px 40px; /* Comfortable edge padding */
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important; /* No background/box */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Pushes header top, buttons bottom */
+    align-items: center;
+    overflow: hidden; /* Clean edges */
+    box-sizing: border-box;
+}
+
+/* Header - pinned top */
+.home-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+.home-header h1 {
+    font-size: 40px;
+    background: linear-gradient(135deg, #a855f7 0%, #e879f9 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+}
+.logo-heart { font-size: 32px; }
+.home-status {
+    text-align: right;
+    font-size: 14px;
+    font-weight: 600;
+    color: #4ade80;
+    line-height: 1.4;
+}
+
+/* Hero Animals - large, centered, responsive */
+.hero-animals {
+    position: relative;
+    width: 90%; /* Takes most of screen width */
+    max-width: 500px; /* Caps size on large screens */
+    margin: 20px auto;
+    animation: gentleFloat 8s ease-in-out infinite;
+}
+.hero-group {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 20px; /* Optional soft edges */
+}
+
+/* Gentle float + subtle rotate */
+@keyframes gentleFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-12px) rotate(1deg); }
+}
+
+/* Bubbles & spotlight effects */
+.bubbles::before, .bubbles::after,
+.bubbles::before:nth-child(3), .bubbles::after:nth-child(3) {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 50%;
+    animation: bubbleRise 5s infinite ease-in-out;
+}
+.bubbles::before { bottom: 20px; left: 20%; animation-delay: 0s; }
+.bubbles::after { bottom: 40px; right: 30%; animation-delay: 1s; }
+.bubbles::before:nth-child(3) { bottom: 60px; left: 50%; animation-delay: 2s; width: 15px; height: 15px; }
+.bubbles::after:nth-child(3) { bottom: 30px; right: 15%; animation-delay: 3s; width: 25px; height: 25px; }
+
+@keyframes bubbleRise {
+    0% { transform: translateY(0); opacity: 0; }
+    50% { opacity: 0.6; }
+    100% { transform: translateY(-300px); opacity: 0; }
+}
+
+.spotlight {
+    position: absolute;
+    top: -60%;
+    left: 50%;
+    width: 800px;
+    height: 800px;
+    background: radial-gradient(circle, rgba(255,255,255,0.12) 0%, transparent 65%);
+    transform: translateX(-50%);
+    pointer-events: none;
+    animation: spotlightPulse 7s ease-in-out infinite;
+}
+@keyframes spotlightPulse {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 0.8; }
+}
+
+/* Titles */
+.main-title { font-size: 36px; margin: 10px 0 0; font-weight: 800; }
+.main-subtitle { font-size: 18px; color: rgba(255,255,255,0.7); margin: 0 0 30px; }
+
+/* Big Start Button */
+.big-start-btn {
+    background: linear-gradient(135deg, #a855f7 0%, #e879f9 100%);
+    padding: 22px 70px;
+    font-size: 22px;
+    border-radius: 50px;
+    margin: 20px 0;
+    box-shadow: 0 10px 30px rgba(168, 85, 247, 0.4);
+}
+
+/* Bottom Row */
+.bottom-row {
+    display: flex;
+    gap: 16px;
+    width: 100%;
+    max-width: 400px;
+    margin: 10px 0;
+}
+.bottom-btn {
+    flex: 1;
+    background: rgba(20, 25, 40, 0.85);
+    border: 1px solid rgba(102, 126, 234, 0.3);
+    border-radius: 20px;
+    padding: 18px;
+    font-size: 17px;
+    backdrop-filter: blur(15px);
+}
+.btn-icon { font-size: 26px; display: block; margin-bottom: 6px; }
+
+/* Premium Section - compact */
+.premium-section {
+    width: 100%;
+    max-width: 400px;
+    background: rgba(20, 25, 40, 0.6);
+    border-radius: 20px;
+    padding: 14px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-top: 10px;
+}
+.unicorn-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 14px;
+    flex-shrink: 0;
+}
+.premium-info { flex: 1; text-align: left; }
+.premium-title { font-size: 17px; font-weight: 800; }
+.premium-desc { font-size: 13px; color: rgba(255,255,255,0.7); }
+.premium-buttons { display: flex; flex-direction: column; gap: 6px; }
+.unlock-btn {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: black;
+    font-weight: bold;
+    padding: 10px 18px;
+    border-radius: 12px;
+    font-size: 15px;
+}
+.restore-btn {
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    background: none;
+    border: none;
+    text-decoration: underline;
+}
+
+/* Firebase status tiny at bottom */
+.firebase-status.small { 
+    font-size: 11px; 
+    margin-top: 10px; 
+    color: rgba(255,255,255,0.5);
+}
+
+
+
+
+
+
+
+
             @keyframes pulse {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.02); }
@@ -1722,12 +1917,12 @@
         </div>
     </div>
 
-    <!-- Hero Animals (single combined image) -->
-    <div class="hero-animals">
-        <img src="animals.png" class="hero-group" alt="Zoo Animals">
-        <div class="bubbles"></div>
-        <div class="spotlight"></div>
-    </div>
+ <!-- Hero Animals -->
+<div class="hero-animals">
+    <img src="animals.png" class="hero-group" alt="Zoo Animals" style="max-width:100%; height:auto;">
+    <div class="bubbles"></div>
+    <div class="spotlight"></div>
+</div>
 
     <!-- Subtitle -->
     <h2 class="main-title">Catch Animals</h2>
@@ -1748,7 +1943,8 @@
 
     <!-- Premium Section -->
     <div class="premium-section">
-        <img src="unicorn.png" class="unicorn-icon" alt="Unicorn">
+       <!-- Premium unicorn -->
+<img src="unicorn.png" class="unicorn-icon" alt="Unicorn" style="max-width:100%; height:auto;">
         <div class="premium-info">
             <div class="premium-title">Premium Animals</div>
             <div class="premium-desc">14 Rare Species</div>
@@ -1767,7 +1963,7 @@
 
 
 
-    
+
 
     <div id="gameOverScreen" class="hidden">
         <div id="overlay">
