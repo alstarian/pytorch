@@ -1579,14 +1579,14 @@
 
 /* Hero Title */
 .hero-title {
-    font-size: 64px;
+    font-size: 48px;
     font-weight: 900;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    letter-spacing: -2px;
-    margin-bottom: 8px;
+    letter-spacing: -1px;
+    margin-bottom: 4px; /* was 8px */
     animation: titleGlow 3s ease-in-out infinite alternate;
 }
 
@@ -1596,12 +1596,11 @@
 }
 
 .hero-subtitle {
-    font-size: 18px;
+    font-size: 16px;      /* was 18px */
     color: rgba(255, 255, 255, 0.75);
-    margin-bottom: 32px;
+    margin-bottom: 20px;  /* was 32px */
     font-weight: 600;
 }
-
 .high-score {
     font-size: 24px;
     font-weight: 800;
@@ -1615,12 +1614,13 @@
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 12px;
-    margin: 32px 0;
-    padding: 16px;
+    margin: 24px 0;          /* was 32px */
+    padding: 12px 10px;      /* was 16px */
     background: rgba(255, 255, 255, 0.03);
     border-radius: 20px;
     border: 1px solid rgba(255, 255, 255, 0.08);
 }
+
 
 .animal-card {
     background: rgba(255, 255, 255, 0.05);
@@ -1889,79 +1889,155 @@
     <div class="slowmo-overlay" id="slowmoOverlay"></div>
 
     <div id="overlay">
-        <div class="modal">
-            <!-- Floating background animals -->
-    <div class="floating-animal" style="left: 10%; animation-delay: 0s;">🐘</div>
-    <div class="floating-animal" style="left: 30%; animation-delay: 4s;">🦒</div>
-    <div class="floating-animal" style="left: 50%; animation-delay: 8s;">🐯</div>
-    <div class="floating-animal" style="left: 70%; animation-delay: 12s;">🦁</div>
-    <div class="floating-animal" style="left: 90%; animation-delay: 16s;">🐨</div>
+        <!-- Floating background animals for ambiance -->
+        <div class="floating-animal" style="left: 8%; animation-delay: 0s;">🐘</div>
+        <div class="floating-animal" style="left: 25%; animation-delay: 5s;">🦒</div>
+        <div class="floating-animal" style="left: 45%; animation-delay: 10s;">🐯</div>
+        <div class="floating-animal" style="left: 65%; animation-delay: 15s;">🦁</div>
+        <div class="floating-animal" style="left: 85%; animation-delay: 20s;">🐨</div>
+        <div class="floating-animal" style="left: 15%; animation-delay: 8s;">🦊</div>
+        <div class="floating-animal" style="left: 75%; animation-delay: 12s;">🐼</div>
 
-    <h1 class="hero-title">Zoo Keeper</h1>
-    <p class="hero-subtitle">Rescue falling animals · Catch 6️⃣7️⃣ for slow-motion!</p>
+        <h1 class="hero-title">Zoo Keeper</h1>
+        <p class="hero-subtitle">Rescue falling animals · Catch 6️⃣7️⃣ for slow-motion!</p>
 
-    <div class="high-score">🏆 High Score: <span id="mainHighScore">0</span></div>
+        <div class="high-score">🏆 High Score: <span id="mainHighScore">0</span></div>
 
-    <div class="animal-grid">
-        <!-- Copy ALL your existing animal-item divs here, but change class names -->
-        <!-- Example for regular animals -->
-        <div class="animal-card">
-            <div class="animal-emoji">🐇</div>
-            <div class="animal-name">Rabbit</div>
-            <div class="animal-points">+10</div>
+        <div class="animal-grid">
+            <!-- Regular Animals -->
+            <div class="animal-card">
+                <div class="animal-emoji">🐇</div>
+                <div class="animal-name">Rabbit</div>
+                <div class="animal-points">+10</div>
+            </div>
+            <div class="animal-card">
+                <div class="animal-emoji">🐨</div>
+                <div class="animal-name">Koala</div>
+                <div class="animal-points">+15</div>
+            </div>
+            <div class="animal-card">
+                <div class="animal-emoji">🦊</div>
+                <div class="animal-name">Fox</div>
+                <div class="animal-points">+20</div>
+            </div>
+            <div class="animal-card">
+                <div class="animal-emoji">🦁</div>
+                <div class="animal-name">Lion</div>
+                <div class="animal-points">+25</div>
+            </div>
+            <div class="animal-card">
+                <div class="animal-emoji">🐼</div>
+                <div class="animal-name">Panda</div>
+                <div class="animal-points">+30</div>
+            </div>
+            <div class="animal-card">
+                <div class="animal-emoji">🐯</div>
+                <div class="animal-name">Tiger</div>
+                <div class="animal-points">+35</div>
+            </div>
+            <div class="animal-card">
+                <div class="animal-emoji">🐘</div>
+                <div class="animal-name">Elephant</div>
+                <div class="animal-points">+40</div>
+            </div>
+            <div class="animal-card">
+                <div class="animal-emoji">🦒</div>
+                <div class="animal-name">Giraffe</div>
+                <div class="animal-points">+45</div>
+            </div>
+
+            <!-- Premium Animals -->
+            <div class="animal-card premium">
+                <div class="animal-emoji">🦄</div>
+                <div class="animal-name">Unicorn ⭐</div>
+                <div class="animal-points">+100</div>
+            </div>
+            <div class="animal-card premium">
+                <div class="animal-emoji">🦚</div>
+                <div class="animal-name">Peacock ⭐</div>
+                <div class="animal-points">+110</div>
+            </div>
+            <div class="animal-card premium">
+                <div class="animal-emoji">🐺</div>
+                <div class="animal-name">Arctic Wolf ⭐</div>
+                <div class="animal-points">+120</div>
+            </div>
+            <div class="animal-card premium">
+                <div class="animal-emoji">🦭</div>
+                <div class="animal-name">Seal ⭐</div>
+                <div class="animal-points">+130</div>
+            </div>
+            <div class="animal-card premium">
+                <div class="animal-emoji">🐒</div>
+                <div class="animal-name">Golden Monkey ⭐</div>
+                <div class="animal-points">+140</div>
+            </div>
+            <div class="animal-card premium">
+                <div class="animal-emoji">🦜</div>
+                <div class="animal-name">Macaw ⭐</div>
+                <div class="animal-points">+150</div>
+            </div>
+            <div class="animal-card premium">
+                <div class="animal-emoji">🦅</div>
+                <div class="animal-name">Golden Eagle ⭐</div>
+                <div class="animal-points">+160</div>
+            </div>
+            <div class="animal-card premium">
+                <div class="animal-emoji">🦓</div>
+                <div class="animal-name">Zebra ⭐</div>
+                <div class="animal-points">+170</div>
+            </div>
+            <div class="animal-card premium">
+                <div class="animal-emoji">🦉</div>
+                <div class="animal-name">Moon Owl ⭐</div>
+                <div class="animal-points">+180</div>
+            </div>
+            <div class="animal-card premium">
+                <div class="animal-emoji">🦇</div>
+                <div class="animal-name">Mystic Bat ⭐</div>
+                <div class="animal-points">+190</div>
+            </div>
+            <div class="animal-card premium">
+                <div class="animal-emoji">🐉</div>
+                <div class="animal-name">Dragon ⭐</div>
+                <div class="animal-points">+200</div>
+            </div>
+            <div class="animal-card premium">
+                <div class="animal-emoji">🕊️</div>
+                <div class="animal-name">Phoenix ⭐</div>
+                <div class="animal-points">+220</div>
+            </div>
+
+            <!-- Power-Up & Dangers -->
+            <div class="animal-card powerup-card">
+                <div class="animal-emoji">6️⃣7️⃣</div>
+                <div class="animal-name">Power-Up</div>
+                <div class="animal-points" style="color:#00FFFF;">SLOW-MO</div>
+            </div>
+            <div class="animal-card danger-card">
+                <div class="animal-emoji">💣🧨</div>
+                <div class="animal-name">Danger!</div>
+                <div class="animal-points" style="color:#FF4444;">-1 LIFE</div>
+            </div>
+            <div class="animal-card danger-card">
+                <div class="animal-emoji">❤️</div>
+                <div class="animal-name">Heart Life</div>
+                <div class="animal-points" style="color:#ff4444;">+1 LIFE</div>
+            </div>
         </div>
-        <div class="animal-card">
-            <div class="animal-emoji">🐨</div>
-            <div class="animal-name">Koala</div>
-            <div class="animal-points">+15</div>
-        </div>
-        <!-- ... continue for all regular animals ... -->
 
-        <!-- Premium animals — add class="premium" -->
-        <div class="animal-card premium">
-            <div class="animal-emoji">🦄</div>
-            <div class="animal-name">Unicorn ⭐</div>
-            <div class="animal-points premium-points">+100</div>
-        </div>
-        <!-- ... all other premium animals with class="premium" ... -->
+        <button id="startBtn" class="btn-primary">🚀 Start Playing</button>
+        <button id="statsBtn" class="btn-secondary">📊 View Stats</button>
+        <button id="leaderboardBtn" class="btn-secondary">🏆 Leaderboard</button>
 
-        <!-- Power-up and dangers (full width) -->
-        <div class="animal-card powerup-card">
-            <div class="animal-emoji">6️⃣7️⃣</div>
-            <div class="animal-name">Power-Up</div>
-            <div class="animal-points" style="color:#00FFFF;">SLOW-MO</div>
-        </div>
-        <div class="animal-card danger-card">
-            <div class="animal-emoji">💣🧨</div>
-            <div class="animal-name">Danger!</div>
-            <div class="animal-points" style="color:#FF4444;">-1 LIFE</div>
-        </div>
-        <div class="animal-card danger-card">
-            <div class="animal-emoji">❤️</div>
-            <div class="animal-name">Heart Life</div>
-            <div class="animal-points" style="color:#ff4444;">+1 LIFE</div>
-        </div>
-    </div>
+        <button id="premiumBtn" onclick="buyPremiumAnimals()" class="btn-premium">
+            🦄 Unlock Premium Animals (14 Rare Species)
+        </button>
+        <button onclick="restorePurchases()" class="btn-secondary">
+            🔄 Restore Purchases
+        </button>
 
-    <button id="startBtn" class="btn-primary">🚀 Start Playing</button>
-    <button id="statsBtn" class="btn-secondary">📊 View Stats</button>
-    <button id="leaderboardBtn" class="btn-secondary">🏆 Leaderboard</button>
-
-    <button id="premiumBtn" class="btn-premium">
-        🦄 Unlock Premium Animals (14 Rare Species)
-    </button>
-    <button onclick="restorePurchases()" class="btn-secondary">
-        🔄 Restore Purchases
-    </button>
-
-    <p class="firebase-status" id="firebaseStatus">Connecting to leaderboard...</p>
-
-
-
-
-
-
-
+        <p class="firebase-status" id="firebaseStatus">Connecting to leaderboard...</p>
 
 
 
