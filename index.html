@@ -2272,6 +2272,8 @@ function updateMainMenuHighScore() {
     const currentHighScore = parseInt(localStorage.getItem('zooKeeperHighScore') || 0);
     document.getElementById('mainHighScore').textContent = currentHighScore.toLocaleString();
 }
+
+
 updateMainMenuHighScore(); // Show it immediately
 
 // Also call this whenever you set a new high score (you already have logic in endGame)
@@ -2778,13 +2780,7 @@ function resetGameTracker() {
 
 
 
-        function updateMainMenuHighScore() {
-            const currentHighScore = parseInt(localStorage.getItem('zooKeeperHighScore') || 0);
-            highScore = currentHighScore;
-            document.getElementById('highScoreText').textContent = `High Score: ${currentHighScore}`;
-        }
-
-        // updateMainMenuHighScore();
+       
 
         let audioCtx = null;
         let audioInitialized = false;
