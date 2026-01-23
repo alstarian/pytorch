@@ -1710,7 +1710,34 @@
 
     <div class="slowmo-overlay" id="slowmoOverlay"></div>
 
-    <div id="overlay">
+
+
+<!-- Your game canvas and HUD stuff is up here -->
+
+<!-- APPLE-STYLE HOME SCREEN (NEW - ADD THIS) -->
+<div id="appleHomeScreen" style="...">
+    <!-- All the home screen code here -->
+</div>
+
+<!-- YOUR EXISTING ANIMAL LIST (KEEP THIS EXACTLY AS IS) -->
+<div id="overlay">
+    <div class="modal">
+        <h1>Zoo Keeper</h1>
+        <p class="subtitle">Catch 6️⃣7️⃣ to slow time!</p>
+        <div class="animal-list">
+            <!-- All your animals stay here -->
+        </div>
+        <button id="startBtn">Start Playing</button>
+        <!-- etc -->
+    </div>
+</div>
+
+
+
+    
+
+    <div id="overlay" class="hidden">
+
         <div class="modal">
             <h1>Zoo Keeper</h1>
             <p class="subtitle">Catch 6️⃣7️⃣ to slow time!</p>
@@ -4457,6 +4484,42 @@ initIAP();
 
 
 
+// APPLE HOME SCREEN NAVIGATION
+document.getElementById('appleStartBtn').addEventListener('click', function() {
+    document.getElementById('appleHomeScreen').style.display = 'none';
+    startGame();
+});
+
+document.getElementById('appleAnimalsBtn').addEventListener('click', function() {
+    document.getElementById('appleHomeScreen').style.display = 'none';
+    document.getElementById('overlay').classList.remove('hidden');
+});
+
+document.getElementById('appleLeaderboardBtn').addEventListener('click', function() {
+    document.getElementById('appleHomeScreen').style.display = 'none';
+    loadLeaderboard();
+    document.getElementById('leaderboardScreen').classList.remove('hidden');
+});
+
+// Update high score on home screen
+function updateAppleHighScore() {
+    const score = parseInt(localStorage.getItem('zooKeeperHighScore')) || 0;
+    document.getElementById('appleHighScore').textContent = score.toLocaleString();
+}
+
+// Call on page load
+updateAppleHighScore();
+
+// Update when returning to home screen after game over
+const originalQuitBtn = document.getElementById('quitButton');
+if(originalQuitBtn) {
+    originalQuitBtn.addEventListener('click', function() {
+        setTimeout(function() {
+            document.getElementById('appleHomeScreen').style.display = 'flex';
+            updateAppleHighScore();
+        }, 300);
+    });
+}
 
 
 
