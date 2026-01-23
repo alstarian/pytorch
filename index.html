@@ -4118,7 +4118,7 @@ showZoneTransition(initialZone.name);
 
         document.getElementById('startBtn').addEventListener('click', startGame);
         document.getElementById('restartBtn').addEventListener('click', restart);
-        document.getElementById('statsBtn').addEventListener('click', showStats);
+       
         document.getElementById('viewStatsBtn').addEventListener('click', () => {
             document.getElementById('gameOverScreen').classList.add('hidden');
             showStats();
@@ -4129,11 +4129,7 @@ showZoneTransition(initialZone.name);
             updateMainMenuHighScore();
         });
 
-        document.getElementById('leaderboardBtn').addEventListener('click', () => {
-            document.getElementById('overlay').classList.add('hidden');
-            document.getElementById('leaderboardScreen').classList.remove('hidden');
-            loadLeaderboard();
-        });
+     
 
         document.getElementById('closeLeaderboardBtn').addEventListener('click', () => {
             document.getElementById('leaderboardScreen').classList.add('hidden');
