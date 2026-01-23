@@ -1710,40 +1710,8 @@
 
     <div class="slowmo-overlay" id="slowmoOverlay"></div>
 
-
-
-<!-- NEW HOME SCREEN -->
-<div id="homeScreen" style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #000000; display: flex; align-items: center; justify-content: center; z-index: 2000;">
-
-    <div style="width: 90%; max-width: 400px; text-align: center; padding: 20px;">
-        
-        <!-- Animals Image -->
-        <img src="bg.png" alt="Zoo Animals" style="width: 100%; max-width: 300px; margin: 30px auto;">
-
-
-        <!-- Title -->
-        <h2 style="font-size: 36px; margin: 20px 0;">Catch Animals</h2>
-        <p style="font-size: 16px; color: rgba(255,255,255,0.7);">Catch 6️⃣7️⃣ to slow time!</p>
-        
-        <!-- Start Button -->
-        <button id="homeStartBtn" style="width: 100%; padding: 20px; font-size: 22px; margin: 20px 0;">
-            ▶ Start Playing
-        </button>
-
-        <!-- Stats Button -->
-        <button id="homeStatsBtn" class="secondary" style="width: 100%; padding: 18px; font-size: 18px;">
-            📊 View Animals & Stats
-        </button>
-    </div>
-</div>
-
-
-    
-
-    <div id="overlay" class="hidden">
+    <div id="overlay">
         <div class="modal">
-
-
             <h1>Zoo Keeper</h1>
             <p class="subtitle">Catch 6️⃣7️⃣ to slow time!</p>
 
@@ -4155,11 +4123,7 @@ showZoneTransition(initialZone.name);
             startGame();
         }
 
-        document.getElementById('startBtn').addEventListener('click', function() {
-    document.getElementById('overlay').classList.add('hidden');
-    startGame();
-});
-
+        document.getElementById('startBtn').addEventListener('click', startGame);
         document.getElementById('restartBtn').addEventListener('click', restart);
         document.getElementById('statsBtn').addEventListener('click', showStats);
         document.getElementById('viewStatsBtn').addEventListener('click', () => {
@@ -4494,16 +4458,6 @@ initIAP();
 
 
 
-// HOME SCREEN NAVIGATION
-document.getElementById('homeStartBtn').addEventListener('click', function() {
-    document.getElementById('homeScreen').classList.add('hidden');
-    startGame();
-});
-
-document.getElementById('homeStatsBtn').addEventListener('click', function() {
-    document.getElementById('homeScreen').classList.add('hidden');
-    document.getElementById('overlay').classList.remove('hidden');
-});
 
 
 
