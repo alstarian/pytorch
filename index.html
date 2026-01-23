@@ -4459,6 +4459,32 @@ initIAP();
 
 
 
+// Fix existing menu buttons (inside #overlay - the animal list screen)
+document.getElementById('statsBtn').addEventListener('click', function() {
+    document.getElementById('overlay').classList.add('hidden');
+    showStats();
+});
+
+document.getElementById('leaderboardBtn').addEventListener('click', function() {
+    document.getElementById('overlay').classList.add('hidden');
+    loadLeaderboard();
+    document.getElementById('leaderboardScreen').classList.remove('hidden');
+});
+
+// Back buttons - return to animal list
+document.getElementById('closeStatsBtn').addEventListener('click', function() {
+    document.getElementById('statsScreen').classList.add('hidden');
+    document.getElementById('overlay').classList.remove('hidden');
+});
+
+document.getElementById('closeLeaderboardBtn').addEventListener('click', function() {
+    document.getElementById('leaderboardScreen').classList.add('hidden');
+    document.getElementById('overlay').classList.remove('hidden');
+});
+
+
+
+
 
 
 
