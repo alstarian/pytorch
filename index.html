@@ -1782,27 +1782,35 @@
             </button>
         </div>
 
-        <!-- Premium Callout -->
-        <div style="background: linear-gradient(135deg, rgba(255,215,0,0.12) 0%, rgba(255,165,0,0.08) 100%); 
-             border: 1px solid rgba(255,215,0,0.25); border-radius: 18px; padding: 18px; 
-             display: flex; align-items: center; gap: 16px; backdrop-filter: blur(10px);">
-            <span style="font-size: 52px;">🦄</span>
-            <div style="flex: 1; text-align: left;">
-                <div style="font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 4px;">
-                    Premium Animals
-                </div>
-                <div style="font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 12px;">
-                    14 exclusive species
-                </div>
-                <button onclick="buyPremiumAnimals()" style="padding: 10px 18px; 
-                         background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-                         color: #000; border: none; border-radius: 10px; font-size: 14px; font-weight: 700;
-                         cursor: pointer; box-shadow: 0 4px 12px rgba(255,215,0,0.3);">
-                    Unlock $2.99
-                </button>
-            </div>
+       <!-- Premium Callout (COMPACT VERSION) -->
+<div style="background: linear-gradient(135deg, rgba(255,215,0,0.12) 0%, rgba(255,165,0,0.08) 100%); 
+     border: 1px solid rgba(255,215,0,0.25); border-radius: 16px; padding: 14px; 
+     display: flex; align-items: center; gap: 12px; backdrop-filter: blur(10px);">
+    <span style="font-size: 42px;">🦄</span>
+    <div style="flex: 1; text-align: left;">
+        <div style="font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 2px;">
+            Premium Animals
+        </div>
+        <div style="font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 8px;">
+            14 exclusive species
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <button onclick="buyPremiumAnimals()" style="padding: 7px 14px; 
+                     background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+                     color: #000; border: none; border-radius: 8px; font-size: 12px; font-weight: 700;
+                     cursor: pointer; box-shadow: 0 4px 12px rgba(255,215,0,0.3);">
+                Unlock $2.99
+            </button>
+            <button onclick="restorePurchases()" style="padding: 7px 14px; 
+                     background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.7);
+                     border: 1px solid rgba(255,255,255,0.2); border-radius: 8px; 
+                     font-size: 12px; font-weight: 600; cursor: pointer;">
+                Restore
+            </button>
         </div>
     </div>
+</div>
+
 </div>
 
 <style>
@@ -4587,9 +4595,8 @@ initIAP();
 
 
 
-
 // ============================================
-// APPLE HOME SCREEN NAVIGATION
+// APPLE HOME SCREEN NAVIGATION (UPDATED)
 // ============================================
 
 // Start Game Button
@@ -4598,7 +4605,7 @@ document.getElementById('appleStartBtn').addEventListener('click', function() {
     startGame();
 });
 
-// Animals Button - Shows your animal list
+// Animals Button
 document.getElementById('appleAnimalsBtn').addEventListener('click', function() {
     document.getElementById('appleHomeScreen').style.display = 'none';
     document.getElementById('overlay').classList.remove('hidden');
@@ -4611,7 +4618,7 @@ document.getElementById('appleLeaderboardBtn').addEventListener('click', functio
     document.getElementById('leaderboardScreen').classList.remove('hidden');
 });
 
-// Update high score display on home screen
+// Update high score display
 function updateAppleHighScore() {
     const score = parseInt(localStorage.getItem('zooKeeperHighScore')) || 0;
     const scoreElement = document.getElementById('appleHighScore');
@@ -4623,20 +4630,35 @@ function updateAppleHighScore() {
 // Call on page load
 updateAppleHighScore();
 
-// Return to home screen after game over (when clicking quit)
-const originalRestartBtn = document.getElementById('restartBtn');
-if(originalRestartBtn) {
-    originalRestartBtn.addEventListener('click', function() {
-        setTimeout(function() {
-            const gameOverScreen = document.getElementById('gameOverScreen');
-            if(gameOverScreen) {
-                gameOverScreen.classList.add('hidden');
-            }
-            document.getElementById('appleHomeScreen').style.display = 'flex';
-            updateAppleHighScore();
-        }, 100);
-    });
+// FIX: Return to Apple home screen from all "Back to Menu" buttons
+function returnToAppleHome() {
+    // Hide all screens
+    document.getElementById('overlay').classList.add('hidden');
+    document.getElementById('leaderboardScreen').classList.add('hidden');
+    document.getElementById('statsScreen').classList.add('hidden');
+    document.getElementById('gameOverScreen').classList.add('hidden');
+    
+    // Show Apple home
+    document.getElementById('appleHomeScreen').style.display = 'flex';
+    updateAppleHighScore();
 }
+
+// Hook into existing "Back to Menu" buttons
+document.getElementById('closeLeaderboardBtn').addEventListener('click', returnToAppleHome);
+document.getElementById('closeStatsBtn').addEventListener('click', returnToAppleHome);
+
+// Hook into "Start Playing" button in animal list screen
+document.getElementById('startBtn').addEventListener('click', function() {
+    document.getElementById('overlay').classList.add('hidden');
+    startGame();
+});
+
+// Hook into "Play Again" button after game over
+document.getElementById('restartBtn').addEventListener('click', function() {
+    setTimeout(function() {
+        returnToAppleHome();
+    }, 100);
+});
 
 
 
