@@ -58,15 +58,17 @@
             gap: 16px;
         }
 
-        h1 {
-            font-size: 36px; /* Smaller title */
-            font-weight: 800;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 4px;
-            letter-spacing: -0.5px;
-        }
+          h1 {
+        font-size: 52px; /* BIGGER */
+        font-weight: 900;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin-bottom: 8px;
+        letter-spacing: -1px;
+        text-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+    }
+
 
         .subtitle {
             font-size: 14px; /* Smaller subtitle */
@@ -84,11 +86,25 @@
             margin-bottom: 16px;
         }
 
-        .animal-emoji {
-            font-size: 32px;
+              .animal-emoji {
+            font-size: 48px; /* Bigger! */
             animation: glowPulse 2s infinite ease-in-out;
-            text-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+            text-shadow: 0 0 20px rgba(102, 126, 234, 0.8),
+                         0 0 40px rgba(102, 126, 234, 0.4);
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
         }
+
+        @keyframes glowPulse {
+            0%, 100% { 
+                opacity: 0.9; 
+                transform: scale(1) translateY(0); 
+            }
+            50% { 
+                opacity: 1; 
+                transform: scale(1.15) translateY(-4px); 
+            }
+        }
+
 
         @keyframes glowPulse {
             0%, 100% { opacity: 0.8; transform: scale(1); }
@@ -142,11 +158,22 @@
             padding: 10px 20px;
         }
 
-        .firebase-status {
-            font-size: 12px;
-            color: #4ade80;
-            margin: 8px 0;
-        }
+      .firebase-status {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 16px 0 8px 0;
+    font-weight: 500;
+}
+
+.firebase-status.connected {
+    color: #4ade80;
+}
+
+.firebase-status.connected::before {
+    content: "● ";
+    font-size: 14px;
+}
+
 
         /* Responsive - Ensure compactness on all screens */
         @media (min-width: 768px) {
