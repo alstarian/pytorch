@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Zoo Keeper Pro">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -11,19 +11,24 @@
     <link rel="icon" type="image/png" sizes="512x512" href="icon.png">
     <meta name="theme-color" content="#0a0e1a">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <!-- ADD THIS LINE -->
-   
     <title>Zoo Keeper</title>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
-        /* Existing styles remain, but we'll override/add for home screen */
+        /* Compact design styles */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
 
         body {
             font-family: 'Poppins', -apple-system, sans-serif;
             background: linear-gradient(135deg, #0a0e1a 0%, #1a1f35 100%);
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         #overlay {
@@ -38,1544 +43,1494 @@
             align-items: center;
             justify-content: center;
             z-index: 1000;
-            overflow-y: auto;
+            overflow: hidden; /* No scroll */
         }
 
         .modal {
-            background: linear-gradient(135deg, rgba(20, 25, 40, 0.98) 0%, rgba(30, 35, 50, 0.98) 100%);
-            border: 1px solid rgba(102, 126, 234, 0.2);
-            border-radius: 24px; /* Softer corners */
-            padding: 40px 24px;
+            background: transparent; /* Sleek, no background box */
+            padding: 20px;
             width: 90%;
             max-width: 400px;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
             display: flex;
             flex-direction: column;
-            gap: 20px;
-            animation: fadeIn 0.5s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            gap: 12px; /* Reduced spacing for compactness */
         }
 
         h1 {
-            font-size: 48px;
+            font-size: 36px; /* Smaller title */
             font-weight: 800;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 0;
-            letter-spacing: -1px;
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            margin-bottom: 4px;
+            letter-spacing: -0.5px;
         }
 
         .subtitle {
-            font-size: 16px;
+            font-size: 14px; /* Smaller subtitle */
             color: rgba(255, 255, 255, 0.7);
-            margin-bottom: 24px;
+            margin-bottom: 16px;
             font-weight: 500;
         }
 
-        /* Tabbed Animal List for Better UX */
-        .animal-tabs {
+        /* Glowing Animal Emojis Row */
+        .animal-emojis {
             display: flex;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
+            flex-wrap: wrap;
             margin-bottom: 16px;
         }
 
-        .tab-button {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 8px 20px;
-            font-size: 14px;
-            font-weight: 600;
-            color: rgba(255, 255, 255, 0.7);
-            cursor: pointer;
-            transition: all 0.3s;
+        .animal-emoji {
+            font-size: 32px;
+            animation: glowPulse 2s infinite ease-in-out;
+            text-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
         }
 
-        .tab-button.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border-color: transparent;
+        @keyframes glowPulse {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.1); }
         }
 
-        .animal-list {
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 20px;
-            padding: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            max-height: 40vh;
-            overflow-y: auto;
-            display: none; /* Hidden by default, shown via JS */
-            scrollbar-width: thin;
-            scrollbar-color: rgba(102, 126, 234, 0.3) transparent;
-        }
-
-        .animal-list.active {
-            display: block;
-        }
-
-        .animal-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            margin: 8px 0;
-            background: rgba(255, 255, 255, 0.04);
-            border-radius: 14px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            transition: transform 0.2s;
-        }
-
-        .animal-item:hover {
-            transform: translateX(4px);
-        }
-
-        .premium-item {
-            border: 2px solid #FFD700 !important;
-            background: linear-gradient(135deg, rgba(255, 215, 0, 0.15) 0%, rgba(255, 215, 0, 0.05) 100%) !important;
-            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
-            animation: premiumGlow 2s infinite;
-        }
-
-        @keyframes premiumGlow {
-            0%, 100% { box-shadow: 0 0 15px rgba(255, 215, 0, 0.4); }
-            50% { box-shadow: 0 0 25px rgba(255, 215, 0, 0.6); }
-        }
-
+        /* Buttons - Compact and sleek */
         button {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border: none;
-            padding: 16px 32px;
-            font-size: 18px;
+            padding: 12px 24px; /* Smaller padding */
+            font-size: 16px;
             font-weight: 700;
-            border-radius: 16px;
+            border-radius: 12px;
             cursor: pointer;
-            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
-            transition: all 0.3s;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+            transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 8px;
+            gap: 6px;
         }
 
         button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 16px 40px rgba(102, 126, 234, 0.5);
+            transform: translateY(-1px);
+            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
         }
 
         button:active {
-            transform: translateY(2px);
-            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+            transform: translateY(1px);
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.2);
         }
 
         button.secondary {
             background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
             box-shadow: none;
-            color: rgba(255, 255, 255, 0.8);
+            color: rgba(255, 255, 255, 0.9);
         }
 
         #premiumBtn {
             background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
             color: #1a1f35;
-            box-shadow: 0 12px 32px rgba(255, 215, 0, 0.4);
-            animation: pulse 2s infinite;
+            box-shadow: 0 8px 24px rgba(255, 215, 0, 0.3);
         }
 
-        /* Responsive for Tablets */
+        #restoreBtn {
+            background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%);
+            color: white;
+            font-size: 14px;
+            padding: 10px 20px;
+        }
+
+        .firebase-status {
+            font-size: 12px;
+            color: #4ade80;
+            margin: 8px 0;
+        }
+
+        /* Responsive - Ensure compactness on all screens */
         @media (min-width: 768px) {
             .modal {
-                max-width: 500px;
-                padding: 60px 40px;
+                max-width: 450px;
             }
 
             h1 {
-                font-size: 56px;
+                font-size: 42px;
             }
 
             button {
-                padding: 20px 40px;
-                font-size: 20px;
+                padding: 14px 28px;
+                font-size: 18px;
             }
         }
 
-        /* Other existing styles... */
-        /* ALL YOUR ORIGINAL GAME STYLES PASTED BELOW (I copied them from your original code) */
+        /* Other existing game styles (keep as is for in-game) */
         @keyframes pulse {
           0%, 100% { transform: scale(1); }
           50% { transform: scale(1.02); }
         }
-                .premium-item {
-        border: 2px solid #FFD700 !important;
-        background: rgba(255, 215, 0, 0.15) !important;
-        box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
-    }
-    .premium-points {
-        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        font-weight: 800;
-    }
-            /* Zone Transition Modal Styles */
-    #zoneTransitionModal {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(10, 14, 26, 0.92);
-        backdrop-filter: blur(12px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 2000;
-        opacity: 0;
-        pointer-events: none;
-        transition: opacity 0.4s ease;
-    }
-    #zoneTransitionModal.active {
-        opacity: 1;
-        pointer-events: auto;
-    }
-    .zone-modal-content {
-        background: rgba(20, 25, 40, 0.98);
-        border: 2px solid rgba(102, 126, 234, 0.4);
-        border-radius: 28px;
-        padding: 60px 40px;
-        text-align: center;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
-        transform: scale(0.9);
-        transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-        max-width: 400px;
-        width: 90%;
-    }
-    #zoneTransitionModal.active .zone-modal-content {
-        transform: scale(1);
-    }
-    #zoneModalTitle {
-        font-size: 48px;
-        font-weight: 800;
-        background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin-bottom: 20px;
-        letter-spacing: -1px;
-    }
-    .zone-emoji {
-        font-size: 120px;
-        margin: 20px 0;
-        animation: zonePulse 2s ease-in-out infinite;
-    }
-    @keyframes zonePulse {
-        0%, 100% { transform: scale(1); }
-        50% { transform: scale(1.1); }
-    }
-    .zone-subtitle {
-        font-size: 20px;
-        color: rgba(255, 255, 255, 0.7);
-        font-weight: 600;
-    }
-    /* ========================================
-       TABLET/IPAD OPTIMIZATION - PORTRAIT MODE ONLY
-       ======================================== */
-    @media (min-width: 768px) and (orientation: portrait) {
-        /* DO NOT restrict gameContainer width - let it stretch full width */
-        #gameContainer {
-            max-width: 100%;
-            width: 100%;
-            margin: 0;
-            border: none;
+        .premium-item {
+            border: 2px solid #FFD700 !important;
+            background: rgba(255, 215, 0, 0.15) !important;
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
         }
-       
-        /* Scale up HUD elements */
-        .stat-box {
-            padding: 16px 24px;
-            min-width: 110px;
+        .premium-points {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 800;
         }
-       
-        .stat-label {
-            font-size: 12px;
-        }
-       
-        .stat-value {
-            font-size: 40px;
-        }
-       
-        .heart {
-            width: 16px;
-            height: 16px;
-        }
-       
-        /* Larger pause button */
-        #pauseButton {
-            width: 64px;
-            height: 64px;
-            font-size: 34px;
-        }
-       
-        /* Scale up streak bar */
-        #streakBar {
-            padding: 16px 20px;
-        }
-       
-        .streak-text {
-            font-size: 15px;
-        }
-       
-        .streak-count {
-            font-size: 19px;
-        }
-       
-        .progress-bar {
-            height: 11px;
-        }
-       
-        /* Scale up difficulty indicator */
-        #difficultyIndicator {
-            padding: 12px 18px;
-        }
-       
-        .difficulty-text {
-            font-size: 13px;
-        }
-       
-        .difficulty-level {
-            font-size: 26px;
-        }
-       
-        /* Larger combo */
-        #combo {
-            font-size: 24px;
-            padding: 12px 26px;
-        }
-       
-        /* Scale modals appropriately */
-        .modal {
-            max-width: 500px;
-            padding: 60px 45px;
-            border-radius: 28px;
-            margin: 0 auto;
-            height: auto;
-            max-height: 90vh;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
-        }
-       
-        .pause-modal {
-            max-width: 450px;
-            padding: 55px 45px;
-        }
-       
-        h1 {
-            font-size: 58px;
-        }
-       
-        h2 {
-            font-size: 48px;
-        }
-       
-        .subtitle, .pause-subtitle {
-            font-size: 19px;
-        }
-       
-        button {
-            padding: 24px 60px;
-            font-size: 20px;
-        }
-       
-        /* Larger animal emojis for iPad */
-        .animal-item {
-            padding: 18px 22px;
-        }
-       
-        .animal-emoji {
-            font-size: 40px;
-        }
-       
-        .animal-name {
-            font-size: 18px;
-        }
-       
-        .animal-points {
-            font-size: 16px;
-        }
-    }
-    /* iPad-specific canvas fix - doesn't affect iPhone */
-    @media (min-width: 768px) and (orientation: portrait) {
-        #gameContainer {
-            width: 100vw !important;
-            max-width: 100vw !important;
-        }
-       
-        canvas {
-            width: 100vw !important;
-            max-width: 100vw !important;
-        }
-    }
-    /* iPad-specific fixes - PORTRAIT MODE ONLY */
-    @media (min-width: 768px) and (orientation: portrait) {
-        /* Full-width canvas on iPad */
-        #gameContainer {
-            width: 100vw !important;
-            max-width: 100vw !important;
-        }
-       
-        canvas {
-            width: 100vw !important;
-            max-width: 100vw !important;
-        }
-       
-        /* Full-screen modals on iPad */
-        .modal {
-            width: 100% !important;
-            max-width: 100% !important;
-            height: 100vh !important;
-            max-height: 100vh !important;
-            border-radius: 0 !important;
-            padding: 60px 24px 44px !important;
-            margin: 0 !important;
-        }
-       
-        .pause-modal {
-            width: 100% !important;
-            max-width: 100% !important;
-            height: 100vh !important;
-            max-height: 100vh !important;
-            border-radius: 0 !important;
-            padding: 60px 24px 44px !important;
-            margin: 0 !important;
-        }
-    }
-                 /* ADD THIS ENTIRE NEW CSS BLOCK */
-    #gameInfoBar {
-        position: absolute;
-        top: 80px;
-        left: 15px;
-        right: 15px;
-        display: flex; /* This makes them side-by-side */
-        flex-direction: row; /* Forces horizontal layout */
-        gap: 10px; /* Space between the two boxes */
-        z-index: 100;
-    }
-                                            #hud {
-                        position: absolute;
-                        top: 5px; /* More aggressive - was 15px */
-                        left: 0;
-                        right: 0;
-                        padding: 0 15px;
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: flex-start;
-                        z-index: 100;
-                    }
-                            /* Pause button - top-right, matches your HUD style */
-                /* Pause button - centered between score and lives */
-             
-    #pauseButton {
-        position: absolute;
-        top: calc(10px + env(safe-area-inset-top)); /* Much closer - was 30px */
-        left: 50%;
-        transform: translateX(-50%);
-        width: 48px;
-        height: 48px;
-        background: rgba(15, 20, 35, 0.9);
-        border: 1px solid rgba(102, 126, 234, 0.25);
-        border-radius: 16px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 26px;
-        z-index: 150;
-        backdrop-filter: blur(20px);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-        cursor: pointer;
-        user-select: none;
-        transition: all 0.2s ease;
-    }
-    #pauseButton:active {
-        transform: translateX(-50%) scale(0.92);
-    }
-                /* Pause overlay - reuses your existing modal styling */
-                         #pauseOverlay {
-                    position: fixed;
-                    top: 0;
-                    left: 0;
-                    width: 100%;
-                    height: 100%;
-                    background: rgba(10, 14, 26, 0.85);
-                    backdrop-filter: blur(12px);
-                    -webkit-backdrop-filter: blur(12px);
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                    z-index: 1000;
-                    opacity: 0;
-                    pointer-events: none;
-                    transition: opacity 0.3s ease;
-                }
-                                #pauseOverlay:not(.hidden) {
-                        opacity: 1;
-                        pointer-events: auto;
-                    }
-                            /* Pause modal box - centered */
-    .pause-modal {
-        background: rgba(20, 25, 40, 0.98);
-        border: 2px solid rgba(102, 126, 234, 0.3);
-        border-radius: 24px;
-        padding: 40px 32px;
-        width: 85%;
-        max-width: 340px;
-        text-align: center;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8),
-                    0 0 0 1px rgba(255, 255, 255, 0.05) inset;
-        transform: scale(0.85);
-        transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    #pauseOverlay:not(.hidden) .pause-modal {
-        transform: scale(1);
-    }
-    /* Pause icon */
-    .pause-icon {
-        font-size: 64px;
-        margin-bottom: 16px;
-        animation: pausePulse 2s ease-in-out infinite;
-    }
-    @keyframes pausePulse {
-        0%, 100% { transform: scale(1); opacity: 1; }
-        50% { transform: scale(1.1); opacity: 0.8; }
-    }
-    /* Pause modal text */
-    .pause-modal h2 {
-        font-size: 28px;
-        font-weight: 800;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        margin-bottom: 12px;
-    }
-    .pause-subtitle {
-        font-size: 14px;
-        color: rgba(255, 255, 255, 0.6);
-        margin-bottom: 32px;
-        line-height: 1.5;
-    }
-    /* Pause modal buttons */
-    .pause-modal button {
-        margin-top: 12px;
-    }
-    .pause-modal button.secondary {
-        background: rgba(255, 107, 107, 0.15);
-        border: 1px solid rgba(255, 107, 107, 0.4);
-        color: #FF6B6B;
-        box-shadow: none;
-    }
-    .pause-modal button.secondary:active {
-        background: rgba(255, 107, 107, 0.25);
-    }
-                                html, body {
-                    width: 100%;
-                    height: 100%;
-                    margin: 0;
-                    padding: 0;
-                    overflow: hidden;
-                    background: #0a0e1a;
-                }
-                                canvas {
-                    width: 100% !important;
-                    height: 100% !important;
-                    display: block;
-                    margin: 0;
-                    padding: 0;
-                }
-                    #pauseOverlay:not(.hidden) .modal {
-                        transform: scale(1);
-                    }
-                    /* Pause modal specific styles */
-                    #pauseOverlay h2 {
-                        font-size: 32px;
-                        margin-bottom: 16px;
-                    }
-                    #pauseOverlay .subtitle {
-                        font-size: 14px;
-                        margin-bottom: 32px;
-                        color: rgba(255, 255, 255, 0.6);
-                    }
-                    #pauseOverlay button {
-                        margin-top: 12px;
-                    }
-                    #pauseOverlay button.secondary {
-                        background: rgba(255, 107, 107, 0.2);
-                        border: 1px solid rgba(255, 107, 107, 0.4);
-                        color: #FF6B6B;
-                    }
-                    #pauseOverlay button.secondary:active {
-                        background: rgba(255, 107, 107, 0.3);
-                    }
-                    /* Make both stat boxes vertically centered and more compact */
-            .stat-box {
-                display: flex;
-                flex-direction: column;
-                justify-content: center; /* Perfect vertical centering */
-                align-items: flex-start;
-                padding: 10px 16px; /* Reduced from 12px 18px — makes boxes shorter/tighter */
-                min-width: 80px; /* Slightly smaller min-width */
-                height: 68px; /* Optional: Force exact same height on both boxes (tweak if needed) */
-            }
-            /* Smaller score number to better match lives box height */
-            .stat-value {
-                font-size: 25px; /* Try 24px if you want it even smaller */
-                line-height: 1;
-            }
-            /* Fine-tune lives box alignment */
-            .stat-label {
-                margin-bottom: 4px; /* Reduced from 5px */
-            }
-            .lives {
-                margin-top: 6px; /* Slight push down so hearts sit centered */
-                justify-content: center; /* Ensures hearts are centered if they wrap (rare) */
-            }
-            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&display=swap');
-            * {
-                margin: 0;
-                padding: 0;
-                box-sizing: border-box;
-                -webkit-tap-highlight-color: transparent;
-            }
-            body {
-                font-family: 'Inter', -apple-system, sans-serif;
-                background: #0a0e1a;
-                overflow: hidden;
-                height: 100vh;
-            }
-               #gameContainer {
-                position: fixed; /* Changed from relative to fixed for true full-screen */
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
-                max-width: none; /* Critical: removes the 430px cap */
-                margin: 0;
-                padding: 0;
-                background: radial-gradient(ellipse at top, #1a1f35 0%, #0a0e1a 100%);
-                overflow: hidden; /* Prevents any scroll/overflow issues */
-            }
-            canvas {
-                display: block;
-                width: 100%;
-                height: 100%;
-                background: linear-gradient(180deg, #0f1729 0%, #1a2332 40%, #2d3748 100%);
-            }
-            #hud {
-                position: absolute;
-                top: 15px;
-                left: 0;
-                right: 0;
-                padding: 0 15px;
-                display: flex;
-                justify-content: space-between;
-                align-items: flex-start;
-                z-index: 100;
-            }
-            .stat-box {
-                background: rgba(15, 20, 35, 0.9);
-                border: 1px solid rgba(102, 126, 234, 0.25);
-                border-radius: 16px;
-                padding: 12px 18px;
-                min-width: 85px;
-                backdrop-filter: blur(20px);
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5),
-                            inset 0 1px 0 rgba(255, 255, 255, 0.05);
-                transition: all 0.3s;
-            }
-            .stat-box.pulse {
-                transform: scale(1.15);
-                box-shadow: 0 0 40px rgba(255, 215, 0, 0.8);
-                animation: pulseGlow 0.5s ease-out;
-            }
-            @keyframes pulseGlow {
-                0%, 100% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.8); }
-                50% { box-shadow: 0 0 60px rgba(255, 215, 0, 1); }
-            }
-            .stat-label {
-                font-size: 9px;
-                color: rgba(255, 255, 255, 0.5);
-                text-transform: uppercase;
-                letter-spacing: 1.2px;
-                margin-bottom: 5px;
-                font-weight: 600;
-            }
-            .stat-value {
-                font-size: 30px;
-                font-weight: 800;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                line-height: 1;
-            }
-            .lives {
-                display: flex;
-                gap: 6px;
-                margin-top: 5px;
-                flex-wrap: wrap;
-            }
-            .heart {
-                width: 10px;
-                height: 10px;
-                border-radius: 50%;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                box-shadow: 0 0 12px rgba(102, 126, 234, 0.7);
-                transition: all 0.3s;
-            }
-            .heart.lost {
-                background: rgba(255, 255, 255, 0.1);
-                box-shadow: none;
-            }
-            .heart.gained {
-                animation: heartPop 0.5s ease-out;
-            }
-            @keyframes heartPop {
-                0% { transform: scale(0); }
-                50% { transform: scale(1.3); }
-                100% { transform: scale(1); }
-            }
-            #streakBar {
-        position: relative; /* CHANGED: was "absolute" */
-        flex: 1; /* NEW LINE: add this */
-        background: rgba(15, 20, 35, 0.9);
-        border: 1px solid rgba(255, 215, 0, 0.4);
-        border-radius: 12px;
-        padding: 10px 14px;
-        backdrop-filter: blur(20px);
-        transition: all 0.3s;
-    }
-            #streakBar.hot {
-                border-color: rgba(255, 215, 0, 0.8);
-                box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
-            }
-            .streak-info {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 6px;
-            }
-            .streak-text {
-                font-size: 11px;
-                font-weight: 700;
-                color: #FFD700;
-                text-transform: uppercase;
-                letter-spacing: 0.8px;
-            }
-            .streak-count {
-                font-size: 13px;
-                font-weight: 800;
-                color: #fff;
-            }
-            .progress-bar {
-                height: 7px;
-                background: rgba(255, 255, 255, 0.1);
-                border-radius: 4px;
-                overflow: hidden;
-                position: relative;
-            }
-            .progress-fill {
-                height: 100%;
-                background: linear-gradient(90deg, #FFD700 0%, #FFA500 100%);
-                width: 0%;
-                transition: width 0.3s;
-                box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-            }
-            .streak-reward {
-                font-size: 9px;
-                color: rgba(255, 255, 255, 0.6);
-                text-align: center;
-                margin-top: 4px;
-                font-weight: 600;
-            }
-                #difficultyIndicator {
-                position: relative; /* CHANGED: was "absolute" */
-                flex: 1; /* NEW LINE: add this */
-                background: rgba(15, 20, 35, 0.9);
-                border: 1px solid rgba(255, 107, 107, 0.3);
-                border-radius: 12px;
-                padding: 8px 12px;
-                backdrop-filter: blur(20px);
-                text-align: center;
-            }
-            .difficulty-text {
-                font-size: 9px;
-                font-weight: 700;
-                color: rgba(255, 255, 255, 0.7);
-                text-transform: uppercase;
-                letter-spacing: 1px;
-            }
-            .difficulty-level {
-                font-size: 16px;
-                font-weight: 800;
-                margin-top: 3px;
-            }
-            .diff-beginner { color: #4ade80; }
-            .diff-easy { color: #86efac; }
-            .diff-medium { color: #fbbf24; }
-            .diff-challenging { color: #fb923c; }
-            .diff-hard { color: #f87171; }
-            .diff-expert { color: #dc2626; }
-            #overlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(10, 14, 26, 0.97);
-                backdrop-filter: blur(20px);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 1000;
-            }
-         
-    .modal {
-        background: rgba(20, 25, 40, 0.95);
-        border: 1px solid rgba(102, 126, 234, 0.2);
-        border-radius: 0; /* Remove rounded corners for full screen */
-        padding: 60px 24px 44px; /* Add more top padding for status bar */
-        width: 100%; /* Full width */
-        height: 100vh; /* Full viewport height */
-        max-width: 100%; /* Override the 370px limit */
-        max-height: 100vh; /* Full height */
-        margin: 0; /* Remove auto margins */
-        text-align: center;
-        box-shadow: none; /* Remove shadow for cleaner full-screen look */
-        overflow-y: auto;
-        display: flex;
-        flex-direction: column;
-    }
-    /* Optional: Add safe area padding for iPhone notch */
-    @supports (padding: env(safe-area-inset-top)) {
-        #hud {
-            top: calc(5px + env(safe-area-inset-top));
-            padding: 0 15px;
-        }
-        #gameInfoBar {
-            top: calc(80px + env(safe-area-inset-top)); /* NEW: adjust the wrapper, not the children */
-        }
-        #combo {
-            top: calc(155px + env(safe-area-inset-top)); /* CHANGED: was 215px */
-        }
-    }
-    /* If you want to keep the rounded modal on larger screens: */
-    @media (min-width: 768px) {
-        .modal {
-            border-radius: 28px;
-            padding: 44px 36px;
-            max-width: 90%;
-            width: 370px;
-            height: auto;
-            max-height: 90vh;
-            margin: 0 auto;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7),
-                        inset 0 1px 0 rgba(255, 255, 255, 0.05);
-        }
-    }
-            h1 {
-                font-size: 44px;
-                font-weight: 800;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                margin-bottom: 8px;
-                letter-spacing: -1px;
-            }
-            h2 {
-                font-size: 36px;
-                font-weight: 800;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                margin-bottom: 12px;
-                letter-spacing: -1px;
-            }
-            .subtitle {
-                font-size: 15px;
-                color: rgba(255, 255, 255, 0.6);
-                margin-bottom: 28px;
-                font-weight: 600;
-            }
-            .animal-list {
-                margin: 24px 0;
-                background: rgba(255, 255, 255, 0.02);
-                border-radius: 20px;
-                padding: 8px;
-                border: 1px solid rgba(255, 255, 255, 0.05);
-                max-height: 60vh;
-                overflow-y: auto;
-            }
-            .animal-item {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 12px 16px;
-                margin: 5px 0;
-                background: rgba(255, 255, 255, 0.04);
-                border-radius: 14px;
-                border: 1px solid rgba(255, 255, 255, 0.06);
-            }
-            .animal-left {
-                display: flex;
-                align-items: center;
-                gap: 12px;
-            }
-            .animal-emoji {
-                font-size: 28px;
-            }
-            .animal-name {
-                font-size: 14px;
-                color: rgba(255, 255, 255, 0.95);
-                font-weight: 700;
-            }
-            .animal-points {
-                font-size: 13px;
-                font-weight: 700;
-                background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                padding: 5px 12px;
-                background-color: rgba(255, 215, 0, 0.1);
-                border-radius: 10px;
-                border: 1px solid rgba(255, 215, 0, 0.2);
-            }
-            button {
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                border: none;
-                padding: 18px 44px;
-                font-size: 16px;
-                font-weight: 700;
-                border-radius: 16px;
-                cursor: pointer;
-                margin-top: 24px;
-                width: 100%;
-                box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
-                font-family: 'Inter', sans-serif;
-                text-transform: uppercase;
-                letter-spacing: 1px;
-                transition: all 0.2s;
-            }
-            button:active {
-                transform: translateY(2px);
-                box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
-            }
-            button.secondary {
-                background: rgba(255, 255, 255, 0.1);
-                box-shadow: none;
-                margin-top: 10px;
-            }
-            .instruction {
-                font-size: 13px;
-                color: rgba(255, 255, 255, 0.5);
-                margin-top: 18px;
-                font-weight: 600;
-            }
-            #finalScore {
-                font-size: 80px;
-                font-weight: 800;
-                background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                background-clip: text;
-                margin: 20px 0;
-                line-height: 1;
-                letter-spacing: -3px;
-            }
-            .badge {
-                display: inline-block;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                color: white;
-                padding: 10px 26px;
-                border-radius: 12px;
-                font-size: 16px;
-                font-weight: 700;
-                margin: 12px 0 18px;
-                box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
-            }
-            .stats {
-                font-size: 15px;
-                color: rgba(255, 255, 255, 0.6);
-                margin-bottom: 8px;
-                font-weight: 600;
-            }
-            .highscore-beat {
-                font-size: 18px;
-                font-weight: 800;
-                color: #FFD700;
-                margin: 10px 0;
-                animation: glow 1s infinite;
-            }
-            @keyframes glow {
-                0%, 100% { text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
-                50% { text-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
-            }
-            .urge-message {
-                font-size: 16px;
-                font-weight: 700;
-                color: #FF6B6B;
-                margin: 15px 0;
-                padding: 12px;
-                background: rgba(255, 107, 107, 0.1);
-                border: 2px solid #FF6B6B;
-                border-radius: 12px;
-                animation: pulse 1.5s infinite;
-            }
-            @keyframes pulse {
-                0%, 100% { transform: scale(1); }
-                50% { transform: scale(1.03); }
-            }
-               #combo {
-                position: absolute;
-                top: 155px; /* CHANGED: was "215px" - moved up 60px */
-                left: 50%;
-                transform: translateX(-50%) scale(0.8);
-                background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-                color: white;
-                padding: 8px 18px;
-                border-radius: 10px;
-                font-size: 16px;
-                font-weight: 800;
-                opacity: 0;
-                transition: all 0.3s;
-                z-index: 99;
-                box-shadow: 0 8px 24px rgba(255, 215, 0, 0.4);
-            }
-            #combo.show {
-                opacity: 1;
-                transform: translateX(-50%) scale(1);
-            }
-            .achievement {
-                position: fixed;
-                top: 15px;
-                right: 15px;
-                transform: translateX(350px);
-                background: rgba(20, 25, 40, 0.98);
-                border: 2px solid #FFD700;
-                border-radius: 14px;
-                padding: 12px 18px;
-                text-align: left;
-                z-index: 2000;
-                box-shadow: 0 12px 40px rgba(255, 215, 0, 0.6);
-                transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-                opacity: 0;
-                max-width: 250px;
-                display: flex;
-                align-items: center;
-                gap: 12px;
-            }
-            .achievement.show {
-                opacity: 1;
-                transform: translateX(0);
-            }
-            .achievement-icon {
-                font-size: 32px;
-                flex-shrink: 0;
-                animation: bounce 0.6s ease-out;
-            }
-            @keyframes bounce {
-                0%, 100% { transform: translateY(0); }
-                25% { transform: translateY(-10px); }
-                50% { transform: translateY(0); }
-                75% { transform: translateY(-5px); }
-            }
-            .achievement-content {
-                flex: 1;
-            }
-            .achievement-text {
-                font-size: 14px;
-                font-weight: 800;
-                color: #FFD700;
-                margin-bottom: 2px;
-            }
-            .achievement-desc {
-                font-size: 11px;
-                color: rgba(255, 255, 255, 0.7);
-            }
-            .big-win {
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%) scale(0);
-                font-size: 60px;
-                font-weight: 900;
-                color: #FFD700;
-                text-shadow: 0 0 40px rgba(255, 215, 0, 1);
-                z-index: 3000;
-                opacity: 0;
-                pointer-events: none;
-                animation: bigWinPop 2s ease-out;
-            }
-            @keyframes bigWinPop {
-                0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-                10% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
-                90% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-                100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-            }
-            .slowmo-overlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 255, 255, 0.15);
-                pointer-events: none;
-                z-index: 1500;
-                opacity: 0;
-                transition: opacity 0.5s;
-            }
-            .slowmo-overlay.active {
-                opacity: 1;
-                animation: slowmoPulse 1s infinite;
-            }
-            @keyframes slowmoPulse {
-                0%, 100% { background: rgba(0, 255, 255, 0.1); }
-                50% { background: rgba(0, 255, 255, 0.2); }
-            }
-            .game-over-animation {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: radial-gradient(circle, rgba(102, 126, 234, 0.2) 0%, rgba(10, 14, 26, 0.95) 70%);
-                z-index: 999;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                animation: fadeIn 0.8s ease-out;
-            }
-            @keyframes fadeIn {
-                from { opacity: 0; }
-                to { opacity: 1; }
-            }
-            .game-over-text {
-                font-size: 64px;
-                font-weight: 900;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                animation: slideDown 0.8s ease-out;
-                text-align: center;
-                padding: 0 20px;
-                width: 100%;
-                max-width: 90vw;
-                word-wrap: break-word;
-            }
-            @keyframes slideDown {
-                from { transform: translateY(-100px); opacity: 0; }
-                to { transform: translateY(0); opacity: 1; }
-            }
-            .stats-grid {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 15px;
-                margin: 20px 0;
-            }
-            .stat-card {
-                background: rgba(255, 255, 255, 0.05);
-                border: 1px solid rgba(255, 255, 255, 0.1);
-                border-radius: 12px;
-                padding: 15px;
-                text-align: center;
-            }
-            .stat-card-value {
-                font-size: 32px;
-                font-weight: 800;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-                margin-bottom: 5px;
-            }
-            .stat-card-label {
-                font-size: 11px;
-                color: rgba(255, 255, 255, 0.5);
-                text-transform: uppercase;
-                letter-spacing: 1px;
-            }
-            .leaderboard-list {
-                margin: 20px 0;
-                max-height: 50vh;
-                overflow-y: auto;
-            }
-            .leaderboard-item {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                padding: 12px 16px;
-                margin: 8px 0;
-                background: rgba(255, 255, 255, 0.04);
-                border-radius: 12px;
-                border: 1px solid rgba(255, 255, 255, 0.06);
-                transition: all 0.3s;
-            }
-            .leaderboard-item:hover {
-                background: rgba(255, 255, 255, 0.08);
-                transform: translateX(4px);
-            }
-            .leaderboard-item.top1 {
-                background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 215, 0, 0.05) 100%);
-                border-color: #FFD700;
-            }
-            .leaderboard-item.top2 {
-                background: linear-gradient(135deg, rgba(192, 192, 192, 0.2) 0%, rgba(192, 192, 192, 0.05) 100%);
-                border-color: #C0C0C0;
-            }
-            .leaderboard-item.top3 {
-                background: linear-gradient(135deg, rgba(205, 127, 50, 0.2) 0%, rgba(205, 127, 50, 0.05) 100%);
-                border-color: #CD7F32;
-            }
-            .leaderboard-rank {
-                font-size: 20px;
-                font-weight: 800;
-                min-width: 40px;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-            }
-            .top1 .leaderboard-rank {
-                background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-                -webkit-background-clip: text;
-                -webkit-text-fill-color: transparent;
-            }
-            .leaderboard-name {
-                flex: 1;
-                font-size: 16px;
-                font-weight: 700;
-                color: rgba(255, 255, 255, 0.9);
-                margin: 0 12px;
-            }
-            .leaderboard-score {
-                font-size: 18px;
-                font-weight: 800;
-                color: #FFD700;
-            }
-            .name-input {
-                width: 100%;
-                padding: 16px;
-                margin: 16px 0;
-                background: rgba(255, 255, 255, 0.05);
-                border: 2px solid rgba(102, 126, 234, 0.3);
-                border-radius: 12px;
-                color: white;
-                font-size: 16px;
-                font-weight: 600;
-                font-family: 'Inter', sans-serif;
-                text-align: center;
-                transition: all 0.3s;
-            }
-            .name-input:focus {
-                outline: none;
-                border-color: rgba(102, 126, 234, 0.8);
-                background: rgba(255, 255, 255, 0.08);
-            }
-            .name-input::placeholder {
-                color: rgba(255, 255, 255, 0.3);
-            }
-            .loading {
-                color: rgba(255, 255, 255, 0.5);
-                font-size: 14px;
-                margin: 20px 0;
-            }
-            .hidden {
-                display: none !important;
-            }
-            .firebase-status {
-                font-size: 11px;
-                color: rgba(255, 255, 255, 0.4);
-                margin-top: 10px;
-            }
-            .firebase-status.connected {
-                color: #4ade80;
-            }
-            .firebase-status.error {
-                color: #f87171;
-            }
-    /* Portrait-only lock - MOBILE + TABLET */
-    @media (orientation: landscape) {
-        body::before {
-            content: "📱 Portrait Mode Only";
+        /* Zone Transition Modal Styles */
+        #zoneTransitionModal {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: #0a0e1a;
-            color: white;
+            background: rgba(10, 14, 26, 0.92);
+            backdrop-filter: blur(12px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+        }
+        #zoneTransitionModal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .zone-modal-content {
+            background: rgba(20, 25, 40, 0.98);
+            border: 2px solid rgba(102, 126, 234, 0.4);
+            border-radius: 28px;
+            padding: 60px 40px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8);
+            transform: scale(0.9);
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            max-width: 400px;
+            width: 90%;
+        }
+        #zoneTransitionModal.active .zone-modal-content {
+            transform: scale(1);
+        }
+        #zoneModalTitle {
+            font-size: 48px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            letter-spacing: -1px;
+        }
+        .zone-emoji {
+            font-size: 120px;
+            margin: 20px 0;
+            animation: zonePulse 2s ease-in-out infinite;
+        }
+        @keyframes zonePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        .zone-subtitle {
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-weight: 600;
+        }
+        /* ========================================
+           TABLET/IPAD OPTIMIZATION - PORTRAIT MODE ONLY
+           ======================================== */
+        @media (min-width: 768px) and (orientation: portrait) {
+            /* DO NOT restrict gameContainer width - let it stretch full width */
+            #gameContainer {
+                max-width: 100%;
+                width: 100%;
+                margin: 0;
+                border: none;
+            }
+           
+            /* Scale up HUD elements */
+            .stat-box {
+                padding: 16px 24px;
+                min-width: 110px;
+            }
+           
+            .stat-label {
+                font-size: 12px;
+            }
+           
+            .stat-value {
+                font-size: 40px;
+            }
+           
+            .heart {
+                width: 16px;
+                height: 16px;
+            }
+           
+            /* Larger pause button */
+            #pauseButton {
+                width: 64px;
+                height: 64px;
+                font-size: 34px;
+            }
+           
+            /* Scale up streak bar */
+            #streakBar {
+                padding: 16px 20px;
+            }
+           
+            .streak-text {
+                font-size: 15px;
+            }
+           
+            .streak-count {
+                font-size: 19px;
+            }
+           
+            .progress-bar {
+                height: 11px;
+            }
+           
+            /* Scale up difficulty indicator */
+            #difficultyIndicator {
+                padding: 12px 18px;
+            }
+           
+            .difficulty-text {
+                font-size: 13px;
+            }
+           
+            .difficulty-level {
+                font-size: 26px;
+            }
+           
+            /* Larger combo */
+            #combo {
+                font-size: 24px;
+                padding: 12px 26px;
+            }
+           
+            /* Scale modals appropriately */
+            .modal {
+                max-width: 500px;
+                padding: 60px 45px;
+                border-radius: 28px;
+                margin: 0 auto;
+                height: auto;
+                max-height: 90vh;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7),
+                            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            }
+           
+            .pause-modal {
+                max-width: 450px;
+                padding: 55px 45px;
+            }
+           
+            h1 {
+                font-size: 58px;
+            }
+           
+            h2 {
+                font-size: 48px;
+            }
+           
+            .subtitle, .pause-subtitle {
+                font-size: 19px;
+            }
+           
+            button {
+                padding: 24px 60px;
+                font-size: 20px;
+            }
+           
+            /* Larger animal emojis for iPad */
+            .animal-item {
+                padding: 18px 22px;
+            }
+           
+            .animal-emoji {
+                font-size: 40px;
+            }
+           
+            .animal-name {
+                font-size: 18px;
+            }
+           
+            .animal-points {
+                font-size: 16px;
+            }
+        }
+        /* iPad-specific canvas fix - doesn't affect iPhone */
+        @media (min-width: 768px) and (orientation: portrait) {
+            #gameContainer {
+                width: 100vw !important;
+                max-width: 100vw !important;
+            }
+           
+            canvas {
+                width: 100vw !important;
+                max-width: 100vw !important;
+            }
+        }
+        /* iPad-specific fixes - PORTRAIT MODE ONLY */
+        @media (min-width: 768px) and (orientation: portrait) {
+            /* Full-width canvas on iPad */
+            #gameContainer {
+                width: 100vw !important;
+                max-width: 100vw !important;
+            }
+           
+            canvas {
+                width: 100vw !important;
+                max-width: 100vw !important;
+            }
+           
+            /* Full-screen modals on iPad */
+            .modal {
+                width: 100% !important;
+                max-width: 100% !important;
+                height: 100vh !important;
+                max-height: 100vh !important;
+                border-radius: 0 !important;
+                padding: 60px 24px 44px !important;
+                margin: 0 !important;
+            }
+           
+            .pause-modal {
+                width: 100% !important;
+                max-width: 100% !important;
+                height: 100vh !important;
+                max-height: 100vh !important;
+                border-radius: 0 !important;
+                padding: 60px 24px 44px !important;
+                margin: 0 !important;
+            }
+        }
+                     /* ADD THIS ENTIRE NEW CSS BLOCK */
+        #gameInfoBar {
+            position: absolute;
+            top: 80px;
+            left: 15px;
+            right: 15px;
+            display: flex; /* This makes them side-by-side */
+            flex-direction: row; /* Forces horizontal layout */
+            gap: 10px; /* Space between the two boxes */
+            z-index: 100;
+        }
+                                                #hud {
+                            position: absolute;
+                            top: 5px; /* More aggressive - was 15px */
+                            left: 0;
+                            right: 0;
+                            padding: 0 15px;
+                            display: flex;
+                            justify-content: space-between;
+                            align-items: flex-start;
+                            z-index: 100;
+                        }
+                                /* Pause button - top-right, matches your HUD style */
+                    /* Pause button - centered between score and lives */
+                 
+        #pauseButton {
+            position: absolute;
+            top: calc(10px + env(safe-area-inset-top)); /* Much closer - was 30px */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 48px;
+            height: 48px;
+            background: rgba(15, 20, 35, 0.9);
+            border: 1px solid rgba(102, 126, 234, 0.25);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            z-index: 150;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+        #pauseButton:active {
+            transform: translateX(-50%) scale(0.92);
+        }
+                    /* Pause overlay - reuses your existing modal styling */
+                             #pauseOverlay {
+                        position: fixed;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(10, 14, 26, 0.85);
+                        backdrop-filter: blur(12px);
+                        -webkit-backdrop-filter: blur(12px);
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                        z-index: 1000;
+                        opacity: 0;
+                        pointer-events: none;
+                        transition: opacity 0.3s ease;
+                    }
+                                    #pauseOverlay:not(.hidden) {
+                            opacity: 1;
+                            pointer-events: auto;
+                        }
+                                /* Pause modal box - centered */
+        .pause-modal {
+            background: rgba(20, 25, 40, 0.98);
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            border-radius: 24px;
+            padding: 40px 32px;
+            width: 85%;
+            max-width: 340px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.8),
+                        0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+            transform: scale(0.85);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        #pauseOverlay:not(.hidden) .pause-modal {
+            transform: scale(1);
+        }
+        /* Pause icon */
+        .pause-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+            animation: pausePulse 2s ease-in-out infinite;
+        }
+        @keyframes pausePulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+        /* Pause modal text */
+        .pause-modal h2 {
+            font-size: 28px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 12px;
+        }
+        .pause-subtitle {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 32px;
+            line-height: 1.5;
+        }
+        /* Pause modal buttons */
+        .pause-modal button {
+            margin-top: 12px;
+        }
+        .pause-modal button.secondary {
+            background: rgba(255, 107, 107, 0.15);
+            border: 1px solid rgba(255, 107, 107, 0.4);
+            color: #FF6B6B;
+            box-shadow: none;
+        }
+        .pause-modal button.secondary:active {
+            background: rgba(255, 107, 107, 0.25);
+        }
+                                    html, body {
+                        width: 100%;
+                        height: 100%;
+                        margin: 0;
+                        padding: 0;
+                        overflow: hidden;
+                        background: #0a0e1a;
+                    }
+                                    canvas {
+                        width: 100% !important;
+                        height: 100% !important;
+                        display: block;
+                        margin: 0;
+                        padding: 0;
+                    }
+                        #pauseOverlay:not(.hidden) .modal {
+                            transform: scale(1);
+                        }
+                        /* Pause modal specific styles */
+                        #pauseOverlay h2 {
+                            font-size: 32px;
+                            margin-bottom: 16px;
+                        }
+                        #pauseOverlay .subtitle {
+                            font-size: 14px;
+                            margin-bottom: 32px;
+                            color: rgba(255, 255, 255, 0.6);
+                        }
+                        #pauseOverlay button {
+                            margin-top: 12px;
+                        }
+                        #pauseOverlay button.secondary {
+                            background: rgba(255, 107, 107, 0.2);
+                            border: 1px solid rgba(255, 107, 107, 0.4);
+                            color: #FF6B6B;
+                        }
+                        #pauseOverlay button.secondary:active {
+                            background: rgba(255, 107, 107, 0.3);
+                        }
+                        /* Make both stat boxes vertically centered and more compact */
+                .stat-box {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center; /* Perfect vertical centering */
+                    align-items: flex-start;
+                    padding: 10px 16px; /* Reduced from 12px 18px — makes boxes shorter/tighter */
+                    min-width: 80px; /* Slightly smaller min-width */
+                    height: 68px; /* Optional: Force exact same height on both boxes (tweak if needed) */
+                }
+                /* Smaller score number to better match lives box height */
+                .stat-value {
+                    font-size: 25px; /* Try 24px if you want it even smaller */
+                    line-height: 1;
+                }
+                /* Fine-tune lives box alignment */
+                .stat-label {
+                    margin-bottom: 4px; /* Reduced from 5px */
+                }
+                .lives {
+                    margin-top: 6px; /* Slight push down so hearts sit centered */
+                    justify-content: center; /* Ensures hearts are centered if they wrap (rare) */
+                }
+                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&display=swap');
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                    -webkit-tap-highlight-color: transparent;
+                }
+                body {
+                    font-family: 'Inter', -apple-system, sans-serif;
+                    background: #0a0e1a;
+                    overflow: hidden;
+                    height: 100vh;
+                }
+                   #gameContainer {
+                    position: fixed; /* Changed from relative to fixed for true full-screen */
+                    top: 0;
+                    left: 0;
+                    width: 100vw;
+                    height: 100vh;
+                    max-width: none; /* Critical: removes the 430px cap */
+                    margin: 0;
+                    padding: 0;
+                    background: radial-gradient(ellipse at top, #1a1f35 0%, #0a0e1a 100%);
+                    overflow: hidden; /* Prevents any scroll/overflow issues */
+                }
+                canvas {
+                    display: block;
+                    width: 100%;
+                    height: 100%;
+                    background: linear-gradient(180deg, #0f1729 0%, #1a2332 40%, #2d3748 100%);
+                }
+                #hud {
+                    position: absolute;
+                    top: 15px;
+                    left: 0;
+                    right: 0;
+                    padding: 0 15px;
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: flex-start;
+                    z-index: 100;
+                }
+                .stat-box {
+                    background: rgba(15, 20, 35, 0.9);
+                    border: 1px solid rgba(102, 126, 234, 0.25);
+                    border-radius: 16px;
+                    padding: 12px 18px;
+                    min-width: 85px;
+                    backdrop-filter: blur(20px);
+                    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5),
+                                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+                    transition: all 0.3s;
+                }
+                .stat-box.pulse {
+                    transform: scale(1.15);
+                    box-shadow: 0 0 40px rgba(255, 215, 0, 0.8);
+                    animation: pulseGlow 0.5s ease-out;
+                }
+                @keyframes pulseGlow {
+                    0%, 100% { box-shadow: 0 0 40px rgba(255, 215, 0, 0.8); }
+                    50% { box-shadow: 0 0 60px rgba(255, 215, 0, 1); }
+                }
+                .stat-label {
+                    font-size: 9px;
+                    color: rgba(255, 255, 255, 0.5);
+                    text-transform: uppercase;
+                    letter-spacing: 1.2px;
+                    margin-bottom: 5px;
+                    font-weight: 600;
+                }
+                .stat-value {
+                    font-size: 30px;
+                    font-weight: 800;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    line-height: 1;
+                }
+                .lives {
+                    display: flex;
+                    gap: 6px;
+                    margin-top: 5px;
+                    flex-wrap: wrap;
+                }
+                .heart {
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    box-shadow: 0 0 12px rgba(102, 126, 234, 0.7);
+                    transition: all 0.3s;
+                }
+                .heart.lost {
+                    background: rgba(255, 255, 255, 0.1);
+                    box-shadow: none;
+                }
+                .heart.gained {
+                    animation: heartPop 0.5s ease-out;
+                }
+                @keyframes heartPop {
+                    0% { transform: scale(0); }
+                    50% { transform: scale(1.3); }
+                    100% { transform: scale(1); }
+                }
+                #streakBar {
+            position: relative; /* CHANGED: was "absolute" */
+            flex: 1; /* NEW LINE: add this */
+            background: rgba(15, 20, 35, 0.9);
+            border: 1px solid rgba(255, 215, 0, 0.4);
+            border-radius: 12px;
+            padding: 10px 14px;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s;
+        }
+                #streakBar.hot {
+                    border-color: rgba(255, 215, 0, 0.8);
+                    box-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+                }
+                .streak-info {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 6px;
+                }
+                .streak-text {
+                    font-size: 11px;
+                    font-weight: 700;
+                    color: #FFD700;
+                    text-transform: uppercase;
+                    letter-spacing: 0.8px;
+                }
+                .streak-count {
+                    font-size: 13px;
+                    font-weight: 800;
+                    color: #fff;
+                }
+                .progress-bar {
+                    height: 7px;
+                    background: rgba(255, 255, 255, 0.1);
+                    border-radius: 4px;
+                    overflow: hidden;
+                    position: relative;
+                }
+                .progress-fill {
+                    height: 100%;
+                    background: linear-gradient(90deg, #FFD700 0%, #FFA500 100%);
+                    width: 0%;
+                    transition: width 0.3s;
+                    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+                }
+                .streak-reward {
+                    font-size: 9px;
+                    color: rgba(255, 255, 255, 0.6);
+                    text-align: center;
+                    margin-top: 4px;
+                    font-weight: 600;
+                }
+                    #difficultyIndicator {
+                    position: relative; /* CHANGED: was "absolute" */
+                    flex: 1; /* NEW LINE: add this */
+                    background: rgba(15, 20, 35, 0.9);
+                    border: 1px solid rgba(255, 107, 107, 0.3);
+                    border-radius: 12px;
+                    padding: 8px 12px;
+                    backdrop-filter: blur(20px);
+                    text-align: center;
+                }
+                .difficulty-text {
+                    font-size: 9px;
+                    font-weight: 700;
+                    color: rgba(255, 255, 255, 0.7);
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                }
+                .difficulty-level {
+                    font-size: 16px;
+                    font-weight: 800;
+                    margin-top: 3px;
+                }
+                .diff-beginner { color: #4ade80; }
+                .diff-easy { color: #86efac; }
+                .diff-medium { color: #fbbf24; }
+                .diff-challenging { color: #fb923c; }
+                .diff-hard { color: #f87171; }
+                .diff-expert { color: #dc2626; }
+                #overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(10, 14, 26, 0.97);
+                    backdrop-filter: blur(20px);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    z-index: 1000;
+                }
+             
+        .modal {
+            background: rgba(20, 25, 40, 0.95);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 0; /* Remove rounded corners for full screen */
+            padding: 60px 24px 44px; /* Add more top padding for status bar */
+            width: 100%; /* Full width */
+            height: 100vh; /* Full viewport height */
+            max-width: 100%; /* Override the 370px limit */
+            max-height: 100vh; /* Full height */
+            margin: 0; /* Remove auto margins */
+            text-align: center;
+            box-shadow: none; /* Remove shadow for cleaner full-screen look */
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+        /* Optional: Add safe area padding for iPhone notch */
+        @supports (padding: env(safe-area-inset-top)) {
+            #hud {
+                top: calc(5px + env(safe-area-inset-top));
+                padding: 0 15px;
+            }
+            #gameInfoBar {
+                top: calc(80px + env(safe-area-inset-top)); /* NEW: adjust the wrapper, not the children */
+            }
+            #combo {
+                top: calc(155px + env(safe-area-inset-top)); /* CHANGED: was 215px */
+            }
+        }
+        /* If you want to keep the rounded modal on larger screens: */
+        @media (min-width: 768px) {
+            .modal {
+                border-radius: 28px;
+                padding: 44px 36px;
+                max-width: 90%;
+                width: 370px;
+                height: auto;
+                max-height: 90vh;
+                margin: 0 auto;
+                box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7),
+                            inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            }
+        }
+                h1 {
+                    font-size: 44px;
+                    font-weight: 800;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    margin-bottom: 8px;
+                    letter-spacing: -1px;
+                }
+                h2 {
+                    font-size: 36px;
+                    font-weight: 800;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    margin-bottom: 12px;
+                    letter-spacing: -1px;
+                }
+                .subtitle {
+                    font-size: 15px;
+                    color: rgba(255, 255, 255, 0.6);
+                    margin-bottom: 28px;
+                    font-weight: 600;
+                }
+                .animal-list {
+                    margin: 24px 0;
+                    background: rgba(255, 255, 255, 0.02);
+                    border-radius: 20px;
+                    padding: 8px;
+                    border: 1px solid rgba(255, 255, 255, 0.05);
+                    max-height: 60vh;
+                    overflow-y: auto;
+                }
+                .animal-item {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 12px 16px;
+                    margin: 5px 0;
+                    background: rgba(255, 255, 255, 0.04);
+                    border-radius: 14px;
+                    border: 1px solid rgba(255, 255, 255, 0.06);
+                }
+                .animal-left {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                }
+                .animal-emoji {
+                    font-size: 28px;
+                }
+                .animal-name {
+                    font-size: 14px;
+                    color: rgba(255, 255, 255, 0.95);
+                    font-weight: 700;
+                }
+                .animal-points {
+                    font-size: 13px;
+                    font-weight: 700;
+                    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    padding: 5px 12px;
+                    background-color: rgba(255, 215, 0, 0.1);
+                    border-radius: 10px;
+                    border: 1px solid rgba(255, 215, 0, 0.2);
+                }
+                button {
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    border: none;
+                    padding: 18px 44px;
+                    font-size: 16px;
+                    font-weight: 700;
+                    border-radius: 16px;
+                    cursor: pointer;
+                    margin-top: 24px;
+                    width: 100%;
+                    box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
+                    font-family: 'Inter', sans-serif;
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                    transition: all 0.2s;
+                }
+                button:active {
+                    transform: translateY(2px);
+                    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+                }
+                button.secondary {
+                    background: rgba(255, 255, 255, 0.1);
+                    box-shadow: none;
+                    margin-top: 10px;
+                }
+                .instruction {
+                    font-size: 13px;
+                    color: rgba(255, 255, 255, 0.5);
+                    margin-top: 18px;
+                    font-weight: 600;
+                }
+                #finalScore {
+                    font-size: 80px;
+                    font-weight: 800;
+                    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    background-clip: text;
+                    margin: 20px 0;
+                    line-height: 1;
+                    letter-spacing: -3px;
+                }
+                .badge {
+                    display: inline-block;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    padding: 10px 26px;
+                    border-radius: 12px;
+                    font-size: 16px;
+                    font-weight: 700;
+                    margin: 12px 0 18px;
+                    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+                }
+                .stats {
+                    font-size: 15px;
+                    color: rgba(255, 255, 255, 0.6);
+                    margin-bottom: 8px;
+                    font-weight: 600;
+                }
+                .highscore-beat {
+                    font-size: 18px;
+                    font-weight: 800;
+                    color: #FFD700;
+                    margin: 10px 0;
+                    animation: glow 1s infinite;
+                }
+                @keyframes glow {
+                    0%, 100% { text-shadow: 0 0 10px rgba(255, 215, 0, 0.5); }
+                    50% { text-shadow: 0 0 20px rgba(255, 215, 0, 0.8); }
+                }
+                .urge-message {
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: #FF6B6B;
+                    margin: 15px 0;
+                    padding: 12px;
+                    background: rgba(255, 107, 107, 0.1);
+                    border: 2px solid #FF6B6B;
+                    border-radius: 12px;
+                    animation: pulse 1.5s infinite;
+                }
+                @keyframes pulse {
+                    0%, 100% { transform: scale(1); }
+                    50% { transform: scale(1.03); }
+                }
+                   #combo {
+                    position: absolute;
+                    top: 155px; /* CHANGED: was "215px" - moved up 60px */
+                    left: 50%;
+                    transform: translateX(-50%) scale(0.8);
+                    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+                    color: white;
+                    padding: 8px 18px;
+                    border-radius: 10px;
+                    font-size: 16px;
+                    font-weight: 800;
+                    opacity: 0;
+                    transition: all 0.3s;
+                    z-index: 99;
+                    box-shadow: 0 8px 24px rgba(255, 215, 0, 0.4);
+                }
+                #combo.show {
+                    opacity: 1;
+                    transform: translateX(-50%) scale(1);
+                }
+                .achievement {
+                    position: fixed;
+                    top: 15px;
+                    right: 15px;
+                    transform: translateX(350px);
+                    background: rgba(20, 25, 40, 0.98);
+                    border: 2px solid #FFD700;
+                    border-radius: 14px;
+                    padding: 12px 18px;
+                    text-align: left;
+                    z-index: 2000;
+                    box-shadow: 0 12px 40px rgba(255, 215, 0, 0.6);
+                    transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+                    opacity: 0;
+                    max-width: 250px;
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                }
+                .achievement.show {
+                    opacity: 1;
+                    transform: translateX(0);
+                }
+                .achievement-icon {
+                    font-size: 32px;
+                    flex-shrink: 0;
+                    animation: bounce 0.6s ease-out;
+                }
+                @keyframes bounce {
+                    0%, 100% { transform: translateY(0); }
+                    25% { transform: translateY(-10px); }
+                    50% { transform: translateY(0); }
+                    75% { transform: translateY(-5px); }
+                }
+                .achievement-content {
+                    flex: 1;
+                }
+                .achievement-text {
+                    font-size: 14px;
+                    font-weight: 800;
+                    color: #FFD700;
+                    margin-bottom: 2px;
+                }
+                .achievement-desc {
+                    font-size: 11px;
+                    color: rgba(255, 255, 255, 0.7);
+                }
+                .big-win {
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%) scale(0);
+                    font-size: 60px;
+                    font-weight: 900;
+                    color: #FFD700;
+                    text-shadow: 0 0 40px rgba(255, 215, 0, 1);
+                    z-index: 3000;
+                    opacity: 0;
+                    pointer-events: none;
+                    animation: bigWinPop 2s ease-out;
+                }
+                @keyframes bigWinPop {
+                    0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+                    10% { transform: translate(-50%, -50%) scale(1.5); opacity: 1; }
+                    90% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+                    100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+                }
+                .slowmo-overlay {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0, 255, 255, 0.15);
+                    pointer-events: none;
+                    z-index: 1500;
+                    opacity: 0;
+                    transition: opacity 0.5s;
+                }
+                .slowmo-overlay.active {
+                    opacity: 1;
+                    animation: slowmoPulse 1s infinite;
+                }
+                @keyframes slowmoPulse {
+                    0%, 100% { background: rgba(0, 255, 255, 0.1); }
+                    50% { background: rgba(0, 255, 255, 0.2); }
+                }
+                .game-over-animation {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: radial-gradient(circle, rgba(102, 126, 234, 0.2) 0%, rgba(10, 14, 26, 0.95) 70%);
+                    z-index: 999;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    animation: fadeIn 0.8s ease-out;
+                }
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                .game-over-text {
+                    font-size: 64px;
+                    font-weight: 900;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    animation: slideDown 0.8s ease-out;
+                    text-align: center;
+                    padding: 0 20px;
+                    width: 100%;
+                    max-width: 90vw;
+                    word-wrap: break-word;
+                }
+                @keyframes slideDown {
+                    from { transform: translateY(-100px); opacity: 0; }
+                    to { transform: translateY(0); opacity: 1; }
+                }
+                .stats-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 15px;
+                    margin: 20px 0;
+                }
+                .stat-card {
+                    background: rgba(255, 255, 255, 0.05);
+                    border: 1px solid rgba(255, 255, 255, 0.1);
+                    border-radius: 12px;
+                    padding: 15px;
+                    text-align: center;
+                }
+                .stat-card-value {
+                    font-size: 32px;
+                    font-weight: 800;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                    margin-bottom: 5px;
+                }
+                .stat-card-label {
+                    font-size: 11px;
+                    color: rgba(255, 255, 255, 0.5);
+                    text-transform: uppercase;
+                    letter-spacing: 1px;
+                }
+                .leaderboard-list {
+                    margin: 20px 0;
+                    max-height: 50vh;
+                    overflow-y: auto;
+                }
+                .leaderboard-item {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 12px 16px;
+                    margin: 8px 0;
+                    background: rgba(255, 255, 255, 0.04);
+                    border-radius: 12px;
+                    border: 1px solid rgba(255, 255, 255, 0.06);
+                    transition: all 0.3s;
+                }
+                .leaderboard-item:hover {
+                    background: rgba(255, 255, 255, 0.08);
+                    transform: translateX(4px);
+                }
+                .leaderboard-item.top1 {
+                    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 215, 0, 0.05) 100%);
+                    border-color: #FFD700;
+                }
+                .leaderboard-item.top2 {
+                    background: linear-gradient(135deg, rgba(192, 192, 192, 0.2) 0%, rgba(192, 192, 192, 0.05) 100%);
+                    border-color: #C0C0C0;
+                }
+                .leaderboard-item.top3 {
+                    background: linear-gradient(135deg, rgba(205, 127, 50, 0.2) 0%, rgba(205, 127, 50, 0.05) 100%);
+                    border-color: #CD7F32;
+                }
+                .leaderboard-rank {
+                    font-size: 20px;
+                    font-weight: 800;
+                    min-width: 40px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+                .top1 .leaderboard-rank {
+                    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+                .leaderboard-name {
+                    flex: 1;
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: rgba(255, 255, 255, 0.9);
+                    margin: 0 12px;
+                }
+                .leaderboard-score {
+                    font-size: 18px;
+                    font-weight: 800;
+                    color: #FFD700;
+                }
+                .name-input {
+                    width: 100%;
+                    padding: 16px;
+                    margin: 16px 0;
+                    background: rgba(255, 255, 255, 0.05);
+                    border: 2px solid rgba(102, 126, 234, 0.3);
+                    border-radius: 12px;
+                    color: white;
+                    font-size: 16px;
+                    font-weight: 600;
+                    font-family: 'Inter', sans-serif;
+                    text-align: center;
+                    transition: all 0.3s;
+                }
+                .name-input:focus {
+                    outline: none;
+                    border-color: rgba(102, 126, 234, 0.8);
+                    background: rgba(255, 255, 255, 0.08);
+                }
+                .name-input::placeholder {
+                    color: rgba(255, 255, 255, 0.3);
+                }
+                .loading {
+                    color: rgba(255, 255, 255, 0.5);
+                    font-size: 14px;
+                    margin: 20px 0;
+                }
+                .hidden {
+                    display: none !important;
+                }
+                .firebase-status {
+                    font-size: 11px;
+                    color: rgba(255, 255, 255, 0.4);
+                    margin-top: 10px;
+                }
+                .firebase-status.connected {
+                    color: #4ade80;
+                }
+                .firebase-status.error {
+                    color: #f87171;
+                }
+        /* Portrait-only lock - MOBILE + TABLET */
+        @media (orientation: landscape) {
+            body::before {
+                content: "📱 Portrait Mode Only";
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: #0a0e1a;
+                color: white;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                font-size: 32px;
+                font-weight: 700;
+                font-family: 'Inter', sans-serif;
+                z-index: 10000;
+                text-align: center;
+                padding: 20px;
+                gap: 0px;
+                line-height: 1.4;
+            }
+           
+            body::after {
+                content: "";
+                display: none;
+            }
+           
+            /* Hide game content in landscape */
+            #gameContainer,
+            #overlay,
+            .modal {
+                opacity: 0.1;
+                pointer-events: none;
+            }
+        }
+        /* Force hide rotation prompt in portrait */
+        @media (orientation: portrait) {
+            body::before,
+            body::after {
+                display: none !important;
+            }
+        }
+        @keyframes rotateIcon {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(90deg); }
+        }
+        /* iPad Portrait Optimization */
+        @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
+            /* Center game with max playable width */
+            #gameContainer {
+                max-width: 600px;
+                margin: 0 auto;
+                border-left: 1px solid rgba(102, 126, 234, 0.2);
+                border-right: 1px solid rgba(102, 126, 234, 0.2);
+            }
+           
+            /* Scale up HUD elements */
+            .stat-box {
+                padding: 14px 22px;
+                min-width: 100px;
+            }
+           
+            .stat-label {
+                font-size: 11px;
+            }
+           
+            .stat-value {
+                font-size: 36px;
+            }
+           
+            .heart {
+                width: 14px;
+                height: 14px;
+            }
+           
+            /* Larger pause button */
+            #pauseButton {
+                width: 56px;
+                height: 56px;
+                font-size: 30px;
+            }
+           
+            /* Scale up streak bar */
+            #streakBar {
+                padding: 14px 18px;
+            }
+           
+            .streak-text {
+                font-size: 13px;
+            }
+           
+            .streak-count {
+                font-size: 16px;
+            }
+           
+            .progress-bar {
+                height: 9px;
+            }
+           
+            /* Scale up difficulty indicator */
+            #difficultyIndicator {
+                padding: 10px 16px;
+            }
+           
+            .difficulty-text {
+                font-size: 11px;
+            }
+           
+            .difficulty-level {
+                font-size: 20px;
+            }
+           
+            /* Larger combo */
+            #combo {
+                font-size: 20px;
+                padding: 10px 22px;
+            }
+           
+            /* Scale modals appropriately */
+            .modal {
+                max-width: 450px;
+                padding: 50px 40px;
+            }
+           
+            .pause-modal {
+                max-width: 400px;
+                padding: 50px 40px;
+            }
+           
+            h1 {
+                font-size: 52px;
+            }
+           
+            h2 {
+                font-size: 42px;
+            }
+           
+            .subtitle, .pause-subtitle {
+                font-size: 17px;
+            }
+           
+            button {
+                padding: 20px 50px;
+                font-size: 18px;
+            }
+        }
+        @keyframes rotateIcon {
+            0%, 100% { transform: translateX(-50%) rotate(0deg); }
+            50% { transform: translateX(-50%) rotate(90deg); }
+        }
+        @supports (padding: env(safe-area-inset-top)) {
+            #hud {
+                top: calc(25px + env(safe-area-inset-top));
+                padding: 0 15px;
+            }
+            #gameInfoBar {
+                top: calc(100px + env(safe-area-inset-top));
+            }
+            #combo {
+                top: calc(175px + env(safe-area-inset-top));
+            }
+        }
+        /* Fallback for older iOS (constant instead of env) */
+        @supports (padding: constant(safe-area-inset-top)) {
+            #hud {
+                top: calc(25px + constant(safe-area-inset-top));
+            }
+            #gameInfoBar {
+                top: calc(100px + constant(safe-area-inset-top));
+            }
+            #combo {
+                top: calc(175px + constant(safe-area-inset-top));
+            }
+        }
+        /* Portrait Pause Lock */
+        .portrait-pause::before {
+            content: "📱 Portrait Mode Only";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: linear-gradient(45deg, #0a0e1a, #1a1e3a);
+            color: #fff;
+            font-size: 28px;
+            font-weight: bold;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
-            font-weight: 700;
-            font-family: 'Inter', sans-serif;
-            z-index: 10000;
+            z-index: 9999;
             text-align: center;
-            padding: 20px;
-            gap: 0px;
-            line-height: 1.4;
+            animation: glow 2s infinite;
         }
-       
-        body::after {
-            content: "";
-            display: none;
+        .portrait-pause canvas {
+            opacity: 0.3;
         }
-       
-        /* Hide game content in landscape */
-        #gameContainer,
-        #overlay,
-        .modal {
-            opacity: 0.1;
+        @keyframes glow {
+            0%, 100% { text-shadow: 0 0 20px #00ffff; }
+            50% { text-shadow: 0 0 40px #00ffff; }
+        }
+               
+            /* ADD NEW CELEBRATION & ZONE CSS HERE */
+            /* Confetti particles */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #FFD700;
+            top: 0;
+            z-index: 5000;
+            pointer-events: none;
+            animation: confettiFall 2s ease-out forwards;
+        }
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+        /* Screen shake */
+        @keyframes screenShake {
+            0%, 100% { transform: translate(0, 0); }
+            10%, 30%, 50%, 70%, 90% { transform: translate(-5px, 0); }
+            20%, 40%, 60%, 80% { transform: translate(5px, 0); }
+        }
+        .shake {
+            animation: screenShake 0.5s ease-in-out;
+        }
+        /* Fireworks */
+        .firework {
+            position: fixed;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            z-index: 5000;
             pointer-events: none;
         }
-    }
-    /* Force hide rotation prompt in portrait */
-    @media (orientation: portrait) {
-        body::before,
-        body::after {
-            display: none !important;
+        @keyframes fireworkBurst {
+            0% {
+                opacity: 1;
+                transform: translate(0, 0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translate(var(--tx), var(--ty)) scale(0);
+            }
         }
-    }
-    @keyframes rotateIcon {
-        0%, 100% { transform: rotate(0deg); }
-        50% { transform: rotate(90deg); }
-    }
-    /* iPad Portrait Optimization */
-    @media (min-width: 768px) and (max-width: 1024px) and (orientation: portrait) {
-        /* Center game with max playable width */
-        #gameContainer {
-            max-width: 600px;
-            margin: 0 auto;
-            border-left: 1px solid rgba(102, 126, 234, 0.2);
-            border-right: 1px solid rgba(102, 126, 234, 0.2);
+        /* Zone popup */
+        @keyframes zonePopup {
+            0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+            10% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+            85% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
         }
-       
-        /* Scale up HUD elements */
-        .stat-box {
-            padding: 14px 22px;
-            min-width: 100px;
+        /* Combo message */
+        @keyframes comboPop {
+            0% { transform: translate(-50%, 0) scale(0); opacity: 0; }
+            15% { transform: translate(-50%, 0) scale(1.3); opacity: 1; }
+            80% { transform: translate(-50%, 0) scale(1); opacity: 1; }
+            100% { transform: translate(-50%, -20px) scale(0.8); opacity: 0; }
         }
-       
-        .stat-label {
-            font-size: 11px;
-        }
-       
-        .stat-value {
-            font-size: 36px;
-        }
-       
-        .heart {
-            width: 14px;
-            height: 14px;
-        }
-       
-        /* Larger pause button */
-        #pauseButton {
-            width: 56px;
-            height: 56px;
-            font-size: 30px;
-        }
-       
-        /* Scale up streak bar */
-        #streakBar {
-            padding: 14px 18px;
-        }
-       
-        .streak-text {
-            font-size: 13px;
-        }
-       
-        .streak-count {
-            font-size: 16px;
-        }
-       
-        .progress-bar {
-            height: 9px;
-        }
-       
-        /* Scale up difficulty indicator */
-        #difficultyIndicator {
-            padding: 10px 16px;
-        }
-       
-        .difficulty-text {
-            font-size: 11px;
-        }
-       
-        .difficulty-level {
-            font-size: 20px;
-        }
-       
-        /* Larger combo */
-        #combo {
-            font-size: 20px;
-            padding: 10px 22px;
-        }
-       
-        /* Scale modals appropriately */
-        .modal {
-            max-width: 450px;
-            padding: 50px 40px;
-        }
-       
-        .pause-modal {
-            max-width: 400px;
-            padding: 50px 40px;
-        }
-       
-        h1 {
-            font-size: 52px;
-        }
-       
-        h2 {
-            font-size: 42px;
-        }
-       
-        .subtitle, .pause-subtitle {
-            font-size: 17px;
-        }
-       
-        button {
-            padding: 20px 50px;
-            font-size: 18px;
-        }
-    }
-    @keyframes rotateIcon {
-        0%, 100% { transform: translateX(-50%) rotate(0deg); }
-        50% { transform: translateX(-50%) rotate(90deg); }
-    }
-    @supports (padding: env(safe-area-inset-top)) {
-        #hud {
-            top: calc(25px + env(safe-area-inset-top));
-            padding: 0 15px;
-        }
-        #gameInfoBar {
-            top: calc(100px + env(safe-area-inset-top));
-        }
-        #combo {
-            top: calc(175px + env(safe-area-inset-top));
-        }
-    }
-    /* Fallback for older iOS (constant instead of env) */
-    @supports (padding: constant(safe-area-inset-top)) {
-        #hud {
-            top: calc(25px + constant(safe-area-inset-top));
-        }
-        #gameInfoBar {
-            top: calc(100px + constant(safe-area-inset-top));
-        }
-        #combo {
-            top: calc(175px + constant(safe-area-inset-top));
-        }
-    }
-    /* Portrait Pause Lock */
-    .portrait-pause::before {
-        content: "📱 Portrait Mode Only";
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100vw;
-        height: 100vh;
-        background: linear-gradient(45deg, #0a0e1a, #1a1e3a);
-        color: #fff;
-        font-size: 28px;
-        font-weight: bold;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        z-index: 9999;
-        text-align: center;
-        animation: glow 2s infinite;
-    }
-    .portrait-pause canvas {
-        opacity: 0.3;
-    }
-    @keyframes glow {
-        0%, 100% { text-shadow: 0 0 20px #00ffff; }
-        50% { text-shadow: 0 0 40px #00ffff; }
-    }
-           
-        /* ADD NEW CELEBRATION & ZONE CSS HERE */
-        /* Confetti particles */
-    .confetti {
-        position: fixed;
-        width: 10px;
-        height: 10px;
-        background: #FFD700;
-        top: 0;
-        z-index: 5000;
-        pointer-events: none;
-        animation: confettiFall 2s ease-out forwards;
-    }
-    @keyframes confettiFall {
-        0% {
-            transform: translateY(0) rotate(0deg);
-            opacity: 1;
-        }
-        100% {
-            transform: translateY(100vh) rotate(720deg);
-            opacity: 0;
-        }
-    }
-    /* Screen shake */
-    @keyframes screenShake {
-        0%, 100% { transform: translate(0, 0); }
-        10%, 30%, 50%, 70%, 90% { transform: translate(-5px, 0); }
-        20%, 40%, 60%, 80% { transform: translate(5px, 0); }
-    }
-    .shake {
-        animation: screenShake 0.5s ease-in-out;
-    }
-    /* Fireworks */
-    .firework {
-        position: fixed;
-        width: 4px;
-        height: 4px;
-        border-radius: 50%;
-        z-index: 5000;
-        pointer-events: none;
-    }
-    @keyframes fireworkBurst {
-        0% {
-            opacity: 1;
-            transform: translate(0, 0) scale(1);
-        }
-        100% {
-            opacity: 0;
-            transform: translate(var(--tx), var(--ty)) scale(0);
-        }
-    }
-    /* Zone popup */
-    @keyframes zonePopup {
-        0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
-        10% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-        85% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
-        100% { transform: translate(-50%, -50%) scale(0.8); opacity: 0; }
-    }
-    /* Combo message */
-    @keyframes comboPop {
-        0% { transform: translate(-50%, 0) scale(0); opacity: 0; }
-        15% { transform: translate(-50%, 0) scale(1.3); opacity: 1; }
-        80% { transform: translate(-50%, 0) scale(1); opacity: 1; }
-        100% { transform: translate(-50%, -20px) scale(0.8); opacity: 0; }
-    }
     </style>
 </head>
 <body>
@@ -1596,29 +1551,28 @@
                 </div>
             </div>
         </div>
-            <!-- NEW CODE - ADD THIS ENTIRE BLOCK -->
-<div id="gameInfoBar">
-    <div id="streakBar">
-        <div class="streak-info">
-            <span class="streak-text">🔥 STREAK</span>
-            <span class="streak-count" id="streakCount">0/10</span>
+        <div id="gameInfoBar">
+            <div id="streakBar">
+                <div class="streak-info">
+                    <span class="streak-text">🔥 STREAK</span>
+                    <span class="streak-count" id="streakCount">0/10</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+                <div class="streak-reward" id="streakReward">Next: +1 Life! ❤️</div>
+            </div>
+            <div id="difficultyIndicator">
+                <div class="difficulty-text">Level</div>
+                <div class="difficulty-level" id="diffLevel">1</div>
+            </div>
         </div>
-        <div class="progress-bar">
-            <div class="progress-fill" id="progressFill"></div>
-        </div>
-        <div class="streak-reward" id="streakReward">Next: +1 Life! ❤️</div>
-    </div>
-    <div id="difficultyIndicator">
-        <div class="difficulty-text">Level</div>
-        <div class="difficulty-level" id="diffLevel">1</div>
-    </div>
-</div>
   
         <div id="combo"></div>
         <canvas id="gameCanvas"></canvas>
-                <div id="pauseButton">⏸️</div>
-        <!-- Full-screen pause overlay (add this after #gameContainer or at the end of body) -->
-            <div id="pauseOverlay" class="hidden">
+        <div id="pauseButton">⏸️</div>
+        <!-- Full-screen pause overlay -->
+        <div id="pauseOverlay" class="hidden">
             <div class="pause-modal">
                 <div class="pause-icon">⏸️</div>
                 <h2>Game Paused</h2>
@@ -1633,193 +1587,21 @@
         <div class="modal">
             <h1>Zoo Keeper</h1>
             <p class="subtitle">Catch animals to build your zoo! Unlock premiums for epic rewards.</p>
-            
-            <!-- Tabbed Interface for Animal List -->
-            <div class="animal-tabs">
-                <button class="tab-button active" data-tab="regular">Regular</button>
-                <button class="tab-button" data-tab="premium">Premium</button>
-                <button class="tab-button" data-tab="powerups">Power-Ups</button>
+            <!-- Glowing Animal Emojis Row -->
+            <div class="animal-emojis">
+                <span class="animal-emoji">🦁</span>
+                <span class="animal-emoji">🐘</span>
+                <span class="animal-emoji">🦓</span>
+                <span class="animal-emoji">🦭</span>
+                <span class="animal-emoji">🦜</span>
+                <span class="animal-emoji">🦅</span>
             </div>
-            
-            <!-- Regular Animals Tab -->
-            <div class="animal-list active" id="regular-list">
-                <div class="animal-item">
-                    <div class="animal-left">
-                        <span class="animal-emoji">🐇</span>
-                        <span class="animal-name">Rabbit</span>
-                    </div>
-                    <span class="animal-points">+10</span>
-                </div>
-                <div class="animal-item">
-                    <div class="animal-left">
-                        <span class="animal-emoji">🐨</span>
-                        <span class="animal-name">Koala</span>
-                    </div>
-                    <span class="animal-points">+15</span>
-                </div>
-                <div class="animal-item">
-                    <div class="animal-left">
-                        <span class="animal-emoji">🦊</span>
-                        <span class="animal-name">Fox</span>
-                    </div>
-                    <span class="animal-points">+20</span>
-                </div>
-                <div class="animal-item">
-                    <div class="animal-left">
-                        <span class="animal-emoji">🦁</span>
-                        <span class="animal-name">Lion</span>
-                    </div>
-                    <span class="animal-points">+25</span>
-                </div>
-                <div class="animal-item">
-                    <div class="animal-left">
-                        <span class="animal-emoji">🐼</span>
-                        <span class="animal-name">Panda</span>
-                    </div>
-                    <span class="animal-points">+30</span>
-                </div>
-                <div class="animal-item">
-                    <div class="animal-left">
-                        <span class="animal-emoji">🐯</span>
-                        <span class="animal-name">Tiger</span>
-                    </div>
-                    <span class="animal-points">+35</span>
-                </div>
-                <div class="animal-item">
-                    <div class="animal-left">
-                        <span class="animal-emoji">🐘</span>
-                        <span class="animal-name">Elephant</span>
-                    </div>
-                    <span class="animal-points">+40</span>
-                </div>
-                <div class="animal-item">
-                    <div class="animal-left">
-                        <span class="animal-emoji">🦒</span>
-                        <span class="animal-name">Giraffe</span>
-                    </div>
-                    <span class="animal-points">+45</span>
-                </div>
-            </div>
-            
-            <!-- Premium Animals Tab -->
-            <div class="animal-list" id="premium-list">
-                <div class="animal-item premium-item">
-                    <div class="animal-left">
-                        <span class="animal-emoji">🦄</span>
-                        <span class="animal-name">Unicorn ⭐</span>
-                    </div>
-                    <span class="animal-points premium-points">+100</span>
-                </div>
-                <div class="animal-item premium-item">
-                    <div class="animal-left">
-                        <span class="animal-emoji">🦚</span>
-                        <span class="animal-name">Peacock ⭐</span>
-                    </div>
-                    <span class="animal-points premium-points">+110</span>
-                </div>
-                <div class="animal-item premium-item">
-                    <div class="animal-left">
-                        <span class="animal-emoji">🐺</span>
-                        <span class="animal-name">Arctic Wolf ⭐</span>
-                    </div>
-                    <span class="animal-points premium-points">+120</span>
-                </div>
-                <div class="animal-item premium-item">
-                    <div class="animal-left">
-                        <span class="animal-emoji">🦭</span>
-                        <span class="animal-name">Seal ⭐</span>
-                    </div>
-                    <span class="animal-points premium-points">+130</span>
-                </div>
-                <div class="animal-item premium-item">
-                    <div class="animal-left">
-                        <span class="animal-emoji">🐒</span>
-                        <span class="animal-name">Golden Monkey ⭐</span>
-                    </div>
-                    <span class="animal-points premium-points">+140</span>
-                </div>
-                <div class="animal-item premium-item">
-                    <div class="animal-left">
-                        <span class="animal-emoji">🦜</span>
-                        <span class="animal-name">Macaw ⭐</span>
-                    </div>
-                    <span class="animal-points premium-points">+150</span>
-                </div>
-                <div class="animal-item premium-item">
-                    <div class="animal-left">
-                        <span class="animal-emoji">🦅</span>
-                        <span class="animal-name">Golden Eagle ⭐</span>
-                    </div>
-                    <span class="animal-points premium-points">+160</span>
-                </div>
-                <div class="animal-item premium-item">
-                    <div class="animal-left">
-                        <span class="animal-emoji">🦓</span>
-                        <span class="animal-name">Zebra ⭐</span>
-                    </div>
-                    <span class="animal-points premium-points">+170</span>
-                </div>
-                <div class="animal-item premium-item">
-                    <div class="animal-left">
-                        <span class="animal-emoji">🦉</span>
-                        <span class="animal-name">Moon Owl ⭐</span>
-                    </div>
-                    <span class="animal-points premium-points">+180</span>
-                </div>
-                <div class="animal-item premium-item">
-                    <div class="animal-left">
-                        <span class="animal-emoji">🦇</span>
-                        <span class="animal-name">Mystic Bat ⭐</span>
-                    </div>
-                    <span class="animal-points premium-points">+190</span>
-                </div>
-                <div class="animal-item premium-item">
-                    <div class="animal-left">
-                        <span class="animal-emoji">🐉</span>
-                        <span class="animal-name">Dragon ⭐</span>
-                    </div>
-                    <span class="animal-points premium-points">+200</span>
-                </div>
-                <div class="animal-item premium-item">
-                    <div class="animal-left">
-                        <span class="animal-emoji">🕊️</span>
-                        <span class="animal-name">Phoenix ⭐</span>
-                    </div>
-                    <span class="animal-points premium-points">+220</span>
-                </div>
-            </div>
-            
-            <!-- Power-Ups Tab -->
-            <div class="animal-list" id="powerups-list">
-                <div class="animal-item" style="border: 2px solid #00FFFF; background: rgba(0, 255, 255, 0.1);">
-                    <div class="animal-left">
-                        <span class="animal-emoji">6️⃣7️⃣</span>
-                        <span class="animal-name">Power-Up</span>
-                    </div>
-                    <span class="animal-points" style="color: #00FFFF;">SLOW-MO</span>
-                </div>
-                <div class="animal-item" style="border: 2px solid #FF0000; background: rgba(255, 0, 0, 0.1);">
-                    <div class="animal-left">
-                        <span class="animal-emoji">💣🧨</span>
-                        <span class="animal-name">Danger!</span>
-                    </div>
-                    <span class="animal-points" style="color: #FF0000;">-1 LIFE</span>
-                </div>
-                <div class="animal-item" style="border: 2px solid #ff4444; background: rgba(255, 68, 68, 0.1);">
-                    <div class="animal-left">
-                        <span class="animal-emoji">❤️</span>
-                        <span class="animal-name">Heart Life</span>
-                    </div>
-                    <span class="animal-points" style="color: #ff4444;">+1 LIFE</span>
-                </div>
-            </div>
-           
             <p class="firebase-status" id="firebaseStatus">Connecting to leaderboard...</p>
             <button id="startBtn"><span>▶️</span> Start Playing</button>
+            <button id="premiumBtn" onclick="buyPremiumAnimals()">🦄 Unlock Premiums</button>
             <button class="secondary" id="statsBtn"><span>📊</span> View Stats</button>
             <button class="secondary" id="leaderboardBtn"><span>🏆</span> Leaderboard</button>
-            <button id="premiumBtn" onclick="buyPremiumAnimals()">🦄 Unlock Premium Animals</button>
-            <button onclick="restorePurchases()">🔄 Restore Purchases</button>
+            <button id="restoreBtn" onclick="restorePurchases()">🔄 Restore Purchases</button>
         </div>
     </div>
     <div id="gameOverScreen" class="hidden">
@@ -1902,7 +1684,10 @@
             <div class="achievement-desc" id="achDesc">You did it!</div>
         </div>
     </div>
-    <script>
+
+
+
+   <script>
         const firebaseConfig = {
             apiKey: "AIzaSyDWLgSdmM1E3Mq0_oVQK3H6UfvJWv0A8HM",
             authDomain: "zookeeper-b75c4.firebaseapp.com",
@@ -3972,6 +3757,9 @@ initIAP();
             });
         });
     </script>
+
+
+    
 <!-- Zone Transition Modal -->
 <div id="zoneTransitionModal" class="hidden">
     <div class="zone-modal-content">
