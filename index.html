@@ -2581,6 +2581,15 @@ document.getElementById('premiumCollection').textContent = `${premiumSpeciesCaug
         a.speed *= 0.3;
         if(a.vx !== undefined) a.vx *= 0.3;
     });
+
+        // ⚡ SLOW DOWN DANGER ITEMS TOO! ⚡
+    dangerItems.forEach(d => {
+        if(!d.baseSpeed) d.baseSpeed = d.speed;
+        d.speed *= 0.3;
+    });
+
+
+
 }
 function checkSlowMo(time) {
     if(slowMoActive && time >= slowMoEndTime) {
@@ -2598,6 +2607,18 @@ function checkSlowMo(time) {
                 delete a.baseVx;
             }
         });
+
+
+                    // ⚡ SPEED DANGER ITEMS BACK UP! ⚡
+        dangerItems.forEach(d => {
+            if(d.baseSpeed) {
+                d.speed = d.baseSpeed;
+                delete d.baseSpeed;
+            }
+        });
+
+
+
     }
 }
         function checkAchievements() {
