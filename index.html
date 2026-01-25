@@ -1820,7 +1820,16 @@
 
 
          // TEMPORARY - Clear premium status for testing
-    localStorage.removeItem('premiumUnlocked');
+    //localStorage.removeItem('premiumUnlocked');
+
+
+// === UNLOCK PREMIUMS FOR TESTING ===
+localStorage.setItem('premiumUnlocked', 'true');
+premiumUnlocked = true;
+updatePremiumButton();  // Shows "Premium Active" badge
+// ===================================
+
+
 
 
         const firebaseConfig = {
