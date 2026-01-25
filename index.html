@@ -47,22 +47,64 @@
         }
 
 
-            /* Compact Game Over Modal */
-#gameOverScreen h2 {
-    font-size: 28px !important; /* ← Smaller */
-    font-weight: 800;
-    color: #fff !important; /* ← WHITE TEXT */
-    margin-bottom: 8px !important;
-    letter-spacing: -0.5px;
+
+
+            /* SUPER COMPACT GAME OVER SCREEN - NO SCROLLING */
+#gameOverScreen .modal {
+    padding: 30px 20px 20px !important; /* ← Less padding */
+    gap: 8px !important; /* ← Tighter spacing between elements */
 }
 
-                #gameOverScreen .stats {
-    font-size: 13px;
-    color: #fff !important; /* ← WHITE TEXT */
-    margin-bottom: 3px !important; /* ← Tighter */
-    font-weight: 600;
-    line-height: 1.3;
+#gameOverScreen h2 {
+    font-size: 24px !important; /* ← Smaller title */
+    margin-bottom: 6px !important;
 }
+
+#finalScore {
+    font-size: 48px !important; /* ← Smaller score (was 56px) */
+    margin: 8px 0 !important; /* ← Less space */
+    letter-spacing: -1px;
+}
+
+.badge {
+    padding: 6px 16px !important; /* ← Smaller badge */
+    font-size: 13px !important;
+    margin: 6px 0 8px !important;
+}
+
+#gameOverScreen .stats {
+    font-size: 12px !important; /* ← Smaller stats text */
+    margin-bottom: 2px !important; /* ← Tighter */
+    line-height: 1.2;
+}
+
+.name-input {
+    padding: 10px !important; /* ← Smaller input */
+    margin: 10px 0 !important;
+    font-size: 14px !important;
+}
+
+#gameOverScreen button {
+    padding: 12px 32px !important; /* ← Smaller buttons */
+    font-size: 14px !important;
+    margin-top: 8px !important; /* ← Less space between buttons */
+}
+
+.highscore-beat {
+    font-size: 15px !important; /* ← Smaller "NEW HIGH SCORE" */
+    margin: 6px 0 !important;
+}
+
+.urge-message {
+    font-size: 14px !important; /* ← Smaller urge message */
+    margin: 10px 0 !important;
+    padding: 10px !important;
+}
+
+
+
+
+
 
 
              .modal {
