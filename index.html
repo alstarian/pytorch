@@ -46,6 +46,25 @@
             overflow: hidden; /* No scroll */
         }
 
+
+            /* Compact Game Over Modal */
+#gameOverScreen h2 {
+    font-size: 28px !important; /* ← Smaller */
+    font-weight: 800;
+    color: #fff !important; /* ← WHITE TEXT */
+    margin-bottom: 8px !important;
+    letter-spacing: -0.5px;
+}
+
+                #gameOverScreen .stats {
+    font-size: 13px;
+    color: #fff !important; /* ← WHITE TEXT */
+    margin-bottom: 3px !important; /* ← Tighter */
+    font-weight: 600;
+    line-height: 1.3;
+}
+
+
              .modal {
             background: transparent;
             border: none !important; /* ← REMOVES PURPLE BORDER */
@@ -969,29 +988,41 @@
                     margin-top: 18px;
                     font-weight: 600;
                 }
-                #finalScore {
-                    font-size: 80px;
+                          #finalScore {
+                    font-size: 56px !important; /* ← Smaller (was 80px) */
                     font-weight: 800;
                     background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
                     -webkit-background-clip: text;
                     -webkit-text-fill-color: transparent;
                     background-clip: text;
-                    margin: 20px 0;
+                    margin: 12px 0 !important; /* ← Less space */
                     line-height: 1;
-                    letter-spacing: -3px;
+                    letter-spacing: -2px;
                 }
-                .badge {
+
+                               .badge {
                     display: inline-block;
                     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                     color: white;
-                    padding: 10px 26px;
-                    border-radius: 12px;
-                    font-size: 16px;
+                    padding: 8px 20px; /* ← Smaller */
+                    border-radius: 10px;
+                    font-size: 14px; /* ← Smaller */
                     font-weight: 700;
-                    margin: 12px 0 18px;
-                    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+                    margin: 8px 0 12px !important; /* ← Less space */
+                    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.3);
                 }
-             .stats
+
+                                .stats {
+                    font-size: 13px;
+                    color: #fff !important; /* ← WHITE */
+                    margin-bottom: 3px; /* ← Compact */
+                    font-weight: 600;
+                    line-height: 1.3;
+                }
+
+
+
+
                 .highscore-beat {
                     font-size: 18px;
                     font-weight: 800;
