@@ -1823,11 +1823,13 @@
     //localStorage.removeItem('premiumUnlocked');
 
 
-// === UNLOCK PREMIUMS FOR TESTING ===
+// UNLOCK PREMIUMS FOR TESTING (DOM ready)
 localStorage.setItem('premiumUnlocked', 'true');
-premiumUnlocked = true;
-updatePremiumButton();  // Shows "Premium Active" badge
-// ===================================
+window.addEventListener('DOMContentLoaded', () => {
+    premiumUnlocked = true;
+    updatePremiumButton();  // ✅ Now safe!
+});
+
 
 
 
