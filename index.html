@@ -2866,11 +2866,14 @@ function checkSlowMo(time) {
     const premiumTypes = types.filter(t => t.premium && t.zone === currentZoneName);
     // Choose: 10% chance for premium if available, otherwise regular
     let type;
-    if (premiumTypes.length > 0 && Math.random() < 0.1) { // Change 0.1 to 0.2 for more premium, etc.
+     // Choose 10% chance for premium if UNLOCKED and available
+    let type;
+    if (premiumUnlocked && premiumTypes.length > 0 && Math.random() < 0.1) {
         type = premiumTypes[Math.floor(Math.random() * premiumTypes.length)];
     } else {
         type = regularTypes[Math.floor(Math.random() * regularTypes.length)];
     }
+
     let speedMultiplier = slowMoActive ? 0.3 : (Math.min(1 + (difficulty * 0.06), 1.8));
     if (difficulty >= 40) {
         speedMultiplier = slowMoActive ? 0.3 : 2.2;
@@ -3183,7 +3186,7 @@ function gameLoop(time) {
     checkSlowMo(time);
         // Progressive zone unlock (challenging milestones - no debug mode)
         // Progressive zone unlock
-    const zoneScoreThresholds = [0, 3000, 8000, 15000, 25000, 40000];
+    const zoneScoreThresholds = [0, 5000, 10000, 20000, 40000, 80000];
     let newZoneIndex = 0;
     for (let i = zoneScoreThresholds.length - 1; i >= 0; i--) {
         if (score >= zoneScoreThresholds[i]) {
