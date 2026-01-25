@@ -3561,28 +3561,48 @@ showZoneTransition(initialZone.name);
                 setTimeout(bigWinSound, 500);
                     updateMainMenuHighScore();
                 } else {
-                    document.getElementById('newHighScore').classList.add('hidden');
-                    document.getElementById('gameOverTitle').textContent = 'Amazing Run!';
-                    const diff = highScore - score;
-                    const urgeEl = document.getElementById('urgePlayAgain');
-                    if(diff <= 50) {
-                        urgeEl.textContent = `SO CLOSE! Only ${diff} points away! 🔥 One more try!`;
-                        urgeEl.classList.remove('hidden');
-                        document.getElementById('restartBtn').textContent = 'BEAT IT NOW! 🎯';
-                    } else if(diff <= 150) {
-                        urgeEl.textContent = `You can do better! ${diff} points to beat! 💪`;
-                        urgeEl.classList.remove('hidden');
-                        document.getElementById('restartBtn').textContent = 'Try Again! 🚀';
-                    } else {
-                        urgeEl.classList.add('hidden');
-                        document.getElementById('restartBtn').textContent = 'Play Again 🎮';
-                    }
-                    if(diff < 100) {
-                        document.getElementById('almostMsg').textContent = `Almost there! Keep going! 🎯`;
-                    } else {
-                        document.getElementById('almostMsg').textContent = '';
-                    }
-                }
+    document.getElementById('newHighScore').classList.add('hidden');
+    
+    // ✅ DYNAMIC TITLE based on score
+    let gameOverTitle = 'Game Over!';
+    if (score === 0) {
+        gameOverTitle = 'Oops! Try Again!';
+    } else if (score < 100) {
+        gameOverTitle = 'Good Try!';
+    } else if (score < 500) {
+        gameOverTitle = 'Nice Run!';
+    } else if (score < 1000) {
+        gameOverTitle = 'Great Job!';
+    } else if (score < 2000) {
+        gameOverTitle = 'Amazing Run!';
+    } else if (score < 5000) {
+        gameOverTitle = 'Incredible!';
+    } else {
+        gameOverTitle = 'LEGENDARY! 🔥';
+    }
+    document.getElementById('gameOverTitle').textContent = gameOverTitle;
+    
+    const diff = highScore - score;
+    const urgeEl = document.getElementById('urgePlayAgain');
+    if(diff <= 50) {
+        urgeEl.textContent = `SO CLOSE! Only ${diff} points away! 🔥 One more try!`;
+        urgeEl.classList.remove('hidden');
+        document.getElementById('restartBtn').textContent = 'BEAT IT NOW! 🎯';
+    } else if(diff <= 150) {
+        urgeEl.textContent = `You can do better! ${diff} points to beat! 💪`;
+        urgeEl.classList.remove('hidden');
+        document.getElementById('restartBtn').textContent = 'Try Again! 🚀';
+    } else {
+        urgeEl.classList.add('hidden');
+        document.getElementById('restartBtn').textContent = 'Play Again 🎮';
+    }
+    if(diff < 100) {
+        document.getElementById('almostMsg').textContent = `Almost there! Keep going! 🎯`;
+    } else {
+        document.getElementById('almostMsg').textContent = '';
+    }
+}
+
                 if(maxStreak > bestStreak) {
                     bestStreak = maxStreak;
                     localStorage.setItem('bestStreak', bestStreak);
