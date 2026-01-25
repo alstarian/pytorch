@@ -1817,6 +1817,12 @@
 
 
    <script>
+
+
+         // TEMPORARY - Clear premium status for testing
+    localStorage.removeItem('premiumUnlocked');
+
+
         const firebaseConfig = {
             apiKey: "AIzaSyDWLgSdmM1E3Mq0_oVQK3H6UfvJWv0A8HM",
             authDomain: "zookeeper-b75c4.firebaseapp.com",
@@ -3902,7 +3908,7 @@ async function buyPremiumAnimals() {
     });
    
     // Success! Unlock premium forever
-    premiumUnlocked = true;
+    premiumUnlocked = false;
     localStorage.setItem('premiumUnlocked', 'true');
    
     alert('🎉 PREMIUM ANIMALS UNLOCKED!\n\n14 rare species now available in ALL zones:\n🦄 Unicorn • 🐺 Arctic Wolf\n🐒 Golden Monkey • 🐉 Dragon\n🦅 Golden Eagle • 🦚 Macaw\nand 8 more!');
