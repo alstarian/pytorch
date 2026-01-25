@@ -576,6 +576,16 @@
                             background: rgba(255, 107, 107, 0.3);
                         }
                         /* Make both stat boxes vertically centered and more compact */
+
+
+
+
+                                                /* Compact Stats Screen Title */
+                        #statsScreen h2 {
+                            font-size: 28px !important; /* ← Smaller title */
+                            margin-bottom: 8px !important;
+                                }
+
                 .stat-box {
                     display: flex;
                     flex-direction: column;
@@ -965,12 +975,7 @@
                     margin: 12px 0 18px;
                     box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
                 }
-                .stats {
-                    font-size: 15px;
-                    color: rgba(255, 255, 255, 0.6);
-                    margin-bottom: 8px;
-                    font-weight: 600;
-                }
+             .stats
                 .highscore-beat {
                     font-size: 18px;
                     font-weight: 800;
@@ -1141,30 +1146,35 @@
                 .stats-grid {
                     display: grid;
                     grid-template-columns: 1fr 1fr;
-                    gap: 15px;
-                    margin: 20px 0;
+                    gap: 8px; /* ← Reduced from 15px */
+                    margin: 12px 0; /* ← Reduced from 20px */
                 }
+
                 .stat-card {
                     background: rgba(255, 255, 255, 0.05);
                     border: 1px solid rgba(255, 255, 255, 0.1);
-                    border-radius: 12px;
-                    padding: 15px;
+                    border-radius: 10px; /* ← Smaller radius */
+                    padding: 10px 8px; /* ← Much smaller padding */
                     text-align: center;
                 }
+
                 .stat-card-value {
-                    font-size: 32px;
+                    font-size: 24px; /* ← Reduced from 32px */
                     font-weight: 800;
                     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                     -webkit-background-clip: text;
                     -webkit-text-fill-color: transparent;
-                    margin-bottom: 5px;
+                    margin-bottom: 2px; /* ← Reduced from 5px */
+                    line-height: 1; /* ← Tighter */
                 }
+
                 .stat-card-label {
-                    font-size: 11px;
+                    font-size: 9px; /* ← Reduced from 11px */
                     color: rgba(255, 255, 255, 0.5);
                     text-transform: uppercase;
-                    letter-spacing: 1px;
+                    letter-spacing: 0.5px; /* ← Reduced from 1px */
                 }
+
                 .leaderboard-list {
                     margin: 20px 0;
                     max-height: 50vh;
