@@ -1786,6 +1786,15 @@
                     <div class="stat-card-value" id="premiumCollection">0/14</div>
                     <div class="stat-card-label">Species Found</div>
                 </div>
+
+
+                <div class="stat-card">
+    <div class="stat-card-value" id="highestZone">Training Grounds</div>
+    <div class="stat-card-label">Farthest Zone</div>
+  </div>
+
+
+
                                     </div>
                 <p class="stats" style="margin-top: 20px;">🏆 Highest Level: <span id="highestLevel">1</span></p>
                 <p class="stats">⭐ Favorite Animal: <span id="favAnimal">🐇 Rabbit</span></p>
@@ -1969,8 +1978,11 @@ window.addEventListener('DOMContentLoaded', () => {
         let premiumSpeciesCaught = JSON.parse(localStorage.getItem('premiumSpeciesCaught') || '[]');
         // let totalPremiumsCaught = parseInt(localStorage.getItem('totalPremiumsCaught') || 0)
         let highestLevelReached = parseInt(localStorage.getItem('highestLevelReached') || 1);
+        let highestZoneReached = localStorage.getItem('highestZoneReached') || 'Training Grounds';
+
         let animalCounts = JSON.parse(localStorage.getItem('animalCounts') || '{}');
         let achievements = JSON.parse(localStorage.getItem('achievements') || '{}');
+
         let dangerItems = [];
         let lastDangerSpawn = 0;
         let lastHeartSpawn = 0;
@@ -2651,6 +2663,8 @@ const gameHeight = window.innerHeight;
 document.getElementById('totalPremiums').textContent = totalPremiumsCaught;
 document.getElementById('premiumCollection').textContent = `${premiumSpeciesCaught.length}/14`;
     document.getElementById('highestLevel').textContent = highestLevelReached;
+    document.getElementById('highestZone').textContent = highestZoneReached;
+
     // FIX: Capitalize animal name before searching
     let maxCount = 0;
     let favAnimal = 'None';
@@ -3223,6 +3237,19 @@ function gameLoop(time) {
     // In gameLoop(time) - UPDATE the zone entry block (replace your current if-block)
 if (newZoneIndex > currentZoneIndex && newZoneIndex < progressionZones.length) {
     currentZoneIndex = newZoneIndex;
+
+
+
+ // 👈 ADD THESE 5 LINES HERE:
+    const zoneName = progressionZones[currentZoneIndex].name;
+    if (progressionZones.findIndex(z => z.emojiZone === highestZoneReached) < currentZoneIndex) {
+        highestZoneReached = zoneName;
+        localStorage.setItem('highestZoneReached', zoneName);
+    }
+    // End new lines
+
+
+    
     const zone = progressionZones[currentZoneIndex];
     // === TRUE FRESH LEVEL START ===
     // Clear EVERYTHING from the old zone (no carry-over animals/particles)
