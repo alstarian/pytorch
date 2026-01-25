@@ -3072,8 +3072,8 @@ function checkSlowMo(time) {
             el.classList.add('show');
             setTimeout(() => el.classList.remove('show'), 1200);
         }
-                    function updateDifficulty() {
-                const newDifficulty = Math.floor(score / 200) + 1;
+                function updateDifficulty() {
+                const newDifficulty = Math.floor(score / 1000) + 1;  // Every 1,000 points!
                 if (newDifficulty > difficulty) {
                     difficulty = newDifficulty;
                     if(difficulty > maxDifficulty) maxDifficulty = difficulty;
