@@ -2865,7 +2865,6 @@ function checkSlowMo(time) {
     // Premium animals only in their correct zone
     const premiumTypes = types.filter(t => t.premium && t.zone === currentZoneName);
     // Choose: 10% chance for premium if available, otherwise regular
-    let type;
      // Choose 10% chance for premium if UNLOCKED and available
     let type;
     if (premiumUnlocked && premiumTypes.length > 0 && Math.random() < 0.1) {
