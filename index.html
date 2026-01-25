@@ -2006,7 +2006,7 @@ const progressionZones = [
 ];
 // Custom score thresholds for each zone (index matches progressionZones)
 // Zone 0: 0 points, Zone 1: 3000+, Zone 2: 8000+, etc.
-const zoneScoreThresholds = [0, 5000, 15000, 25000, 45000, 80000];
+const zoneScoreThresholds = [0, 10000, 20000, 40000, 80000, 100000];
 function createBackgroundElements(zoneName) {
     backgroundElements = []; // clear previous
     if (zoneName === "Training Grounds") {
@@ -3664,12 +3664,19 @@ showZoneTransition(initialZone.name);
                     bestStreak = maxStreak;
                     localStorage.setItem('bestStreak', bestStreak);
                 }
-                let msg = 'Good Start! 🌱';
-                if (maxDifficulty >= 15) msg = 'Master! 👑';
-                else if (maxDifficulty >= 10) msg = 'Expert! 🏆';
-                else if (maxDifficulty >= 7) msg = 'Skilled! ⭐';
-                else if (maxDifficulty >= 5) msg = 'Great! 🎯';
-                else if (score >= 150) msg = 'Nice! 💪';
+              // Badge message based on performance
+                let msg = "Keep Trying!";  // Default for low scores
+                if (maxDifficulty >= 15) msg = "Master!";
+                else if (maxDifficulty >= 10) msg = "Expert!";
+                else if (maxDifficulty >= 7) msg = "Skilled!";
+                else if (maxDifficulty >= 5) msg = "Great Work!";
+                else if (score >= 500) msg = "Nice Run!";
+                else if (score >= 200) msg = "Good Start!";
+                else if (score >= 50) msg = "Not Bad!";
+                else if (score === 0) msg = "Try Again!";
+
+document.getElementById("badge").textContent = msg;
+
                 document.getElementById('badge').textContent = msg;
             }, 1500);
         }
