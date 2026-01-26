@@ -1751,13 +1751,20 @@
         </div>
     </div>
    <script>
-         // TEMPORARY - Clear premium status for testing
-    //localStorage.removeItem('premiumUnlocked');
-// UNLOCK PREMIUMS FOR TESTING (DOM ready)
-localStorage.setItem('premiumUnlocked', 'true');
-window.addEventListener('DOMContentLoaded', () => {
-    premiumUnlocked = true;
-    updatePremiumButton(); // ✅ Now safe!
+       window.addEventListener('DOMContentLoaded', () => {
+    premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
+    updatePremiumButton();
+});
+
+
+        //localStorage.setItem('premiumUnlocked', 'true');
+        //window.addEventListener('DOMContentLoaded', () => {
+            //premiumUnlocked = true;
+            //updatePremiumButton(); // ✅ Now safe!
+
+
+
+
 });
         const firebaseConfig = {
             apiKey: "AIzaSyDWLgSdmM1E3Mq0_oVQK3H6UfvJWv0A8HM",
@@ -3900,7 +3907,7 @@ async function initIAP() {
   
     // Check for premium product (logs when dev account ready)
     const { products } = await NativePurchases.getProducts({
-      productIdentifiers: ['com.alstarian.zookeeper.premium_animals'],
+      productIdentifiers: ['com.alstarian.zookeeper.premiumanimals'],
       productType: 'INAPP'
     });
   
@@ -3930,12 +3937,12 @@ async function buyPremiumAnimals() {
   try {
     const NativePurchases = window.Capacitor.Plugins.NativePurchases;
     const result = await NativePurchases.purchaseProduct({
-      productIdentifier: 'com.alstarian.zookeeper.premium_animals',
+      productIdentifier: 'com.alstarian.zookeeper.premiumanimals',
       productType: 'INAPP'
     });
   
     // Success! Unlock premium forever
-    premiumUnlocked = false;
+    premiumUnlocked = true
     localStorage.setItem('premiumUnlocked', 'true');
   
     alert('🎉 PREMIUM ANIMALS UNLOCKED!\n\n16 rare species now available in ALL zones:\n🦄 Unicorn • 🐺 Arctic Wolf\n🐒 Golden Monkey • 🐉 Dragon\n🦅 Golden Eagle • 🦚 Macaw\n🐋 Whale • 🦈 Shark\nand 8 more!'); // ← CHANGE: 14 to 16
@@ -3943,6 +3950,7 @@ async function buyPremiumAnimals() {
     // Celebrate!
     throwConfetti(100);
     showAchievement('🦄', 'Premium Unlocked!', '16 rare animals added!');
+    updatePremiumButton();
   
   } catch (e) {
     if (e.message && (e.message.includes('cancelled') || e.message.includes('user cancelled'))) {
