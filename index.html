@@ -3512,12 +3512,9 @@ showZoneTransition(initialZone.name);
     document.getElementById('pauseButton').style.display = 'flex';
     // Start the game loop
     animationFrameId = requestAnimationFrame(gameLoop);
-
-
-
-      // ADD THESE LINES AT THE VERY END:
+        // ADD THESE LINES AT THE VERY END:
     updateDisplay();
-    gameLoop(performance.now());  // ← THIS IS MI
+    gameLoop(performance.now());  // ← THIS IS MISSING!
 }
         function endGame() {
             gameRunning = false;
