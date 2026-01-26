@@ -2954,23 +2954,18 @@ function checkSlowMo(time) {
                  function spawn() {
     const currentZoneName = progressionZones[currentZoneIndex].name;
 
-
-        let regularTypes;
+    // Zone-specific regular animals
+    let regularTypes;
     if (currentZoneName === "Ocean Depths") {
         regularTypes = types.filter(t => !t.premium && t.zone === "Ocean Depths");
     } else {
         regularTypes = types.filter(t => !t.premium && t.zone === "land");
     }
 
-
-
-
-    // All regular animals (always available)
-    const regularTypes = types.filter(t => !t.premium);
     // Premium animals only in their correct zone
     const premiumTypes = types.filter(t => t.premium && t.zone === currentZoneName);
-    // Choose: 10% chance for premium if available, otherwise regular
-     // Choose 10% chance for premium if UNLOCKED and available
+    
+    // Choose: 10% chance for premium if UNLOCKED and available
     let type;
     if (premiumUnlocked && premiumTypes.length > 0 && Math.random() < 0.1) {
         type = premiumTypes[Math.floor(Math.random() * premiumTypes.length)];
@@ -2978,29 +2973,22 @@ function checkSlowMo(time) {
         type = regularTypes[Math.floor(Math.random() * regularTypes.length)];
     }
 
-
-
- // Zone-based speed boost for regular animals
-let speedMultiplier;
-if (type.premium) {
-    speedMultiplier = slowMoActive ? 0.3 : Math.min(1 + (difficulty * 0.03), 1.6);
-} else {
-   if (currentZoneIndex >= 2) {  // Jungle+ zones (2,3,4,5)
-    speedMultiplier = slowMoActive ? 0.3 : (difficulty >= 40 ? 2.8 : 2.5);
+    // Zone-based speed boost for regular animals
+    let speedMultiplier;
+    if (type.premium) {
+        speedMultiplier = slowMoActive ? 0.3 : Math.min(1 + (difficulty * 0.03), 1.6);
     } else {
-        speedMultiplier = slowMoActive ? 0.3 : (difficulty >= 40 ? 2.2 : 
-                                               difficulty >= 30 ? 2.0 : 
-                                               Math.min(1 + (difficulty * 0.06), 1.8));
+       if (currentZoneIndex >= 2) {
+        speedMultiplier = slowMoActive ? 0.3 : (difficulty >= 40 ? 2.8 : 2.5);
+        } else {
+            speedMultiplier = slowMoActive ? 0.3 : (difficulty >= 40 ? 2.2 : 
+                                                   difficulty >= 30 ? 2.0 : 
+                                                   Math.min(1 + (difficulty * 0.06), 1.8));
+        }
     }
-}
-
-
-
 
     const swerveSpeedMultiplier = slowMoActive ? 0.3 : (Math.min(1 + (difficulty * 0.05), 1.5));
     const swerveAmountMultiplier = Math.min(1 + (difficulty * 0.08), 1.6);
-
-
 
     animals.push({
         x: Math.random() * (gameWidth - 60) + 30,
@@ -3014,6 +3002,7 @@ if (type.premium) {
         vx: (Math.random() - 0.5) * 4
     });
 }
+
         function spawnDanger() {
     const type = dangerTypes[Math.floor(Math.random() * dangerTypes.length)]; // Random bomb or TNT
    
