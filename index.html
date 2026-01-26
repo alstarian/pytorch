@@ -16,6 +16,434 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
+
+
+
+
+
+
+
+
+
+        * ========================================
+   REDESIGNED HOME SCREEN STYLES
+   ======================================== */
+
+/* Logo Section */
+.game-logo {
+    margin-bottom: 24px;
+}
+
+.game-logo h1 {
+    font-size: 48px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF6B6B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 8px;
+    letter-spacing: -1px;
+    text-shadow: none;
+}
+
+.game-logo .subtitle {
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 0;
+}
+
+/* Premium Showcase Container */
+.premium-showcase {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.1) 0%, rgba(255, 107, 107, 0.05) 100%);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    border-radius: 20px;
+    padding: 20px 16px;
+    margin: 20px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.premium-showcase::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        transparent 30%,
+        rgba(255, 215, 0, 0.1) 50%,
+        transparent 70%
+    );
+    animation: shimmer 3s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.showcase-title {
+    font-size: 16px;
+    font-weight: 800;
+    color: #FFD700;
+    text-align: center;
+    margin-bottom: 16px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+}
+
+/* Animals Carousel */
+.animals-carousel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+}
+
+.carousel-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+/* Premium Animal Cards */
+.premium-animal-card {
+    background: rgba(20, 25, 40, 0.8);
+    border: 2px solid rgba(255, 215, 0, 0.4);
+    border-radius: 12px;
+    padding: 12px 8px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.premium-animal-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, transparent 100%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.premium-animal-card:active {
+    transform: scale(0.95);
+}
+
+.premium-animal-card:active::before {
+    opacity: 1;
+}
+
+/* Locked Cards */
+.premium-animal-card.locked {
+    border-color: rgba(255, 255, 255, 0.2);
+    opacity: 0.5;
+}
+
+.premium-animal-card.locked .animal-icon {
+    filter: grayscale(100%);
+}
+
+/* Animal Icon */
+.animal-icon {
+    font-size: 36px;
+    line-height: 1;
+    animation: floatBounce 3s ease-in-out infinite;
+}
+
+/* Stagger animation delays */
+.carousel-row:nth-child(1) .premium-animal-card:nth-child(1) .animal-icon { animation-delay: 0s; }
+.carousel-row:nth-child(1) .premium-animal-card:nth-child(2) .animal-icon { animation-delay: 0.1s; }
+.carousel-row:nth-child(1) .premium-animal-card:nth-child(3) .animal-icon { animation-delay: 0.2s; }
+.carousel-row:nth-child(1) .premium-animal-card:nth-child(4) .animal-icon { animation-delay: 0.3s; }
+.carousel-row:nth-child(2) .premium-animal-card:nth-child(1) .animal-icon { animation-delay: 0.4s; }
+.carousel-row:nth-child(2) .premium-animal-card:nth-child(2) .animal-icon { animation-delay: 0.5s; }
+.carousel-row:nth-child(2) .premium-animal-card:nth-child(3) .animal-icon { animation-delay: 0.6s; }
+.carousel-row:nth-child(2) .premium-animal-card:nth-child(4) .animal-icon { animation-delay: 0.7s; }
+.carousel-row:nth-child(3) .premium-animal-card:nth-child(1) .animal-icon { animation-delay: 0.8s; }
+.carousel-row:nth-child(3) .premium-animal-card:nth-child(2) .animal-icon { animation-delay: 0.9s; }
+.carousel-row:nth-child(3) .premium-animal-card:nth-child(3) .animal-icon { animation-delay: 1.0s; }
+.carousel-row:nth-child(3) .premium-animal-card:nth-child(4) .animal-icon { animation-delay: 1.1s; }
+.carousel-row:nth-child(4) .premium-animal-card:nth-child(1) .animal-icon { animation-delay: 1.2s; }
+.carousel-row:nth-child(4) .premium-animal-card:nth-child(2) .animal-icon { animation-delay: 1.3s; }
+
+@keyframes floatBounce {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+}
+
+/* Animal Label */
+.animal-label {
+    font-size: 9px;
+    font-weight: 700;
+    color: rgba(255, 215, 0, 0.9);
+    text-align: center;
+    line-height: 1.2;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+
+/* Showcase Footer */
+.showcase-footer {
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.6);
+    text-align: center;
+    margin-top: 12px;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+}
+
+/* Button Group */
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+/* Primary Start Button */
+.primary-btn {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 18px 32px;
+    font-size: 18px;
+    font-weight: 800;
+    border-radius: 16px;
+    cursor: pointer;
+    box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+.primary-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s;
+}
+
+.primary-btn:active::before {
+    left: 100%;
+}
+
+.primary-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+}
+
+.btn-icon {
+    font-size: 20px;
+}
+
+.btn-text {
+    flex: 1;
+}
+
+/* Premium Button */
+.premium-btn {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #1a1f35;
+    border: none;
+    padding: 16px 24px;
+    font-size: 16px;
+    font-weight: 800;
+    border-radius: 16px;
+    cursor: pointer;
+    box-shadow: 0 12px 32px rgba(255, 215, 0, 0.4);
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+}
+
+.premium-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.6s;
+}
+
+.premium-btn:active::before {
+    left: 100%;
+}
+
+.premium-btn:active {
+    transform: translateY(2px);
+    box-shadow: 0 8px 24px rgba(255, 215, 0, 0.3);
+}
+
+.btn-price {
+    background: rgba(26, 31, 53, 0.3);
+    padding: 4px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 900;
+}
+
+/* Premium Active Badge */
+.premium-active-badge {
+    background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+    color: white;
+    padding: 16px 24px;
+    border-radius: 16px;
+    font-size: 16px;
+    font-weight: 800;
+    box-shadow: 0 8px 24px rgba(74, 222, 128, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
+
+/* Secondary Buttons Row */
+.secondary-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.secondary {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.9);
+    padding: 14px 20px;
+    font-size: 15px;
+    font-weight: 700;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.secondary:active {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(1px);
+}
+
+/* Restore Button */
+.restore-btn {
+    background: transparent;
+    border: 1px solid rgba(78, 236, 196, 0.3);
+    color: #4ECDC4;
+    padding: 12px 20px;
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.restore-btn:active {
+    background: rgba(78, 236, 196, 0.1);
+    transform: translateY(1px);
+}
+
+/* Tablet Optimization */
+@media (min-width: 768px) {
+    .game-logo h1 {
+        font-size: 64px;
+    }
+    
+    .carousel-row {
+        gap: 14px;
+    }
+    
+    .premium-animal-card {
+        padding: 16px 10px;
+    }
+    
+    .animal-icon {
+        font-size: 48px;
+    }
+    
+    .animal-label {
+        font-size: 11px;
+    }
+    
+    .primary-btn {
+        padding: 22px 40px;
+        font-size: 20px;
+    }
+    
+    .premium-btn {
+        padding: 20px 32px;
+        font-size: 18px;
+    }
+}
+
+/* Compact version for smaller phones */
+@media (max-width: 380px) {
+    .premium-animal-card {
+        padding: 10px 6px;
+    }
+    
+    .animal-icon {
+        font-size: 32px;
+    }
+    
+    .animal-label {
+        font-size: 8px;
+    }
+    
+    .carousel-row {
+        gap: 8px;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
         /* Compact design styles */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
         body {
@@ -1627,45 +2055,170 @@
         </div>
     </div>
     <div class="slowmo-overlay" id="slowmoOverlay"></div>
-    <div id="overlay">
-        <div class="modal">
-            <h1>Zoo Keeper</h1>
-            <p class="subtitle">Catch animals to build your zoo! Unlock premiums for epic rewards.</p>
-            <!-- Glowing Animal Emojis Row -->
-            <div class="animal-emojis">
-                <span class="animal-emoji">🦁</span>
-                <span class="animal-emoji">🐘</span>
-                <span class="animal-emoji">🦓</span>
-                <span class="animal-emoji">🦭</span>
-                <span class="animal-emoji">🦜</span>
-                <span class="animal-emoji">🦅</span>
+
+
+
+
+
+<!-- REPLACE YOUR EXISTING OVERLAY SECTION WITH THIS -->
+<div id="overlay">
+    <div class="modal">
+        <!-- Logo/Title Section -->
+        <div class="game-logo">
+            <h1>🧺 Zoo Keeper</h1>
+            <p class="subtitle">Catch animals, unlock zones, build your collection!</p>
+        </div>
+
+        <!-- Premium Animals Showcase Carousel -->
+        <div class="premium-showcase">
+            <div class="showcase-title">Premium Collection</div>
+            <div class="animals-carousel">
+                <!-- Row 1: Training Grounds & Arctic -->
+                <div class="carousel-row">
+                    <div class="premium-animal-card">
+                        <div class="animal-icon">🦄</div>
+                        <div class="animal-label">Unicorn</div>
+                    </div>
+                    <div class="premium-animal-card">
+                        <div class="animal-icon">🦚</div>
+                        <div class="animal-label">Peacock</div>
+                    </div>
+                    <div class="premium-animal-card">
+                        <div class="animal-icon">🐺</div>
+                        <div class="animal-label">Arctic Wolf</div>
+                    </div>
+                    <div class="premium-animal-card">
+                        <div class="animal-icon">🦭</div>
+                        <div class="animal-label">Seal</div>
+                    </div>
+                </div>
+                
+                <!-- Row 2: Jungle & Savanna -->
+                <div class="carousel-row">
+                    <div class="premium-animal-card">
+                        <div class="animal-icon">🐒</div>
+                        <div class="animal-label">Golden Monkey</div>
+                    </div>
+                    <div class="premium-animal-card">
+                        <div class="animal-icon">🦜</div>
+                        <div class="animal-label">Macaw</div>
+                    </div>
+                    <div class="premium-animal-card">
+                        <div class="animal-icon">🦅</div>
+                        <div class="animal-label">Golden Eagle</div>
+                    </div>
+                    <div class="premium-animal-card">
+                        <div class="animal-icon">🦓</div>
+                        <div class="animal-label">Zebra</div>
+                    </div>
+                </div>
+                
+                <!-- Row 3: Mystic & Volcanic -->
+                <div class="carousel-row">
+                    <div class="premium-animal-card">
+                        <div class="animal-icon">🦉</div>
+                        <div class="animal-label">Moon Owl</div>
+                    </div>
+                    <div class="premium-animal-card">
+                        <div class="animal-icon">🦇</div>
+                        <div class="animal-label">Mystic Bat</div>
+                    </div>
+                    <div class="premium-animal-card">
+                        <div class="animal-icon">🐉</div>
+                        <div class="animal-label">Dragon</div>
+                    </div>
+                    <div class="premium-animal-card">
+                        <div class="animal-icon">🕊️</div>
+                        <div class="animal-label">Phoenix</div>
+                    </div>
+                </div>
+                
+                <!-- Row 4: Ocean Depths -->
+                <div class="carousel-row">
+                    <div class="premium-animal-card">
+                        <div class="animal-icon">🐳</div>
+                        <div class="animal-label">Blue Whale</div>
+                    </div>
+                    <div class="premium-animal-card">
+                        <div class="animal-icon">🦈</div>
+                        <div class="animal-label">Shark</div>
+                    </div>
+                    <div class="premium-animal-card locked">
+                        <div class="animal-icon">🔒</div>
+                        <div class="animal-label">More Coming</div>
+                    </div>
+                    <div class="premium-animal-card locked">
+                        <div class="animal-icon">❓</div>
+                        <div class="animal-label">Soon...</div>
+                    </div>
+                </div>
             </div>
-            <p class="firebase-status" id="firebaseStatus">Connecting to leaderboard...</p>
-            <button id="startBtn"><span>▶️</span> Start Playing</button>
-            <button id="premiumBtn" onclick="buyPremiumAnimals()">💎 Unlock Premiums</button>
-                        <div id="premiumStatus" class="hidden" style="
-                background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-                color: #1a1f35;
-                padding: 12px 24px;
-                border-radius: 12px;
-                font-size: 15px;
-                font-weight: 700;
-                box-shadow: 0 8px 24px rgba(255, 215, 0, 0.3);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-                margin-top: 24px;
-                width: 100%;
-            ">
-                <span style="font-size: 20px;">💎</span>
-                Premium Active
+            <div class="showcase-footer">16 Rare Species • Bonus Lives • All Zones</div>
+        </div>
+
+        <!-- Firebase Status -->
+        <p class="firebase-status" id="firebaseStatus">Connecting to leaderboard...</p>
+
+        <!-- Action Buttons -->
+        <div class="button-group">
+            <button id="startBtn" class="primary-btn">
+                <span class="btn-icon">▶️</span>
+                <span class="btn-text">Start Playing</span>
+            </button>
+            
+            <button id="premiumBtn" class="premium-btn" onclick="buyPremiumAnimals()">
+                <span class="btn-icon">💎</span>
+                <span class="btn-text">Unlock Premium Animals</span>
+                <span class="btn-price">$2.99</span>
+            </button>
+            
+            <div id="premiumStatus" class="hidden premium-active-badge">
+                <span style="font-size: 24px;">✨</span>
+                <span>Premium Active</span>
+                <span style="font-size: 24px;">✨</span>
             </div>
-            <button class="secondary" id="statsBtn"><span>📊</span> View Stats</button>
-            <button class="secondary" id="leaderboardBtn"><span>🏆</span> Leaderboard</button>
-            <button id="restoreBtn" onclick="restorePurchases()">🔄 Restore Purchases</button>
+            
+            <div class="secondary-buttons">
+                <button class="secondary" id="statsBtn">
+                    <span>📊</span> Stats
+                </button>
+                <button class="secondary" id="leaderboardBtn">
+                    <span>🏆</span> Leaderboard
+                </button>
+            </div>
+            
+            <button id="restoreBtn" class="restore-btn" onclick="restorePurchases()">
+                🔄 Restore Purchases
+            </button>
         </div>
     </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     <div id="gameOverScreen" class="hidden">
         <div id="overlay">
             <div class="modal">
