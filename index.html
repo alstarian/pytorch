@@ -16,32 +16,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        
         /* Compact design styles */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
         body {
@@ -1653,170 +1627,45 @@
         </div>
     </div>
     <div class="slowmo-overlay" id="slowmoOverlay"></div>
-
-
-
-
-
-<!-- REPLACE YOUR EXISTING OVERLAY SECTION WITH THIS -->
-<div id="overlay">
-    <div class="modal">
-        <!-- Logo/Title Section -->
-        <div class="game-logo">
-            <h1>🧺 Zoo Keeper</h1>
-            <p class="subtitle">Catch animals, unlock zones, build your collection!</p>
-        </div>
-
-        <!-- Premium Animals Showcase Carousel -->
-        <div class="premium-showcase">
-            <div class="showcase-title">Premium Collection</div>
-            <div class="animals-carousel">
-                <!-- Row 1: Training Grounds & Arctic -->
-                <div class="carousel-row">
-                    <div class="premium-animal-card">
-                        <div class="animal-icon">🦄</div>
-                        <div class="animal-label">Unicorn</div>
-                    </div>
-                    <div class="premium-animal-card">
-                        <div class="animal-icon">🦚</div>
-                        <div class="animal-label">Peacock</div>
-                    </div>
-                    <div class="premium-animal-card">
-                        <div class="animal-icon">🐺</div>
-                        <div class="animal-label">Arctic Wolf</div>
-                    </div>
-                    <div class="premium-animal-card">
-                        <div class="animal-icon">🦭</div>
-                        <div class="animal-label">Seal</div>
-                    </div>
-                </div>
-                
-                <!-- Row 2: Jungle & Savanna -->
-                <div class="carousel-row">
-                    <div class="premium-animal-card">
-                        <div class="animal-icon">🐒</div>
-                        <div class="animal-label">Golden Monkey</div>
-                    </div>
-                    <div class="premium-animal-card">
-                        <div class="animal-icon">🦜</div>
-                        <div class="animal-label">Macaw</div>
-                    </div>
-                    <div class="premium-animal-card">
-                        <div class="animal-icon">🦅</div>
-                        <div class="animal-label">Golden Eagle</div>
-                    </div>
-                    <div class="premium-animal-card">
-                        <div class="animal-icon">🦓</div>
-                        <div class="animal-label">Zebra</div>
-                    </div>
-                </div>
-                
-                <!-- Row 3: Mystic & Volcanic -->
-                <div class="carousel-row">
-                    <div class="premium-animal-card">
-                        <div class="animal-icon">🦉</div>
-                        <div class="animal-label">Moon Owl</div>
-                    </div>
-                    <div class="premium-animal-card">
-                        <div class="animal-icon">🦇</div>
-                        <div class="animal-label">Mystic Bat</div>
-                    </div>
-                    <div class="premium-animal-card">
-                        <div class="animal-icon">🐉</div>
-                        <div class="animal-label">Dragon</div>
-                    </div>
-                    <div class="premium-animal-card">
-                        <div class="animal-icon">🕊️</div>
-                        <div class="animal-label">Phoenix</div>
-                    </div>
-                </div>
-                
-                <!-- Row 4: Ocean Depths -->
-                <div class="carousel-row">
-                    <div class="premium-animal-card">
-                        <div class="animal-icon">🐳</div>
-                        <div class="animal-label">Blue Whale</div>
-                    </div>
-                    <div class="premium-animal-card">
-                        <div class="animal-icon">🦈</div>
-                        <div class="animal-label">Shark</div>
-                    </div>
-                    <div class="premium-animal-card locked">
-                        <div class="animal-icon">🔒</div>
-                        <div class="animal-label">More Coming</div>
-                    </div>
-                    <div class="premium-animal-card locked">
-                        <div class="animal-icon">❓</div>
-                        <div class="animal-label">Soon...</div>
-                    </div>
-                </div>
+    <div id="overlay">
+        <div class="modal">
+            <h1>Zoo Keeper</h1>
+            <p class="subtitle">Catch animals to build your zoo! Unlock premiums for epic rewards.</p>
+            <!-- Glowing Animal Emojis Row -->
+            <div class="animal-emojis">
+                <span class="animal-emoji">🦁</span>
+                <span class="animal-emoji">🐘</span>
+                <span class="animal-emoji">🦓</span>
+                <span class="animal-emoji">🦭</span>
+                <span class="animal-emoji">🦜</span>
+                <span class="animal-emoji">🦅</span>
             </div>
-            <div class="showcase-footer">16 Rare Species • Bonus Lives • All Zones</div>
-        </div>
-
-        <!-- Firebase Status -->
-        <p class="firebase-status" id="firebaseStatus">Connecting to leaderboard...</p>
-
-        <!-- Action Buttons -->
-        <div class="button-group">
-            <button id="startBtn" class="primary-btn">
-                <span class="btn-icon">▶️</span>
-                <span class="btn-text">Start Playing</span>
-            </button>
-            
-            <button id="premiumBtn" class="premium-btn" onclick="buyPremiumAnimals()">
-                <span class="btn-icon">💎</span>
-                <span class="btn-text">Unlock Premium Animals</span>
-                <span class="btn-price">$2.99</span>
-            </button>
-            
-            <div id="premiumStatus" class="hidden premium-active-badge">
-                <span style="font-size: 24px;">✨</span>
-                <span>Premium Active</span>
-                <span style="font-size: 24px;">✨</span>
+            <p class="firebase-status" id="firebaseStatus">Connecting to leaderboard...</p>
+            <button id="startBtn"><span>▶️</span> Start Playing</button>
+            <button id="premiumBtn" onclick="buyPremiumAnimals()">💎 Unlock Premiums</button>
+                        <div id="premiumStatus" class="hidden" style="
+                background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+                color: #1a1f35;
+                padding: 12px 24px;
+                border-radius: 12px;
+                font-size: 15px;
+                font-weight: 700;
+                box-shadow: 0 8px 24px rgba(255, 215, 0, 0.3);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                margin-top: 24px;
+                width: 100%;
+            ">
+                <span style="font-size: 20px;">💎</span>
+                Premium Active
             </div>
-            
-            <div class="secondary-buttons">
-                <button class="secondary" id="statsBtn">
-                    <span>📊</span> Stats
-                </button>
-                <button class="secondary" id="leaderboardBtn">
-                    <span>🏆</span> Leaderboard
-                </button>
-            </div>
-            
-            <button id="restoreBtn" class="restore-btn" onclick="restorePurchases()">
-                🔄 Restore Purchases
-            </button>
+            <button class="secondary" id="statsBtn"><span>📊</span> View Stats</button>
+            <button class="secondary" id="leaderboardBtn"><span>🏆</span> Leaderboard</button>
+            <button id="restoreBtn" onclick="restorePurchases()">🔄 Restore Purchases</button>
         </div>
     </div>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     <div id="gameOverScreen" class="hidden">
         <div id="overlay">
             <div class="modal">
