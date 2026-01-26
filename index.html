@@ -2542,7 +2542,14 @@ let gameHeight = window.innerHeight;
     { emoji: "🦇", name: "Mystic Bat", points: 190, color: "#8B008B", premium: true, zone: "Mystic Forest", baseSpeed: 4.4 },
     // PREMIUM ANIMALS - VOLCANIC VALLEY
     { emoji: "🐉", name: "Dragon", points: 200, color: "#FF4500", premium: true, zone: "Volcanic Valley", baseSpeed: 4.5 },
-    { emoji: "🕊️", name: "Phoenix", points: 220, color: "#FF6347", premium: true, zone: "Volcanic Valley", baseSpeed: 4.7 }
+    { emoji: "🕊️", name: "Phoenix", points: 220, color: "#FF6347", premium: true, zone: "Volcanic Valley", baseSpeed: 4.7 },
+
+    // ADD THESE - PREMIUM ANIMALS - OCEAN DEPTHS
+    { emoji: "🐋", name: "Whale", points: 230, color: "#4682B4", premium: true, zone: "Ocean Depths", baseSpeed: 4.9 },
+    { emoji: "🦈", name: "Shark", points: 250, color: "#708090", premium: true, zone: "Ocean Depths", baseSpeed: 5.0 }
+
+
+
 ];
    
         const powerupType = {
@@ -2574,7 +2581,7 @@ let gameHeight = window.innerHeight;
 */
 // For testing - always show counts (remove the if/else check)
 document.getElementById('totalPremiums').textContent = totalPremiumsCaught;
-document.getElementById('premiumCollection').textContent = `${premiumSpeciesCaught.length}/14`;
+document.getElementById('premiumCollection').textContent = `${premiumSpeciesCaught.length}/16`;
     document.getElementById('highestLevel').textContent = highestLevelReached;
     document.getElementById('highestZone').textContent = highestZoneReached;
     // FIX: Capitalize animal name before searching
@@ -3562,7 +3569,7 @@ function startGame() {
                 document.getElementById('streakStats').textContent = `Best Streak: ${maxStreak} 🔥`;
                 document.getElementById('diffStats').textContent = `Reached Level: ${maxDifficulty}`;
                 // document.getElementById('powerupStats').textContent = `6️⃣7️⃣ Caught: ${powerupsCaught}`;
-                document.getElementById('premiumStats').textContent = `⭐ Premium: ${totalPremiumsCaught} (${premiumSpeciesCaught.length}/14 species)`;
+                document.getElementById('premiumStats').textContent = `⭐ Premium: ${totalPremiumsCaught} (${premiumSpeciesCaught.length}/16 species)`;
                 const savedName = localStorage.getItem('playerName') || '';
                 document.getElementById('playerNameInput').value = savedName;
                 const newHigh = score > highScore;
@@ -3857,6 +3864,14 @@ async function initIAP() {
     console.log('IAP init (normal without dev account):', e.message);
   }
 }
+
+
+
+
+
+
+
+
 // Buy Premium Animals button
 async function buyPremiumAnimals() {
   if (premiumUnlocked) {
@@ -3876,11 +3891,11 @@ async function buyPremiumAnimals() {
     premiumUnlocked = false;
     localStorage.setItem('premiumUnlocked', 'true');
   
-    alert('🎉 PREMIUM ANIMALS UNLOCKED!\n\n14 rare species now available in ALL zones:\n🦄 Unicorn • 🐺 Arctic Wolf\n🐒 Golden Monkey • 🐉 Dragon\n🦅 Golden Eagle • 🦚 Macaw\nand 8 more!');
+    alert('🎉 PREMIUM ANIMALS UNLOCKED!\n\n16 rare species now available in ALL zones:\n🦄 Unicorn • 🐺 Arctic Wolf\n🐒 Golden Monkey • 🐉 Dragon\n🦅 Golden Eagle • 🦚 Macaw\n🐋 Whale • 🦈 Shark\nand 8 more!'); // ← CHANGE: 14 to 16
   
     // Celebrate!
     throwConfetti(100);
-    showAchievement('🦄', 'Premium Unlocked!', '14 rare animals added!');
+    showAchievement('🦄', 'Premium Unlocked!', '16 rare animals added!');
   
   } catch (e) {
     if (e.message && (e.message.includes('cancelled') || e.message.includes('user cancelled'))) {
