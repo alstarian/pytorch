@@ -1935,6 +1935,9 @@ const progressionZones = [
 // Custom score thresholds for each zone (index matches progressionZones)
 // Zone 0: 0 points, Zone 1: 3000+, Zone 2: 8000+, etc.
 const zoneScoreThresholds = [0, 1000, 2000, 3000, 4000, 5000, 6000];
+
+
+
 function createBackgroundElements(zoneName) {
     backgroundElements = []; // clear previous
     if (zoneName === "Training Grounds") {
@@ -2013,7 +2016,7 @@ function createBackgroundElements(zoneName) {
             });
         }
     }
-        else if (zoneName === "Savanna Sunset") {
+    else if (zoneName === "Savanna Sunset") {
         // 🦅 FLYING EAGLES (horizontal wave motion)
         for (let i = 0; i < 3; i++) {
             backgroundElements.push({
@@ -2047,15 +2050,15 @@ function createBackgroundElements(zoneName) {
             speed: 0,
             size: 50
         });
-      
-    } else if (zoneName === "Mystic Forest") {
+    } 
+    else if (zoneName === "Mystic Forest") {
         // 🍄 FLOATING MUSHROOMS (drift upward)
         for (let i = 0; i < 10; i++) {
             backgroundElements.push({
                 emoji: "🍄",
                 x: Math.random() * gameWidth,
                 y: 100 + Math.random() * (gameHeight - 300),
-                speedY: -0.3 - Math.random() * 0.4, // Float upward
+                speedY: -0.3 - Math.random() * 0.4,
                 swayAmount: 20 + Math.random() * 30,
                 swaySpeed: 0.02 + Math.random() * 0.02,
                 swayOffset: Math.random() * Math.PI * 2,
@@ -2085,55 +2088,97 @@ function createBackgroundElements(zoneName) {
             speed: 0,
             size: 50
         });
+    } 
+    else if (zoneName === "Volcanic Valley") {
+        // 🔥 RISING FLAMES
+        for (let i = 0; i < 6; i++) {
+            backgroundElements.push({
+                emoji: "🔥",
+                x: Math.random() * gameWidth,
+                y: gameHeight + Math.random() * 100,
+                speedY: -0.6 - Math.random() * 0.6,
+                swayAmount: 20 + Math.random() * 15,
+                swaySpeed: 0.02 + Math.random() * 0.02,
+                swayOffset: Math.random() * Math.PI * 2,
+                rotation: 0,
+                rotationSpeed: 0.02 + Math.random() * 0.02,
+                size: 20 + Math.random() * 10,
+                opacity: 0.4
+            });
+        }
       
-    } else if (zoneName === "Volcanic Valley") {
-    // 🔥 RISING FLAMES (slower, smaller, more transparent)
-    for (let i = 0; i < 6; i++) { // REDUCED from 12 to 6
+        // 💥 EXPLOSIONS
+        for (let i = 0; i < 3; i++) {
+            backgroundElements.push({
+                emoji: "💥",
+                x: Math.random() * gameWidth,
+                y: gameHeight - 100 - Math.random() * 150,
+                speed: 0,
+                pulse: true,
+                pulseSpeed: 0.02,
+                pulseOffset: Math.random() * Math.PI * 2,
+                size: 25 + Math.random() * 10,
+                opacity: 0.3
+            });
+        }
+      
+        // 🌋 VOLCANO
         backgroundElements.push({
-            emoji: "🔥",
-            x: Math.random() * gameWidth,
-            y: gameHeight + Math.random() * 100,
-            speedY: -0.6 - Math.random() * 0.6, // SLOWER: was -1.5 to -3.0, now -0.6 to -1.2
-            swayAmount: 20 + Math.random() * 15, // LESS SWAY: was 40-70, now 20-35
-            swaySpeed: 0.02 + Math.random() * 0.02, // SLOWER SWAY: was 0.04-0.07, now 0.02-0.04
-            swayOffset: Math.random() * Math.PI * 2,
-            rotation: 0,
-            rotationSpeed: 0.02 + Math.random() * 0.02, // SLOWER ROTATION: was 0.05-0.10, now 0.02-0.04
-            size: 20 + Math.random() * 10, // SMALLER: was 28-44, now 20-30
-            opacity: 0.4 // NEW: Add opacity flag
-        });
-    }
-  
-    // 💥 EXPLOSIONS (fewer, smaller, more subtle pulse)
-    for (let i = 0; i < 3; i++) { // REDUCED from 5 to 3
-        backgroundElements.push({
-            emoji: "💥",
-            x: Math.random() * gameWidth,
-            y: gameHeight - 100 - Math.random() * 150,
+            emoji: "🌋",
+            x: gameWidth * 0.15,
+            y: gameHeight - 140,
             speed: 0,
-            pulse: true,
-            pulseSpeed: 0.02, // SLOWER: was 0.03, now 0.02
-            pulseOffset: Math.random() * Math.PI * 2,
-            size: 25 + Math.random() * 10, // SMALLER: was 35-50, now 25-35
-            opacity: 0.3 // NEW: Add opacity flag
+            size: 60
         });
     }
-  
-    // 🌋 VOLCANO (static, bottom-left)
-    backgroundElements.push({
-        emoji: "🌋",
-        x: gameWidth * 0.15,
-        y: gameHeight - 140,
-        speed: 0,
-        size: 60 // SMALLER: was 70, now 60
-    });
-  
-}
+    else if (zoneName === "Ocean Depths") {
+        // 🫧 RISING BUBBLES
+        for (let i = 0; i < 20; i++) {
+            backgroundElements.push({
+                emoji: "🫧",
+                x: Math.random() * gameWidth,
+                y: gameHeight + Math.random() * 200,
+                speedY: -0.8 - Math.random() * 1.2,
+                swayAmount: 15 + Math.random() * 25,
+                swaySpeed: 0.02 + Math.random() * 0.03,
+                swayOffset: Math.random() * Math.PI * 2,
+                size: 20 + Math.random() * 15,
+                opacity: 0.6
+            });
+        }
+        
+        // 🌊 WAVES
+        for (let i = 0; i < 5; i++) {
+            backgroundElements.push({
+                emoji: "🌊",
+                x: Math.random() * gameWidth,
+                y: 100 + Math.random() * 150,
+                speed: 0.3 + Math.random() * 0.4,
+                size: 35 + Math.random() * 10
+            });
+        }
+        
+        // 🪸 CORAL
+        backgroundElements.push({
+            emoji: "🪸",
+            x: gameWidth * 0.2,
+            y: gameHeight - 150,
+            speed: 0,
+            size: 45
+        });
+    }
     else {
         // Other zones: no emojis
         backgroundElements = [];
     }
 }
+
+
+
+
+
+
+
         const dangerTypes = [
     { emoji: '💣', name: 'bomb', penalty: -1, color: '#FF0000' },
     { emoji: '🧨', name: 'tnt', penalty: -1, color: '#FF4500' }
