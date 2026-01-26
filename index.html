@@ -2026,10 +2026,12 @@ const progressionZones = [
     { name: "Savanna Sunset", background: "linear-gradient(180deg, #8B4513 0%, #CD853F 40%, #DAA520 100%)", color: "#FFA500", emojiZone: "Savanna Sunset" }, // ← Change
     { name: "Mystic Forest", background: "linear-gradient(180deg, #2C1654 0%, #4A235A 40%, #6C3483 100%)", color: "#9B59B6", emojiZone: "Mystic Forest" }, // ← Change
     { name: "Volcanic Valley", background: "linear-gradient(180deg, #4A0E0E 0%, #7D2020 40%, #B22222 100%)", color: "#FF6B6B", emojiZone: "Volcanic Valley" } // ← Change
+    { name: "Ocean Depths", background: "linear-gradient(180deg, #001f3f 0%, #003d5c 40%, #0074D9 100%)", color: "#00D4FF", emojiZone: "🌊 Ocean Depths" }
+
 ];
 // Custom score thresholds for each zone (index matches progressionZones)
 // Zone 0: 0 points, Zone 1: 3000+, Zone 2: 8000+, etc.
-const zoneScoreThresholds = [0, 10000, 20000, 40000, 80000, 100000];
+const zoneScoreThresholds = [0, 10000, 20000, 40000, 80000, 100000,150000];
 function createBackgroundElements(zoneName) {
     backgroundElements = []; // clear previous
     if (zoneName === "Training Grounds") {
@@ -2230,6 +2232,47 @@ function createBackgroundElements(zoneName) {
         backgroundElements = [];
     }
 }
+
+
+
+
+    else if (zoneName === "🌊 Ocean Depths") {
+    // BUBBLES rising
+    for (let i = 0; i < 20; i++) {
+        backgroundElements.push({
+            emoji: "💧",
+            x: Math.random() * gameWidth,
+            y: gameHeight + Math.random() * 200,
+            speedY: -0.8 - Math.random() * 1.2,
+            swayAmount: 10,
+            swaySpeed: 0.02,
+            swayOffset: Math.random() * Math.PI * 2,
+            size: 12 + Math.random() * 8,
+            opacity: 0.6
+        });
+    }
+    // SWIMMING FISH (background)
+    for (let i = 0; i < 4; i++) {
+        backgroundElements.push({
+            emoji: "🐠",
+            x: -80 - Math.random() * 100,
+            y: 100 + Math.random() * (gameHeight - 300),
+            speed: 0.6 + Math.random() * 0.4,
+            waveAmount: 15,
+            waveSpeed: 0.02,
+            waveOffset: Math.random() * Math.PI * 2,
+            size: 32
+        });
+    }
+}
+
+
+
+
+
+
+
+
         const dangerTypes = [
     { emoji: '💣', name: 'bomb', penalty: -1, color: '#FF0000' },
     { emoji: '🧨', name: 'tnt', penalty: -1, color: '#FF4500' }
@@ -2356,6 +2399,8 @@ function showZoneTransition(zoneName) {
         "Savanna Sunset": "🦁",
         "Mystic Forest": "🌙",
         "Volcanic Valley": "🌋"
+            "Ocean Depths": "🌊"
+
     };
     const emoji = zoneEmojis[zoneName] || "🌍";
     const modal = document.getElementById('zoneTransitionModal');
@@ -2604,14 +2649,28 @@ const gameHeight = window.innerHeight;
         };
   const types = [
     // REGULAR ANIMALS (available in all zones)
-    { emoji: "🐰", name: "Rabbit", points: 10, color: "#FFB6C1", premium: false, zone: "all", baseSpeed: 1.8 },
-    { emoji: "🐨", name: "Koala", points: 15, color: "#A9A9A9", premium: false, zone: "all", baseSpeed: 2.0 },
-    { emoji: "🦊", name: "Fox", points: 20, color: "#FF4500", premium: false, zone: "all", baseSpeed: 2.2 },
-    { emoji: "🦁", name: "Lion", points: 25, color: "#DAA520", premium: false, zone: "all", baseSpeed: 2.4 },
-    { emoji: "🐼", name: "Panda", points: 30, color: "#000000", premium: false, zone: "all", baseSpeed: 2.6 },
-    { emoji: "🐯", name: "Tiger", points: 35, color: "#FF8C00", premium: false, zone: "all", baseSpeed: 2.8 },
-    { emoji: "🐘", name: "Elephant", points: 40, color: "#808080", premium: false, zone: "all", baseSpeed: 3.0 },
-    { emoji: "🦒", name: "Giraffe", points: 45, color: "#F4A460", premium: false, zone: "all", baseSpeed: 3.2 },
+    { emoji: "🐰", name: "Rabbit", points: 10, color: "#FFB6C1", premium: false, zone: "land", baseSpeed: 1.8 },
+    { emoji: "🐨", name: "Koala", points: 15, color: "#A9A9A9", premium: false, zone: "land", baseSpeed: 2.0 },
+    { emoji: "🦊", name: "Fox", points: 20, color: "#FF4500", premium: false, zone: "land", baseSpeed: 2.2 },
+    { emoji: "🦁", name: "Lion", points: 25, color: "#DAA520", premium: false, zone: "land", baseSpeed: 2.4 },
+    { emoji: "🐼", name: "Panda", points: 30, color: "#000000", premium: false, zone: "land", baseSpeed: 2.6 },
+    { emoji: "🐯", name: "Tiger", points: 35, color: "#FF8C00", premium: false, zzone: "land", baseSpeed: 2.8 },
+    { emoji: "🐘", name: "Elephant", points: 40, color: "#808080", premium: false, zzone: "land", baseSpeed: 3.0 },
+    { emoji: "🦒", name: "Giraffe", points: 45, color: "#F4A460", premium: false, zzone: "land", baseSpeed: 3.2 },
+
+    // REGULAR ANIMALS - OCEAN ONLY
+    { emoji: "🐟", name: "Fish", points: 10, color: "#00D4FF", premium: false, zone: "Ocean Depths", baseSpeed: 1.8 },
+    { emoji: "🐙", name: "Octopus", points: 15, color: "#9B59B6", premium: false, zone: "Ocean Depths", baseSpeed: 2.0 },
+    { emoji: "🦀", name: "Crab", points: 20, color: "#FF6B6B", premium: false, zone: "Ocean Depths", baseSpeed: 2.2 },
+    { emoji: "🐢", name: "Turtle", points: 25, color: "#4ade80", premium: false, zone: "Ocean Depths", baseSpeed: 2.4 },
+    { emoji: "🦑", name: "Squid", points: 30, color: "#FF69B4", premium: false, zone: "Ocean Depths", baseSpeed: 2.6 },
+    { emoji: "🦞", name: "Lobster", points: 35, color: "#FF4500", premium: false, zone: "Ocean Depths", baseSpeed: 2.8 },
+    { emoji: "🐠", name: "Tropical Fish", points: 40, color: "#FFD700", premium: false, zone: "Ocean Depths", baseSpeed: 3.0 },
+    { emoji: "🦭", name: "Seal", points: 45, color: "#808080", premium: false, zone: "Ocean Depths", baseSpeed: 3.2 },
+
+
+
+
     // PREMIUM ANIMALS - TRAINING GROUNDS
     { emoji: "🦄", name: "Unicorn", points: 100, color: "#FF69B4", premium: true, zone: "Training Grounds", baseSpeed: 3.0 },
     { emoji: "🦚", name: "Peacock", points: 110, color: "#4169E1", premium: true, zone: "Training Grounds", baseSpeed: 3.2 },
@@ -2630,6 +2689,15 @@ const gameHeight = window.innerHeight;
     // PREMIUM ANIMALS - VOLCANIC VALLEY
     { emoji: "🐉", name: "Dragon", points: 200, color: "#FF4500", premium: true, zone: "Volcanic Valley", baseSpeed: 4.5 },
     { emoji: "🕊️", name: "Phoenix", points: 220, color: "#FF6347", premium: true, zone: "Volcanic Valley", baseSpeed: 4.7 }
+
+
+    // PREMIUM ANIMALS - OCEAN DEPTHS
+    { emoji: "🐋", name: "Blue Whale", points: 240, color: "#0074D9", premium: true, zone: "Ocean Depths", baseSpeed: 4.8 },
+    { emoji: "🦈", name: "Great White", points: 260, color: "#00D4FF", premium: true, zone: "Ocean Depths", baseSpeed: 5.0 },
+
+
+
+
 ];
     
         const powerupType = {
@@ -2661,7 +2729,7 @@ const gameHeight = window.innerHeight;
 */
 // For testing - always show counts (remove the if/else check)
 document.getElementById('totalPremiums').textContent = totalPremiumsCaught;
-document.getElementById('premiumCollection').textContent = `${premiumSpeciesCaught.length}/14`;
+document.getElementById('premiumCollection').textContent = `${premiumSpeciesCaught.length}/16`;
     document.getElementById('highestLevel').textContent = highestLevelReached;
     document.getElementById('highestZone').textContent = highestZoneReached;
 
@@ -2885,6 +2953,18 @@ function checkSlowMo(time) {
             }
                  function spawn() {
     const currentZoneName = progressionZones[currentZoneIndex].name;
+
+
+        let regularTypes;
+    if (currentZoneName === "Ocean Depths") {
+        regularTypes = types.filter(t => !t.premium && t.zone === "Ocean Depths");
+    } else {
+        regularTypes = types.filter(t => !t.premium && t.zone === "land");
+    }
+
+
+
+
     // All regular animals (always available)
     const regularTypes = types.filter(t => !t.premium);
     // Premium animals only in their correct zone
@@ -3240,16 +3320,9 @@ if (newZoneIndex > currentZoneIndex && newZoneIndex < progressionZones.length) {
 
 
 
- // 👈 ADD THESE 5 LINES HERE:
-    const zoneName = progressionZones[currentZoneIndex].name;
-    if (progressionZones.findIndex(z => z.emojiZone === highestZoneReached) < currentZoneIndex) {
-        highestZoneReached = zoneName;
-        localStorage.setItem('highestZoneReached', zoneName);
-    }
-    // End new lines
 
 
-    
+
     const zone = progressionZones[currentZoneIndex];
     // === TRUE FRESH LEVEL START ===
     // Clear EVERYTHING from the old zone (no carry-over animals/particles)
