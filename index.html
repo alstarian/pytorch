@@ -3458,17 +3458,18 @@ forcePortraitPause();
 function startGame() {
     initAudio();
     console.log("START GAME CALLED!");
-    // NEW: Reset achievement tracker
     resetGameTracker();
     totalPlays++;
     localStorage.setItem('totalPlays', totalPlays);
-    dangerItems = []; // Add this line
-    lastDangerSpawn = performance.now() + 10000;
+    
+    // Hide screens
     document.getElementById('overlay').classList.add('hidden');
     document.getElementById('statsScreen').classList.add('hidden');
     document.getElementById('leaderboardScreen').classList.add('hidden');
+    
+    // Reset game state
     gameRunning = true;
-    paused = false; // Make sure game isn't paused
+    paused = false;
     score = 0;
     lives = 3;
     combo = 0;
@@ -3476,46 +3477,49 @@ function startGame() {
     maxStreak = 0;
     difficulty = 1;
     maxDifficulty = 1;
-    animals = [];
-    powerupNumbers = [];
-    particles = [];
-    rescued = {};
     slowMoActive = false;
     powerupsCaught = 0;
+    
+    // Reset arrays (only once!)
+    animals = [];
+    powerupNumbers = [];
+    dangerItems = [];
+    particles = [];
+    rescued = {};
+    
+    // Reset player position
     player.x = gameWidth / 2 - 40;
-    // NEW ZONE SYSTEM: Reset to first zone (Training Grounds)
+    
+    // Set initial zone
     currentZoneIndex = 0;
     const initialZone = progressionZones[0];
     const canvas = document.getElementById('gameCanvas');
     canvas.style.background = initialZone.background;
     document.getElementById('diffLevel').style.color = initialZone.color;
     createBackgroundElements(initialZone.emojiZone);
-// Fresh level start for Training Grounds
-animals = [];
-powerupNumbers = [];
-dangerItems = [];
-particles = [];
-// Calm start: ~2 seconds before first animals appear
-lastSpawn = performance.now() + 2000;
-lastPowerupSpawn = performance.now() + 12000;
-// (keep any other lastXXXSpawn lines you have)
-// Show intro modal
-showZoneTransition(initialZone.name);
-// throwConfetti(100);
+    
+    // Set spawn timers (only once!)
+    lastSpawn = performance.now() + 2000;
+    lastPowerupSpawn = performance.now() + 12000;
+    lastDangerSpawn = performance.now() + 10000;
+    
+    // Show zone transition
+    showZoneTransition(initialZone.name);
+    
+    // Update UI
     updateScore();
     updateStreak();
     updateStreakReward();
     updateLives();
     updateDifficultyDisplay();
-    lastSpawn = performance.now();
-    lastPowerupSpawn = performance.now() + 10000;
+    
+    // Show pause button
     document.getElementById('pauseButton').style.display = 'flex';
-    // Start the game loop
+    
+    // Start game loop (ONLY ONCE!)
     animationFrameId = requestAnimationFrame(gameLoop);
-        // ADD THESE LINES AT THE VERY END:
-    updateDisplay();
-    gameLoop(performance.now());  // ← THIS IS MISSING!
 }
+
         function endGame() {
             gameRunning = false;
             slowMoActive = false;
