@@ -16,6 +16,64 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
+
+
+
+
+
+
+
+
+
+
+
+
+/* Make leaderboard panel bigger/wider/taller modal */
+#leaderboardScreen .modal {
+    max-width: 95% !important;     /* WAS 90% → NOW 95% (WIDER!) */
+    max-height: 95vh;
+    padding: 30px 24px;            /* WAS 30px 20px → MORE SIDE PADDING */
+    border-radius: 24px;
+}
+
+/* Leaderboard list - Bigger, only vertical scroll, no horizontal */
+.leaderboard-list {
+    max-height: 70vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin: 15px 0;
+    padding: 0 12px;              /* WAS 10px → NOW 12px */
+}
+
+/* Ensure items don't cause horizontal scroll */
+.leaderboard-item {
+    padding: 12px 18px;           /* WAS 10px 14px → BIGGER PADDING */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* For iPad/tablet - Even bigger modal */
+@media (min-width: 768px) and (orientation: portrait) {
+    #leaderboardScreen .modal {
+        max-width: 85% !important;  /* WAS 80% → NOW 85% */
+        padding: 40px 36px;         /* MORE PADDING */
+    }
+    
+    .leaderboard-list {
+        max-height: 75vh;
+        padding: 0 16px;            /* EXTRA PADDING */
+    }
+}
+
+
+
+
+
+
+
+
+        
 /* ULTRA-COMPACT LUXURY HOME SCREEN - STATIC & HIGH-CONTRAST */
 
 /* Modal: Deeper shadows for luxury depth, no animations */
