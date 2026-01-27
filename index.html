@@ -3679,15 +3679,7 @@ forcePortraitPause();
 function startGame() {
 
 
-    // RECALCULATE DIMENSIONS FIRST
-    gameWidth = window.innerWidth;
-    gameHeight = window.innerHeight;
-    canvas.width = gameWidth;
-    canvas.height = gameHeight;
-    
-    // RESET PLAYER POSITION WITH CORRECT HEIGHT
-    player.x = gameWidth / 2 - 40;
-    player.y = gameHeight - 110;  // ← Now uses CORRECT gameHeight
+
 
 
 
@@ -3724,7 +3716,7 @@ function startGame() {
     rescued = {};
    
     // Reset player position
-    //player.x = gameWidth / 2 - 40;
+    player.x = gameWidth / 2 - 40;
    
     // Set initial zone
     currentZoneIndex = 0;
