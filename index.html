@@ -4118,14 +4118,30 @@ document.getElementById('pauseButton').addEventListener('click', () => {
 });
 // Resume button
 document.getElementById('resumeButton').addEventListener('click', () => {
-    paused = false;
-    document.getElementById('pauseOverlay').classList.add('hidden');
-    document.getElementById('pauseButton').style.display = 'flex'; // Show pause button again
- 
-    // Resume the game loop
-    if (gameRunning && !animationFrameId) {
-        requestAnimationFrame(gameLoop);
-    }
+    const overlay = document.getElementById('pauseOverlay');
+    overlay.style.opacity = '0';
+    
+    setTimeout(() => {
+        paused = false;
+        overlay.classList.add('hidden');
+        document.getElementById('pauseButton').style.display = 'flex';
+        
+        // 🔥 FIX: Reset spawn timers to current time to prevent fast spawns
+        const now = performance.now();
+        lastSpawn = now;
+        lastPowerupSpawn = now;
+        lastDangerSpawn = now;
+        lastHeartSpawn = now;
+        
+        // 🔥 FIX: Clear any animals that spawned during pause
+        animals = animals.filter(a => a.y < gameHeight - 200);
+        dangerItems = dangerItems.filter(d => d.y < gameHeight - 200);
+        powerupNumbers = powerupNumbers.filter(p => p.y < gameHeight - 200);
+        
+        if(gameRunning) {
+            animationFrameId = requestAnimationFrame(gameLoop);
+        }
+    }, 300);
 });
 // Quit button (returns to main menu)
 document.getElementById('quitButton').addEventListener('click', () => {
