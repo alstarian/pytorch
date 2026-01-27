@@ -28,52 +28,7 @@
 
 
 
-/* Make leaderboard panel bigger/wider/taller modal */
-#leaderboardScreen .modal {
-    max-width: 95% !important;     /* WAS 90% → NOW 95% (WIDER!) */
-    max-height: 95vh;
-    padding: 30px 24px;            /* WAS 30px 20px → MORE SIDE PADDING */
-    border-radius: 24px;
-}
 
-/* Leaderboard list - Bigger, only vertical scroll, no horizontal */
-.leaderboard-list {
-    max-height: 70vh;
-    overflow-y: auto;
-    overflow-x: hidden;
-    margin: 15px 0;
-    padding: 0 12px;              /* WAS 10px → NOW 12px */
-}
-
-/* Ensure items don't cause horizontal scroll */
-.leaderboard-item {
-    padding: 12px 18px;           /* WAS 10px 14px → BIGGER PADDING */
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-/* For iPad/tablet - Even bigger modal */
-@media (min-width: 768px) and (orientation: portrait) {
-    #leaderboardScreen .modal {
-        max-width: 85% !important;  /* WAS 80% → NOW 85% */
-        padding: 40px 36px;         /* MORE PADDING */
-    }
-    
-    .leaderboard-list {
-        max-height: 75vh;
-        padding: 0 16px;            /* EXTRA PADDING */
-    }
-}
-
-
-
-
-
-
-
-
-        
 /* ULTRA-COMPACT LUXURY HOME SCREEN - STATIC & HIGH-CONTRAST */
 
 /* Modal: Deeper shadows for luxury depth, no animations */
@@ -199,39 +154,41 @@ button.secondary {
 
 
 
-/* Make leaderboard panel bigger (wider/taller modal) */
+/* Make leaderboard panel bigger/wider/taller modal */
 #leaderboardScreen .modal {
-    max-width: 90%;          /* Bigger on all screens (was 450px) */
-    max-height: 95vh;       /* Almost full height for more content */
-    padding: 30px 20px;     /* Adjust padding for luxury feel */
-    border-radius: 24px;    /* Slightly larger radius */
+    max-width: 95% !important;     /* WAS 90% → NOW 95% (WIDER!) */
+    max-height: 95vh;
+    padding: 30px 24px;            /* WAS 30px 20px → MORE SIDE PADDING */
+    border-radius: 24px;
 }
 
-/* Leaderboard list: Bigger, only vertical scroll, no horizontal */
+/* Leaderboard list - Bigger, only vertical scroll, no horizontal */
 .leaderboard-list {
-    max-height: 70vh;       /* Taller list (was 50vh) for bigger panel */
-    overflow-y: auto;       /* Vertical scroll only */
-    overflow-x: hidden;     /* Explicitly disable horizontal scroll */
-    margin: 15px 0;         /* Tighter margins */
-    padding: 0 10px;        /* Add side padding to prevent content overflow */
+    max-height: 70vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin: 15px 0;
+    padding: 0 12px;              /* WAS 10px → NOW 12px */
 }
 
 /* Ensure items don't cause horizontal scroll */
 .leaderboard-item {
-    padding: 10px 14px;     /* Slightly tighter */
-    white-space: nowrap;    /* Prevent name/score wrapping if too long */
-    overflow: hidden;       /* Hide overflow text */
-    text-overflow: ellipsis; /* Ellipsis for long names */
+    padding: 12px 18px;           /* WAS 10px 14px → BIGGER PADDING */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
-/* For iPad/tablet: Even bigger modal */
+/* For iPad/tablet - Even bigger modal */
 @media (min-width: 768px) and (orientation: portrait) {
     #leaderboardScreen .modal {
-        max-width: 80%;     /* Wider on tablets */
-        padding: 40px 30px;
+        max-width: 85% !important;  /* WAS 80% → NOW 85% */
+        padding: 40px 36px;         /* MORE PADDING */
     }
+    
     .leaderboard-list {
-        max-height: 75vh;   /* Taller on larger screens */
+        max-height: 75vh;
+        padding: 0 16px;            /* EXTRA PADDING */
     }
 }
 
