@@ -4303,23 +4303,24 @@ initIAP();
 
 
 
+
+
+
+
+window.addEventListener('orientationchange', forcePortraitPause);
+window.addEventListener('resize', forcePortraitPause);
+
+// Also kill audio on rotate
 window.addEventListener('resize', function() {
-    // ONLY stop audio if game is actually running
-    if(gameRunning) {
-        document.querySelectorAll('audio').forEach(audio => {
-            audio.pause();
-            audio.currentTime = 0;
-        });
-    }
-    
-    if (window.innerWidth > window.innerHeight) {
-        // Landscape - stop game completely
-        if (animationFrameId) {
-            cancelAnimationFrame(animationFrameId);
-            animationFrameId = null;
-        }
-    }
+    document.querySelectorAll('audio').forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
+    });
 });
+
+
+
+
 
 
 // FIX ROTATION AUDIO BUG
