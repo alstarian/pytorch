@@ -3764,7 +3764,6 @@ for (let i = powerupNumbers.length - 1; i >= 0; i--) {
 let gamePausedByOrientation = false;
 
 
-
 function forcePortraitPause() {
     const isLandscape = window.innerWidth > window.innerHeight;
  
@@ -3772,48 +3771,36 @@ function forcePortraitPause() {
         // FORCE PAUSE - Stop gameLoop completely
         document.body.classList.add('portrait-pause');
         gamePausedByOrientation = true;
-        gameRunning = false; // ← CRITICAL: Stops gameLoop
+        gameRunning = false;
         if(animationFrameId) {
             cancelAnimationFrame(animationFrameId);
             animationFrameId = null;
         }
         // Kill all audio and effects
         if (audioCtx && audioCtx.state === 'running') {
-            audioCtx.suspend(); // Kill all beep sounds
+            audioCtx.suspend();
         }
         slowMoActive = false;
         document.getElementById('slowmoOverlay')?.classList.remove('active');
-        particles = []; // Stop particles
+        particles = [];
         
     } else if(gamePausedByOrientation) {
-        // RESUME ONLY when returning to portrait
+        // SHOW PAUSE MENU when returning to portrait
         document.body.classList.remove('portrait-pause');
         gamePausedByOrientation = false;
         
-        // Resume audio context if it was suspended
+        // Resume audio
         if (audioCtx && audioCtx.state === 'suspended') {
             audioCtx.resume();
         }
         
-        if(paused) {
-            // Keep paused - user manually paused with button
-            paused = true;
-            document.getElementById('pauseOverlay').classList.remove('hidden');
-            document.getElementById('pauseButton').style.display = 'none';
-        } else {
-            // Restart the game
-            gameRunning = true;
-            paused = false; // Make sure not paused
-            
-            // Restart game loop ONLY if not already running
-            if (!animationFrameId) {
-                animationFrameId = requestAnimationFrame(gameLoop);
-            }
-        }
+        // Show the pause overlay so user can choose
+        paused = true;
+        gameRunning = true; // Game is "running" but paused
+        document.getElementById('pauseOverlay').classList.remove('hidden');
+        document.getElementById('pauseButton').style.display = 'none';
     }
-}  // ← YOU WERE MISSING THIS CLOSING BRACE!
-
-
+}
 
 
 
