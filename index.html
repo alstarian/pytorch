@@ -19,6 +19,18 @@
     <style>
 /* ULTRA-COMPACT LUXURY HOME SCREEN - STATIC & HIGH-CONTRAST */
 
+
+#pauseOverlay {
+    z-index: 2000 !important;  /* 👈 ABOVE EVERYTHING */
+    transition: none !important; /* 👈 NO DELAY */
+}
+
+.pause-modal {
+    transform: scale(1) !important;  /* 👈 INSTANT FULL SIZE */
+}
+
+
+
 /* Modal: Deeper shadows for luxury depth, no animations */
 .modal {
     background: linear-gradient(135deg, #1A1F35 0%, #0A0E1A 100%);  /* Darker gradient for elegance */
@@ -2664,7 +2676,7 @@ function resetGameTracker() {
 
 
 
-        
+
 function missSound() {
     if (!audioCtx) return;
     
@@ -3786,18 +3798,24 @@ function forcePortraitPause() {
         particles = [];
         
     } else if(gamePausedByOrientation) {
-        // 🎮 SHOW PAUSE MENU when returning to portrait
-        document.body.classList.remove('portrait-pause');
-        gamePausedByOrientation = false;
-        
-        // ✅ Resume audio context (not game yet)
-        if (audioCtx && audioCtx.state === 'suspended') { // ← This one is correct
-            audioCtx.resume();
-        }
-        
-        // 🎯 Show pause overlay - user chooses Resume or Quit
-        paused = true;
-        gameRunning = false; // ← FIX: Keep it false until they click Resume
+    document.body.classList.remove('portrait-pause');
+    gamePausedByOrientation = false;
+    
+    // 🔥 FORCE PAUSE OVERLAY INSTANTLY (no delay!)
+    const pauseOverlay = document.getElementById('pauseOverlay');
+    pauseOverlay.classList.remove('hidden');
+    pauseOverlay.style.opacity = '1';  // 👈 INSTANT SHOW
+    pauseOverlay.style.pointerEvents = 'auto';  // 👈 IMMEDIATE CLICKS
+    
+    document.getElementById('pauseButton').style.display = 'none';
+    
+    // Resume audio context
+    if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+    
+    paused = true;
+    gameRunning = false; 
         document.getElementById('pauseOverlay').classList.remove('hidden');
         document.getElementById('pauseButton').style.display = 'none'; // Hide pause button
     }
