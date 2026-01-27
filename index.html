@@ -2661,17 +2661,61 @@ function resetGameTracker() {
                 setTimeout(() => beep(523 + (i * 100), 0.15, 'sine', 0.4), i * 100);
             }
         }
+
+
+
+        
 function missSound() {
-    // Sad descending tones (like "awww")
-    beep(523, 0.1, 'sine', 0.3);  // High note
-    setTimeout(() => beep(392, 0.12, 'sine', 0.35), 80);  // Drop down
-    setTimeout(() => beep(330, 0.15, 'sine', 0.4), 160);  // Even lower (sad)
+    if (!audioCtx) return;
+    
+    // Resume audio context if suspended
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    
+    // Sad descending tones (C → G → E)
+    const now = audioCtx.currentTime;
+    
+    // Note 1: High C (523 Hz)
+    const osc1 = audioCtx.createOscillator();
+    const gain1 = audioCtx.createGain();
+    osc1.connect(gain1);
+    gain1.connect(audioCtx.destination);
+    osc1.frequency.value = 523;
+    gain1.gain.setValueAtTime(0.3, now);
+    gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+    osc1.start(now);
+    osc1.stop(now + 0.15);
+    
+    // Note 2: G (392 Hz) - starts after 0.08s
+    const osc2 = audioCtx.createOscillator();
+    const gain2 = audioCtx.createGain();
+    osc2.connect(gain2);
+    gain2.connect(audioCtx.destination);
+    osc2.frequency.value = 392;
+    gain2.gain.setValueAtTime(0.35, now + 0.08);
+    gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+    osc2.start(now + 0.08);
+    osc2.stop(now + 0.25);
+    
+    // Note 3: Low E (330 Hz) - starts after 0.16s
+    const osc3 = audioCtx.createOscillator();
+    const gain3 = audioCtx.createGain();
+    osc3.connect(gain3);
+    gain3.connect(audioCtx.destination);
+    osc3.frequency.value = 330;
+    gain3.gain.setValueAtTime(0.4, now + 0.16);
+    gain3.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+    osc3.start(now + 0.16);
+    osc3.stop(now + 0.4);
  
     // Gentle "oops" vibration pattern
     if (navigator.vibrate) {
-        navigator.vibrate([20, 15, 20]); // Softer than danger
+        navigator.vibrate([20, 15, 20]);
     }
 }
+
+
+
+
         function levelUpSound() {
             beep(659, 0.12);
             setTimeout(() => beep(784, 0.12), 70);
