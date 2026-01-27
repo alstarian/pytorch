@@ -3187,6 +3187,31 @@ function checkSlowMo(time) {
             ctx.font = '38px Arial, "Apple Color Emoji", sans-serif';
             ctx.fillText('🧺', player.x + 40, player.y + 35);
         }
+
+
+
+function renderScene() {
+    ctx.clearRect(0, 0, gameWidth, gameHeight);
+    drawBackground();
+    drawStars();
+    drawGround();
+    drawAnimals();
+    // Draw particles without updating positions (one-time render)
+    particles.forEach(p => {
+        ctx.globalAlpha = p.life;
+        ctx.fillStyle = p.color;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+        ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+    drawPlayer();
+}
+
+
+
+
+        
         function drawAnimals() {
     const emojiSize = window.innerWidth > 768 ? 64 : 48;
     // Draw animals with premium flair
@@ -3771,17 +3796,17 @@ let gamePausedByOrientation = false;
 
 function forcePortraitPause() {
     const isLandscape = window.innerWidth > window.innerHeight;
-    
-    if(isLandscape) {
+   
+    if (isLandscape) {
         // FORCE PAUSE - Stop gameLoop completely
         document.body.classList.add('portrait-pause');
         gamePausedByOrientation = true;
         gameRunning = false;
-        if(animationFrameId) {
+        if (animationFrameId) {
             cancelAnimationFrame(animationFrameId);
             animationFrameId = null;
         }
-        
+       
         // Kill all audio and effects
         if (audioCtx && audioCtx.state === 'running') {
             audioCtx.suspend();
@@ -3789,31 +3814,42 @@ function forcePortraitPause() {
         slowMoActive = false;
         document.getElementById('slowmoOverlay')?.classList.remove('active');
         particles = [];
-        
-    } else if(gamePausedByOrientation) {
+       
+    } else if (gamePausedByOrientation) {
         // 🎮 BACK TO PORTRAIT - SHOW PAUSE MENU (DON'T AUTO-RESUME!)
         document.body.classList.remove('portrait-pause');
         gamePausedByOrientation = false;
-        
-        // Resume audio context
+       
+        // Resume audio context (but keep game paused)
         if (audioCtx && audioCtx.state === 'suspended') {
             audioCtx.resume();
         }
-        
-        // 🛑 CRITICAL: Show pause menu, DON'T restart game
+       
+        // 🛑 Set pause state
         paused = true;
-        gameRunning = false;  // Keep stopped
-        
+        gameRunning = false; // Keep stopped
+       
+        // NEW: Update dimensions (in case screen size changed)
+        gameWidth = window.innerWidth;
+        gameHeight = window.innerHeight;
+       
+        // NEW: Adjust player position to center (handles wider/taller screens)
+        player.x = gameWidth / 2 - 40;
+       
+        // NEW: Redraw the current scene once (without updating game logic)
+        renderScene();
+       
+        // Show pause menu
         const pauseOverlay = document.getElementById('pauseOverlay');
         pauseOverlay.classList.remove('hidden');
         pauseOverlay.style.opacity = '1';
         pauseOverlay.style.pointerEvents = 'auto';
-        
+       
         document.getElementById('pauseButton').style.display = 'none';
-        
+       
         // ❌ DO NOT ADD THESE LINES - They auto-resume!
-        // gameRunning = true;  ← DELETE THIS
-        // requestAnimationFrame(gameLoop);  ← DELETE THIS
+        // gameRunning = true; ← DELETE THIS
+        // requestAnimationFrame(gameLoop); ← DELETE THIS
     }
 }
 
@@ -4332,7 +4368,15 @@ window.addEventListener('resize', function() {
 });
 
 
-
+// Debounced resize handler to catch orientation changes without rapid firing
+let resizeTimeout;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        resizeCanvas(); // Existing resize
+        forcePortraitPause(); // NEW: Call orientation handler
+    }, 100); // 100ms debounce - adjust if needed
+});
 
 
 
