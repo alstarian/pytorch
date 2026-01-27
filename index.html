@@ -28,19 +28,22 @@
 /* PREMIUM HOME SCREEN - LUXURY EDITION */
 .modal {
     background: linear-gradient(135deg, rgba(20, 25, 40, 0.95) 0%, rgba(10, 14, 26, 0.98) 100%);
-    border: 2px solid rgba(255, 215, 0, 0.3);
+    border: 2px solid rgba(212, 175, 55, 0.3);  /* Darker gold */
     border-radius: 28px;
-    padding: 60px 32px;
+    padding: 32px 24px;  /* SHRINK FROM 60px → 32px */
     width: 92%;
-    max-width: 440px;
+    max-width: 420px;     /* SHRINK FROM 440px */
+    max-height: 85vh;     /* PREVENT OVERFLOW */
+    overflow: hidden;     /* NO SCROLL INSIDE */
     text-align: center;
     box-shadow: 
         0 30px 80px rgba(0, 0, 0, 0.8),
         inset 0 1px 0 rgba(255, 255, 255, 0.08),
-        0 0 60px rgba(255, 215, 0, 0.15);
+        0 0 60px rgba(212, 175, 55, 0.15);  /* Darker gold */
     position: relative;
     backdrop-filter: blur(25px);
 }
+
 /* 3. DARKER GOLD BORDER */
 .modal::before {
     content: '';
@@ -93,14 +96,12 @@ h1 {
 
 /* HUGE GLOWING ANIMALS */
 /* 2. DARKER GOLD ANIMALS */
-.animal-emojis .animal-emoji {
-    font-size: 56px;
-    animation: floatGlow 3s ease-in-out infinite;
-    text-shadow: 
-        0 0 20px rgba(212, 175, 55, 0.8),
-        0 0 40px rgba(212, 175, 55, 0.4);
-    filter: drop-shadow(0 8px 24px rgba(212, 175, 55, 0.3));
+.animal-emojis {
+    gap: 12px;      /* Tighter spacing */
+    margin: 20px 0; /* Less margin */
+    padding: 16px;  /* Smaller padding */
 }
+
 
 .animal-emojis .animal-emoji {
     font-size: 56px;
