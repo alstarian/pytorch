@@ -3587,10 +3587,26 @@ if (time - lastHeartSpawn > 20000 && lives < 5 && Math.random() < 0.05) {
             updateLives();
             animals.splice(i, 1);
          
-            if (lives <= 0) {
-                endGame();
-                return;
-            }
+           if (lives <= 0) {
+    gameRunning = false;
+    gameOver = true;
+    
+    // STOP GAME LOOP
+    if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+    }
+    
+    // KILL ALL AUDIO
+    document.querySelectorAll('audio').forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
+    });
+    
+    endGame();
+    return;
+}
+
         }
     }
     // Update power-up numbers
@@ -3645,10 +3661,26 @@ for (let i = powerupNumbers.length - 1; i >= 0; i--) {
          
             if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
          
-            if (lives <= 0) {
-                endGame();
-                return;
-            }
+         if (lives <= 0) {
+    gameRunning = false;
+    gameOver = true;
+    
+    // STOP GAME LOOP
+    if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+    }
+    
+    // KILL ALL AUDIO
+    document.querySelectorAll('audio').forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
+    });
+    
+    endGame();
+    return;
+}
+
             continue;
         }
      
@@ -3696,7 +3728,14 @@ function startGame() {
 
 
 
-
+// RESET DIFFICULTY TO LEVEL 1
+    difficulty = 1;
+    maxDifficulty = 1;
+    currentZoneIndex = 0;  // Reset zone
+    
+    // RESET SPAWN SPEEDS TO SLOW (LEVEL 1)
+    spawnSpeed = 2.0;      // Slow spawn speed
+    fallSpeed = 1.5;       // Slow fall speed
 
 
     initAudio();
@@ -4151,6 +4190,39 @@ initIAP();
                 document.getElementById(button.dataset.tab + '-list').classList.add('active');
             });
         });
+
+
+
+window.addEventListener('resize', function() {
+    // ALWAYS STOP AUDIO ON ROTATION
+    document.querySelectorAll('audio').forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
+    });
+    
+    if (window.innerWidth > window.innerHeight) {
+        // Landscape - stop game completely
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+        }
+    }
+});
+
+
+// FIX ROTATION AUDIO BUG
+window.addEventListener('resize', function() {
+    document.querySelectorAll('audio').forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
+    });
+});
+
+
+
+
+
+
     </script>
   
 <!-- Zone Transition Modal -->
