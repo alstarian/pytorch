@@ -3791,7 +3791,7 @@ function forcePortraitPause() {
         particles = [];
         
     } else if(gamePausedByOrientation) {
-        // 🎮 BACK TO PORTRAIT - SHOW PAUSE MENU (don't auto-resume!)
+        // 🎮 BACK TO PORTRAIT - SHOW PAUSE MENU (DON'T AUTO-RESUME!)
         document.body.classList.remove('portrait-pause');
         gamePausedByOrientation = false;
         
@@ -3800,21 +3800,23 @@ function forcePortraitPause() {
             audioCtx.resume();
         }
         
-        // 🔥 SHOW PAUSE OVERLAY IMMEDIATELY
+        // 🛑 CRITICAL: Show pause menu, DON'T restart game
         paused = true;
-        gameRunning = false;  // Keep game stopped until user clicks Resume
+        gameRunning = false;  // Keep stopped
         
         const pauseOverlay = document.getElementById('pauseOverlay');
         pauseOverlay.classList.remove('hidden');
         pauseOverlay.style.opacity = '1';
         pauseOverlay.style.pointerEvents = 'auto';
-        pauseOverlay.style.transition = 'none';  // No fade delay
         
         document.getElementById('pauseButton').style.display = 'none';
         
-        // DON'T restart gameLoop here - let Resume button do it
+        // ❌ DO NOT ADD THESE LINES - They auto-resume!
+        // gameRunning = true;  ← DELETE THIS
+        // requestAnimationFrame(gameLoop);  ← DELETE THIS
     }
 }
+
 
 
 
