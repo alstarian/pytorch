@@ -2911,6 +2911,18 @@ document.getElementById('premiumCollection').textContent = `${premiumSpeciesCaug
     });
 }
 function checkSlowMo(time) {
+
+
+// Don't run if game isn't active
+    if(!gameRunning) {
+        slowMoActive = false;
+        document.getElementById('slowmoOverlay').classList.remove('active');
+        return;
+    }
+
+
+
+
     if(slowMoActive && time >= slowMoEndTime) {
         slowMoActive = false;
         document.getElementById('slowmoOverlay').classList.remove('active');
@@ -3044,11 +3056,13 @@ function checkSlowMo(time) {
     // Zone-based speed boost - PREMIUMS ARE SLOWER
     let speedMultiplier;
     if (type.premium) {
-        // Premiums always fall slower (max 1.3x speed regardless of zone/difficulty)
         speedMultiplier = slowMoActive ? 0.3 : Math.min(1 + (difficulty * 0.01), 1.3);
     } else {
-       if (currentZoneIndex >= 2) { // Jungle+ zones (2,3,4,5)
-        speedMultiplier = slowMoActive ? 0.3 : (difficulty >= 40 ? 2.8 : 2.5);
+       if (currentZoneIndex >= 2) {
+        speedMultiplier = slowMoActive ? 0.3 : (difficulty >= 40 ? 2.8 :
+                                               difficulty >= 30 ? 2.4 :
+                                               difficulty >= 20 ? 2.0 :
+                                               Math.min(1 + (difficulty * 0.06), 1.8));
         } else {
             speedMultiplier = slowMoActive ? 0.3 : (difficulty >= 40 ? 2.2 :
                                                    difficulty >= 30 ? 2.0 :
@@ -3717,36 +3731,30 @@ function forcePortraitPause() {
             animationFrameId = null;
         }
 
-// 👇 ADD THESE 5 LINES HERE:
-    if (audioCtx && audioCtx.state === 'running') {
-        audioCtx.suspend(); // Kill all beep sounds
-    }
-    slowMoActive = false;
-    document.getElementById('slowmoOverlay')?.classList.remove('active');
-    // Clear any active sounds
-    particles = []; // Stop particles
-    // End add
-
-
+        // Kill all audio and effects
+        if (audioCtx && audioCtx.state === 'running') {
+            audioCtx.suspend(); // Kill all beep sounds
+        }
+        slowMoActive = false;
+        document.getElementById('slowmoOverlay')?.classList.remove('active');
+        particles = []; // Stop particles
         
     } else if(gamePausedByOrientation) {
         // RESUME ONLY when returning to portrait
         document.body.classList.remove('portrait-pause');
         gamePausedByOrientation = false;
+        
         if(paused) {
-            resumeGame(); // Resume if pause button was used
+            // Keep paused - user manually paused with button
+            paused = true;
+            document.getElementById('pauseOverlay').classList.remove('hidden');
+            document.getElementById('pauseButton').style.display = 'none';
         } else {
             gameRunning = true; // Restart gameLoop
             gameLoop(performance.now()); // Restart animation
         }
     }
 }
-// Listen for ALL orientation events
-window.addEventListener('resize', () => setTimeout(forcePortraitPause, 50));
-window.addEventListener('orientationchange', () => setTimeout(forcePortraitPause, 150));
-window.matchMedia('(orientation: landscape)').addEventListener('change', forcePortraitPause);
-// Initial check
-forcePortraitPause();
 
 
 
@@ -3768,6 +3776,19 @@ function startGame() {
     lastSpawn = 0;  // Force immediate fresh spawn timing
     lastPowerupSpawn = 0;
     lastDangerSpawn = 0;
+
+
+
+    // CRITICAL: Clear all leftover speed flags from previous game
+    animals.forEach(a => {
+        delete a.baseSpeed;
+        delete a.baseVx;
+    });
+    dangerItems.forEach(d => {
+        delete d.baseSpeed;
+    });
+
+    initAudio();
 
 
     initAudio();
@@ -4226,11 +4247,13 @@ initIAP();
 
 
 window.addEventListener('resize', function() {
-    // ALWAYS STOP AUDIO ON ROTATION
-    document.querySelectorAll('audio').forEach(audio => {
-        audio.pause();
-        audio.currentTime = 0;
-    });
+    // ONLY stop audio if game is actually running
+    if(gameRunning) {
+        document.querySelectorAll('audio').forEach(audio => {
+            audio.pause();
+            audio.currentTime = 0;
+        });
+    }
     
     if (window.innerWidth > window.innerHeight) {
         // Landscape - stop game completely
