@@ -19,11 +19,6 @@
     <style>
 /* ULTRA-COMPACT LUXURY HOME SCREEN - STATIC & HIGH-CONTRAST */
 
-
-
-
-
-
 /* Modal: Deeper shadows for luxury depth, no animations */
 .modal {
     background: linear-gradient(135deg, #1A1F35 0%, #0A0E1A 100%);  /* Darker gradient for elegance */
@@ -2669,7 +2664,7 @@ function resetGameTracker() {
 
 
 
-
+        
 function missSound() {
     if (!audioCtx) return;
     
@@ -3082,7 +3077,7 @@ function checkSlowMo(time) {
             }
                  function spawn() {
     const currentZoneName = progressionZones[currentZoneIndex].name;
-  
+   
     // FIXED: Filter regular animals based on current zone
     let regularTypes;
     if (currentZoneName === "Ocean Depths") {
@@ -3092,10 +3087,10 @@ function checkSlowMo(time) {
         // In other zones: only show land animals (exclude ocean animals)
         regularTypes = types.filter(t => !t.premium && t.zone === "land");
     }
-  
+   
     // Premium animals only in their correct zone
     const premiumTypes = types.filter(t => t.premium && t.zone === currentZoneName);
-  
+   
     // Choose 10% chance for premium if UNLOCKED and available
     let type;
     if (premiumUnlocked && premiumTypes.length > 0 && Math.random() < 0.1) {
@@ -3103,7 +3098,8 @@ function checkSlowMo(time) {
     } else {
         type = regularTypes[Math.floor(Math.random() * regularTypes.length)];
     }
-  
+   
+    // Zone-based speed boost for regular animals
     // Zone-based speed boost - PREMIUMS ARE SLOWER
     let speedMultiplier;
     if (type.premium) {
@@ -3120,25 +3116,16 @@ function checkSlowMo(time) {
                                                    Math.min(1 + (difficulty * 0.06), 1.8));
         }
     }
-  
+   
     const swerveSpeedMultiplier = slowMoActive ? 0.3 : (Math.min(1 + (difficulty * 0.05), 1.5));
     const swerveAmountMultiplier = Math.min(1 + (difficulty * 0.08), 1.6);
-  
-    // NEW: Calculate speed first
-    let speed = type.baseSpeed * speedMultiplier;
-
-    // NEW: Cap speed in early levels to prevent "very fast" outliers
-    // (Tweak 3.0 max if you want stricter/smoother — e.g., 2.5 for slower overall)
-    if (difficulty < 10 || currentZoneIndex === 0) { // Applies to level 1+
-        speed = Math.min(speed, 3.0); // Keeps max ~3.0, feels consistent
-    }
-
+   
     animals.push({
         x: Math.random() * (gameWidth - 60) + 30,
         y: -50,
         type: type,
         rotation: 0,
-        speed: speed, // UPDATED: Use capped speed
+        speed: type.baseSpeed * speedMultiplier,
         swerveSpeed: ((Math.random() * 0.03) + 0.01) * swerveSpeedMultiplier * (Math.random() > 0.5 ? 1 : -1),
         swerveAmount: (15 + (Math.random() * 35)) * swerveAmountMultiplier,
         swerveOffset: Math.random() * Math.PI * 2,
@@ -3195,31 +3182,6 @@ function checkSlowMo(time) {
             ctx.font = '38px Arial, "Apple Color Emoji", sans-serif';
             ctx.fillText('🧺', player.x + 40, player.y + 35);
         }
-
-
-
-function renderScene() {
-    ctx.clearRect(0, 0, gameWidth, gameHeight);
-    drawBackground();
-    drawStars();
-    drawGround();
-    drawAnimals();
-    // Draw particles without updating positions (one-time render)
-    particles.forEach(p => {
-        ctx.globalAlpha = p.life;
-        ctx.fillStyle = p.color;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-        ctx.fill();
-    });
-    ctx.globalAlpha = 1;
-    drawPlayer();
-}
-
-
-
-
-
         function drawAnimals() {
     const emojiSize = window.innerWidth > 768 ? 64 : 48;
     // Draw animals with premium flair
@@ -3799,46 +3761,51 @@ for (let i = powerupNumbers.length - 1; i >= 0; i--) {
     animationFrameId = requestAnimationFrame(gameLoop);
 }
 // BULLETPROOF Portrait Lock
-let gamePausedByOrientation = false; // Make sure this is at the top (global)
+let gamePausedByOrientation = false;
+
+
 
 function forcePortraitPause() {
     const isLandscape = window.innerWidth > window.innerHeight;
-
-    if (isLandscape) {
-        // Landscape: freeze + show message
+ 
+    if(isLandscape) {
+        // FORCE PAUSE - Stop gameLoop completely
         document.body.classList.add('portrait-pause');
         gamePausedByOrientation = true;
-        paused = true; // Freeze logic (drawing continues)
+        gameRunning = false; // ← CRITICAL: Stops gameLoop
+        if(animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+        }
 
+        // Kill all audio and effects
         if (audioCtx && audioCtx.state === 'running') {
-            audioCtx.suspend();
+            audioCtx.suspend(); // Kill all beep sounds
         }
         slowMoActive = false;
         document.getElementById('slowmoOverlay')?.classList.remove('active');
-        particles = [];
-    } else if (gamePausedByOrientation) {
-        // Back to portrait: show normal pause menu over frozen scene
+        particles = []; // Stop particles
+        
+    } else if(gamePausedByOrientation) {
+        // RESUME ONLY when returning to portrait
         document.body.classList.remove('portrait-pause');
         gamePausedByOrientation = false;
-        paused = true; // Stay frozen
-
-        if (audioCtx && audioCtx.state === 'suspended') {
-            audioCtx.resume();
+        
+        if(paused) {
+            // Keep paused - user manually paused with button
+            paused = true;
+            document.getElementById('pauseOverlay').classList.remove('hidden');
+            document.getElementById('pauseButton').style.display = 'none';
+        } else {
+            gameRunning = true; // Restart gameLoop
+            gameLoop(performance.now()); // Restart animation
         }
-
-        // Update size + recenter basket
-        gameWidth = window.innerWidth;
-        gameHeight = window.innerHeight;
-        player.x = gameWidth / 2 - 40;
-
-        // Show pause menu (scene stays visible behind it)
-        const pauseOverlay = document.getElementById('pauseOverlay');
-        pauseOverlay.classList.remove('hidden');
-        pauseOverlay.style.opacity = '1';
-        pauseOverlay.style.pointerEvents = 'auto';
-        document.getElementById('pauseButton').style.display = 'none';
     }
 }
+
+
+
+
 
 
 
@@ -4118,30 +4085,14 @@ document.getElementById('pauseButton').addEventListener('click', () => {
 });
 // Resume button
 document.getElementById('resumeButton').addEventListener('click', () => {
-    const overlay = document.getElementById('pauseOverlay');
-    overlay.style.opacity = '0';
-    
-    setTimeout(() => {
-        paused = false;
-        overlay.classList.add('hidden');
-        document.getElementById('pauseButton').style.display = 'flex';
-        
-        // 🔥 FIX: Reset spawn timers to current time to prevent fast spawns
-        const now = performance.now();
-        lastSpawn = now;
-        lastPowerupSpawn = now;
-        lastDangerSpawn = now;
-        lastHeartSpawn = now;
-        
-        // 🔥 FIX: Clear any animals that spawned during pause
-        animals = animals.filter(a => a.y < gameHeight - 200);
-        dangerItems = dangerItems.filter(d => d.y < gameHeight - 200);
-        powerupNumbers = powerupNumbers.filter(p => p.y < gameHeight - 200);
-        
-        if(gameRunning) {
-            animationFrameId = requestAnimationFrame(gameLoop);
-        }
-    }, 300);
+    paused = false;
+    document.getElementById('pauseOverlay').classList.add('hidden');
+    document.getElementById('pauseButton').style.display = 'flex'; // Show pause button again
+ 
+    // Resume the game loop
+    if (gameRunning && !animationFrameId) {
+        requestAnimationFrame(gameLoop);
+    }
 });
 // Quit button (returns to main menu)
 document.getElementById('quitButton').addEventListener('click', () => {
@@ -4208,13 +4159,6 @@ document.getElementById('pauseButton').addEventListener('click', () => {
     if (!gameRunning) return;
  
     paused = true;
-    
-    // 🔥 FIX: Cancel animation frame when pausing
-    if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-        animationFrameId = null;
-    }
-    
     const overlay = document.getElementById('pauseOverlay');
     overlay.classList.remove('hidden');
     document.getElementById('pauseButton').style.display = 'none';
@@ -4226,34 +4170,17 @@ document.getElementById('pauseButton').addEventListener('click', () => {
 document.getElementById('resumeButton').addEventListener('click', () => {
     const overlay = document.getElementById('pauseOverlay');
     overlay.style.opacity = '0';
-    
+ 
     setTimeout(() => {
         paused = false;
         overlay.classList.add('hidden');
         document.getElementById('pauseButton').style.display = 'flex';
-        
-        // 🔥 FIX SUPER FAST ANIMALS ON RESUME:
-        difficulty = 1;              // Reset to Level 1 speeds
-        maxDifficulty = 1;
-        updateDifficultyDisplay();   // Sync UI
-        
-        // Clear old fast animals + reset spawns (like startGame)
-        animals = [];
-        dangerItems = [];
-        powerupNumbers = [];
-        lastSpawn = performance.now() + 2000;
-        lastPowerupSpawn = performance.now() + 12000;
-        lastDangerSpawn = performance.now() + 10000;
-        
-        // ALWAYS restart fresh loop
-        gameRunning = true;
-        if (animationFrameId) cancelAnimationFrame(animationFrameId);
-        animationFrameId = requestAnimationFrame(gameLoop);
-        
-    }, 300);
+     
+        if (gameRunning && !animationFrameId) {
+            requestAnimationFrame(gameLoop);
+        }
+    }, 300); // Wait for fade out animation
 });
-
-
 // Quit button
 document.getElementById('quitButton').addEventListener('click', () => {
     const overlay = document.getElementById('pauseOverlay');
@@ -4366,25 +4293,23 @@ initIAP();
 
 
 
-
-// NEW UNIFIED RESIZE HANDLER (PASTE THIS INSTEAD)
-window.addEventListener('resize', () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-        resizeCanvas();  // Your existing canvas resize
-        gameWidth = window.innerWidth;
-        gameHeight = window.innerHeight;
-        player.x = gameWidth / 2 - 40; // Recenter basket
-        forcePortraitPause();  // Handles pause/show menu
-        
-        // Audio pause (merged from your old code)
+window.addEventListener('resize', function() {
+    // ONLY stop audio if game is actually running
+    if(gameRunning) {
         document.querySelectorAll('audio').forEach(audio => {
             audio.pause();
             audio.currentTime = 0;
         });
-    }, 200);
+    }
+    
+    if (window.innerWidth > window.innerHeight) {
+        // Landscape - stop game completely
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+        }
+    }
 });
-
 
 
 // FIX ROTATION AUDIO BUG
@@ -4396,17 +4321,7 @@ window.addEventListener('resize', function() {
 });
 
 
-let resizeTimeout;
-window.addEventListener('resize', () => {
-    clearTimeout(resizeTimeout);
-    resizeTimeout = setTimeout(() => {
-        resizeCanvas();
-        gameWidth = window.innerWidth;
-        gameHeight = window.innerHeight;
-        player.x = gameWidth / 2 - 40; // Recenter basket
-        forcePortraitPause();
-    }, 200); // Good debounce for rotations
-});
+
 
 
 
