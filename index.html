@@ -4232,12 +4232,27 @@ document.getElementById('resumeButton').addEventListener('click', () => {
         overlay.classList.add('hidden');
         document.getElementById('pauseButton').style.display = 'flex';
         
-        // 🔥 FIX: ALWAYS restart if paused (remove the !animationFrameId check)
-        if(gameRunning) {
-            animationFrameId = requestAnimationFrame(gameLoop);
-        }
+        // 🔥 FIX SUPER FAST ANIMALS ON RESUME:
+        difficulty = 1;              // Reset to Level 1 speeds
+        maxDifficulty = 1;
+        updateDifficultyDisplay();   // Sync UI
+        
+        // Clear old fast animals + reset spawns (like startGame)
+        animals = [];
+        dangerItems = [];
+        powerupNumbers = [];
+        lastSpawn = performance.now() + 2000;
+        lastPowerupSpawn = performance.now() + 12000;
+        lastDangerSpawn = performance.now() + 10000;
+        
+        // ALWAYS restart fresh loop
+        gameRunning = true;
+        if (animationFrameId) cancelAnimationFrame(animationFrameId);
+        animationFrameId = requestAnimationFrame(gameLoop);
+        
     }, 300);
 });
+
 
 // Quit button
 document.getElementById('quitButton').addEventListener('click', () => {
