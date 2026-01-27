@@ -55,33 +55,18 @@
     animation: borderGlow 3s ease-in-out infinite;
 }
 @keyframes borderGlow {
-    0%, 100% { opacity: 0.6; }
+    0%, 100% { opacity: 1; }  /* Static full opacity for high contrast */
     50% { opacity: 1; }
 }
 h1 {
-    font-size: 48px; /* COMPACT TITLE */
-    font-weight: 900;
-    background: linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #D4AF37 100%);
-    background-size: 200% auto;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin: 0 0 6px 0;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    filter: drop-shadow(0 6px 24px rgba(212, 175, 55, 0.5));
-    animation: titleShimmer 3s ease-in-out infinite;
-    line-height: 1;
+    filter: drop-shadow(0 8px 32px rgba(212, 175, 55, 0.7));  /* Deeper shadow for visibility */
 }
 @keyframes titleShimmer {
-    0%, 100% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+    0%, 100% { background-position: 0% 50%; filter: brightness(1.2); }  /* Static brighter for visibility */
+    50% { background-position: 0% 50%; filter: brightness(1.2); }
 }
 .subtitle {
-    font-size: 14px;
-    color: rgba(255, 255, 255, 0.85);
-    margin-bottom: 8px; /* WAS 16px → NOW 8px */
-    font-weight: 600;
+    color: rgba(255, 255, 255, 0.95);  /* Brighter white for contrast */
 }
 /* 2. COMPACT ANIMAL SECTION (Push closer to title) */
 .animal-emojis {
@@ -93,11 +78,7 @@ h1 {
     border: 1px solid rgba(212, 175, 55, 0.15);
 }
 .animal-emojis .animal-emoji {
-    font-size: 38px; /* SMALLER ANIMALS */
-    animation: floatGlow 3s ease-in-out infinite;
-    text-shadow:
-        0 0 16px rgba(212, 175, 55, 0.7),
-        0 0 30px rgba(212, 175, 55, 0.3);
+    text-shadow: 0 0 20px rgba(212, 175, 55, 0.9);  /* Stronger static glow */
 }
 .animal-emojis .animal-emoji:nth-child(1) { animation-delay: 0s; }
 .animal-emojis .animal-emoji:nth-child(2) { animation-delay: 0.3s; }
@@ -111,10 +92,7 @@ h1 {
 }
 /* COMPACT BUTTONS */
 button {
-    padding: 14px 32px; /* WAS 16px → NOW 14px */
-    font-size: 15px; /* WAS 16px → NOW 15px */
-    margin-top: 6px; /* WAS 12px → NOW 6px ← KEY CHANGE! */
-    border-radius: 16px;
+    box-shadow: 0 16px 48px rgba(78, 205, 196, 0.6);  /* Deeper shadow */
 }
 button::before {
     content: '';
@@ -133,16 +111,11 @@ button:active {
     transform: scale(0.97);
 }
 #premiumBtn {
-    background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%);
-    color: white;
-    box-shadow: 0 12px 36px rgba(78, 205, 196, 0.4);
+    box-shadow: 0 16px 48px rgba(255, 215, 0, 0.6);  /* Stronger for visibility */
 }
 /* 5. PREMIUM STATUS PUSHED UP */
-#premiumStatus {
-    padding: 12px 20px; /* Smaller */
-    font-size: 15px;
-    margin-top: 8px; /* WAS 16px → NOW 8px */
-    border-radius: 16px;
+.firebase-status {
+    color: #4ade80;  /* Keep bright green for contrast */
 }
 @keyframes premiumPulse {
     0%, 100% { box-shadow: 0 12px 36px rgba(255, 215, 0, 0.4); }
