@@ -20,14 +20,7 @@
 /* ULTRA-COMPACT LUXURY HOME SCREEN - STATIC & HIGH-CONTRAST */
 
 
-#pauseOverlay {
-    z-index: 2000 !important;  /* 👈 ABOVE EVERYTHING */
-    transition: none !important; /* 👈 NO DELAY */
-}
 
-.pause-modal {
-    transform: scale(1) !important;  /* 👈 INSTANT FULL SIZE */
-}
 
 
 
@@ -3790,7 +3783,7 @@ function forcePortraitPause() {
         }
         
         // 🔇 Kill all audio and effects
-        if (audioCtx && audioCtx.state === 'running') { // ← FIX: was 'suspended'
+        if (audioCtx && audioCtx.state === 'running') {
             audioCtx.suspend();
         }
         slowMoActive = false;
@@ -3798,29 +3791,31 @@ function forcePortraitPause() {
         particles = [];
         
     } else if(gamePausedByOrientation) {
-    document.body.classList.remove('portrait-pause');
-    gamePausedByOrientation = false;
-    
-    // 🔥 FORCE PAUSE OVERLAY INSTANTLY (no delay!)
-    const pauseOverlay = document.getElementById('pauseOverlay');
-    pauseOverlay.classList.remove('hidden');
-    pauseOverlay.style.opacity = '1';  // 👈 INSTANT SHOW
-    pauseOverlay.style.pointerEvents = 'auto';  // 👈 IMMEDIATE CLICKS
-    
-    document.getElementById('pauseButton').style.display = 'none';
-    
-    // Resume audio context
-    if (audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume();
-    }
-    
-    paused = true;
-    gameRunning = false; 
-        document.getElementById('pauseOverlay').classList.remove('hidden');
-        document.getElementById('pauseButton').style.display = 'none'; // Hide pause button
+        // BACK TO PORTRAIT - Resume the game
+        document.body.classList.remove('portrait-pause');
+        gamePausedByOrientation = false;
+        
+        // Resume audio context
+        if (audioCtx && audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+        
+        // Resume game
+        paused = false;
+        gameRunning = true;
+        
+        // Hide pause overlay and show pause button
+        const pauseOverlay = document.getElementById('pauseOverlay');
+        pauseOverlay.classList.add('hidden');
+        pauseOverlay.style.opacity = '0';
+        pauseOverlay.style.pointerEvents = 'none';
+        document.getElementById('pauseButton').style.display = 'block';
+        
+        // Restart the game loop
+        if(animationFrameId) cancelAnimationFrame(animationFrameId);
+        gameLoop();
     }
 }
-
 
 
 
