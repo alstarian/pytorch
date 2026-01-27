@@ -3764,7 +3764,7 @@ for (let i = powerupNumbers.length - 1; i >= 0; i--) {
 let gamePausedByOrientation = false;
 
 
-function forcePortraitPause() {
+ffunction forcePortraitPause() {
     const isLandscape = window.innerWidth > window.innerHeight;
  
     if(isLandscape) {
@@ -3777,7 +3777,7 @@ function forcePortraitPause() {
             animationFrameId = null;
         }
         // Kill all audio and effects
-        if (audioCtx && audioCtx.state === 'running') {
+        if (audioCtx && audioCtx.state === 'suspended') {
             audioCtx.suspend();
         }
         slowMoActive = false;
@@ -3785,6 +3785,9 @@ function forcePortraitPause() {
         particles = [];
         
     } else if(gamePausedByOrientation) {
+        // TEST: Show alert to confirm this code runs
+        alert('Back to portrait! Should show pause menu now.');
+        
         // SHOW PAUSE MENU when returning to portrait
         document.body.classList.remove('portrait-pause');
         gamePausedByOrientation = false;
@@ -3796,12 +3799,11 @@ function forcePortraitPause() {
         
         // Show the pause overlay so user can choose
         paused = true;
-        gameRunning = true; // Game is "running" but paused
+        gameRunning = true;
         document.getElementById('pauseOverlay').classList.remove('hidden');
         document.getElementById('pauseButton').style.display = 'none';
     }
 }
-
 
 
 
