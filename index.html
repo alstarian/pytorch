@@ -2661,12 +2661,15 @@ function resetGameTracker() {
                 setTimeout(() => beep(523 + (i * 100), 0.15, 'sine', 0.4), i * 100);
             }
         }
-        function missSound() {
-    beep(392, 0.15);
+function missSound() {
+    // Sad descending tones (like "awww")
+    beep(523, 0.1, 'sine', 0.3);  // High note
+    setTimeout(() => beep(392, 0.12, 'sine', 0.35), 80);  // Drop down
+    setTimeout(() => beep(330, 0.15, 'sine', 0.4), 160);  // Even lower (sad)
  
-    // Stronger "warning" pattern for misses
+    // Gentle "oops" vibration pattern
     if (navigator.vibrate) {
-        navigator.vibrate([30, 20, 30]); // Heavy double-thud
+        navigator.vibrate([20, 15, 20]); // Softer than danger
     }
 }
         function levelUpSound() {
