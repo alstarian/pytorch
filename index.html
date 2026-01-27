@@ -3677,6 +3677,21 @@ window.matchMedia('(orientation: landscape)').addEventListener('change', forcePo
 // Initial check
 forcePortraitPause();
 function startGame() {
+
+
+    // RECALCULATE DIMENSIONS FIRST
+    gameWidth = window.innerWidth;
+    gameHeight = window.innerHeight;
+    canvas.width = gameWidth;
+    canvas.height = gameHeight;
+    
+    // RESET PLAYER POSITION WITH CORRECT HEIGHT
+    player.x = gameWidth / 2 - 40;
+    player.y = gameHeight - 110;  // ← Now uses CORRECT gameHeight
+
+
+
+    
     initAudio();
     console.log("START GAME CALLED!");
     resetGameTracker();
