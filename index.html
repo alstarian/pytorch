@@ -3777,7 +3777,6 @@ function forcePortraitPause() {
             cancelAnimationFrame(animationFrameId);
             animationFrameId = null;
         }
-
         // Kill all audio and effects
         if (audioCtx && audioCtx.state === 'running') {
             audioCtx.suspend(); // Kill all beep sounds
@@ -3810,9 +3809,9 @@ function forcePortraitPause() {
             if (!animationFrameId) {
                 animationFrameId = requestAnimationFrame(gameLoop);
             }
+        }
     }
-}
-
+}  // ← YOU WERE MISSING THIS CLOSING BRACE!
 
 
 
