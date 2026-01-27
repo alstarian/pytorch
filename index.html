@@ -41,7 +41,7 @@
     position: relative;
     backdrop-filter: blur(25px);
 }
-
+/* 3. DARKER GOLD BORDER */
 .modal::before {
     content: '';
     position: absolute;
@@ -49,7 +49,7 @@
     left: -4px;
     right: -4px;
     bottom: -4px;
-    background: linear-gradient(45deg, #FFD700, #FFA500, #FF6B6B, #FFD700);
+    background: linear-gradient(45deg, #D4AF37, #B8860B, #DAA520, #D4AF37);
     border-radius: 32px;
     z-index: -1;
     filter: blur(12px);
@@ -61,10 +61,11 @@
     50% { opacity: 1; }
 }
 
+* 1. DARKER GOLD TITLE */
 h1 {
     font-size: 64px;
     font-weight: 900;
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%);
+    background: linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #D4AF37 100%);
     background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -72,9 +73,10 @@ h1 {
     margin-bottom: 12px;
     letter-spacing: 3px;
     text-transform: uppercase;
-    filter: drop-shadow(0 8px 32px rgba(255, 215, 0, 0.6));
+    filter: drop-shadow(0 8px 32px rgba(212, 175, 55, 0.6));
     animation: titleShimmer 3s ease-in-out infinite;
 }
+
 
 @keyframes titleShimmer {
     0%, 100% { background-position: 0% 50%; filter: brightness(1); }
@@ -90,16 +92,14 @@ h1 {
 }
 
 /* HUGE GLOWING ANIMALS */
-.animal-emojis {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    flex-wrap: wrap;
-    margin: 32px 0 24px;
-    padding: 20px;
-    background: rgba(255, 215, 0, 0.08);
-    border-radius: 24px;
-    border: 2px solid rgba(255, 215, 0, 0.2);
+/* 2. DARKER GOLD ANIMALS */
+.animal-emojis .animal-emoji {
+    font-size: 56px;
+    animation: floatGlow 3s ease-in-out infinite;
+    text-shadow: 
+        0 0 20px rgba(212, 175, 55, 0.8),
+        0 0 40px rgba(212, 175, 55, 0.4);
+    filter: drop-shadow(0 8px 24px rgba(212, 175, 55, 0.3));
 }
 
 .animal-emojis .animal-emoji {
