@@ -16,19 +16,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* ULTRA-COMPACT LUXURY HOME SCREEN - STATIC & HIGH-CONTRAST */
 
 /* Modal: Deeper shadows for luxury depth, no animations */
@@ -286,15 +273,22 @@ body {
         }
 
 
-        h1 {
-            font-size: 36px; /* Smaller title */
-            font-weight: 800;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 4px;
-            letter-spacing: -0.5px;
-        }
+       /* HOME SCREEN TITLE ONLY - MODERN SLEEK */
+#overlay h1 {
+    font-size: 48px;
+    font-weight: 900;
+    font-family: 'SF Pro Display', -apple-system, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #D4AF37 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0 0 6px 0;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    filter: drop-shadow(0 8px 32px rgba(212, 175, 55, 0.7));
+    line-height: 1;
+    animation: none;
+}
+
         .subtitle {
             font-size: 14px; /* Smaller subtitle */
             color: rgba(255, 255, 255, 0.7);
@@ -303,7 +297,7 @@ body {
         }
 
 
-        
+
         /* Glowing Animal Emojis Row */
         .animal-emojis {
             display: flex;
