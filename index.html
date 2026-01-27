@@ -16,126 +16,127 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
-/* ULTRA-COMPACT HOME SCREEN - NO SCROLL */
+/* ULTRA-COMPACT LUXURY HOME SCREEN - STATIC & HIGH-CONTRAST */
+
+/* Modal: Deeper shadows for luxury depth, no animations */
 .modal {
-    background: linear-gradient(135deg, rgba(20, 25, 40, 0.98) 0%, rgba(10, 14, 26, 0.99) 100%);
-    border: 2px solid rgba(212, 175, 55, 0.3);
+    background: linear-gradient(135deg, #1A1F35 0%, #0A0E1A 100%);  /* Darker gradient for elegance */
+    border: 2px solid #D4AF37;  /* Solid gold border, no glow animation */
     border-radius: 20px;
-    padding: env(safe-area-inset-top,20px) 16px 16px; /* MINIMAL PADDING + SAFE-AREA */
+    padding: env(safe-area-inset-top, 20px) 16px 16px;  /* Compact padding */
     width: 90%;
     max-width: 360px;
-    max-height: 90vh; /* FITS ANY SCREEN */
-    overflow: hidden; /* NO INTERNAL SCROLL */
+    max-height: 90vh;
+    overflow: hidden;
     text-align: center;
-    box-shadow:
-        0 20px 50px rgba(0, 0, 0, 0.85),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08),
-        0 0 35px rgba(212, 175, 55, 0.2);
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    backdrop-filter: blur(20px);
-    z-index: 9999;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.9),  /* Deeper static shadow */
+                inset 0 2px 4px rgba(212,175,55,0.3);  /* Inner gold highlight */
+    backdrop-filter: blur(15px);  /* Softer blur for premium feel */
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
+    gap: 8px;  /* Tight spacing */
 }
+
+/* Remove before pseudo-element (no glowing border) */
 .modal::before {
-    content: '';
-    position: absolute;
-    top: -3px;
-    left: -3px;
-    right: -3px;
-    bottom: -3px;
-    background: linear-gradient(45deg, #D4AF37, #B8860B, #DAA520, #D4AF37);
-    border-radius: 23px;
-    z-index: -1;
-    filter: blur(10px);
-    animation: borderGlow 3s ease-in-out infinite;
+    display: none;  /* Static - no animation */
 }
-@keyframes borderGlow {
-    0%, 100% { opacity: 1; }  /* Static full opacity for high contrast */
-    50% { opacity: 1; }
-}
+
+/* Title: Static gold, bolder shadow for contrast */
 h1 {
-    filter: drop-shadow(0 8px 32px rgba(212, 175, 55, 0.7));  /* Deeper shadow for visibility */
+    font-size: 48px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0 0 6px 0;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    filter: drop-shadow(0 8px 32px rgba(212,175,55,0.7));  /* Stronger static shadow */
+    line-height: 1;
+    animation: none;  /* Remove shimmer */
 }
-@keyframes titleShimmer {
-    0%, 100% { background-position: 0% 50%; filter: brightness(1.2); }  /* Static brighter for visibility */
-    50% { background-position: 0% 50%; filter: brightness(1.2); }
-}
+
+/* Subtitle: Brighter white for high contrast */
 .subtitle {
-    color: rgba(255, 255, 255, 0.95);  /* Brighter white for contrast */
-}
-/* 2. COMPACT ANIMAL SECTION (Push closer to title) */
-.animal-emojis {
-    gap: 8px;
-    margin: 8px 0 10px; /* WAS 12px 0 16px → NOW 8px 0 10px */
-    padding: 10px 8px; /* WAS 12px → NOW 10px */
-    background: rgba(212, 175, 55, 0.06);
-    border-radius: 20px;
-    border: 1px solid rgba(212, 175, 55, 0.15);
-}
-.animal-emojis .animal-emoji {
-    text-shadow: 0 0 20px rgba(212, 175, 55, 0.9);  /* Stronger static glow */
-}
-.animal-emojis .animal-emoji:nth-child(1) { animation-delay: 0s; }
-.animal-emojis .animal-emoji:nth-child(2) { animation-delay: 0.3s; }
-.animal-emojis .animal-emoji:nth-child(3) { animation-delay: 0.6s; }
-.animal-emojis .animal-emoji:nth-child(4) { animation-delay: 0.9s; }
-.animal-emojis .animal-emoji:nth-child(5) { animation-delay: 1.2s; }
-.animal-emojis .animal-emoji:nth-child(6) { animation-delay: 1.5s; }
-@keyframes floatGlow {
-    0%, 100% { transform: translateY(0px) scale(1); }
-    50% { transform: translateY(-6px) scale(1.03); }
-}
-/* COMPACT BUTTONS */
-button {
-    box-shadow: 0 16px 48px rgba(78, 205, 196, 0.6);  /* Deeper shadow */
-}
-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-    transition: left 0.6s;
-}
-button:active::before {
-    left: 100%;
-}
-button:active {
-    transform: scale(0.97);
-}
-#premiumBtn {
-    box-shadow: 0 16px 48px rgba(255, 215, 0, 0.6);  /* Stronger for visibility */
-}
-/* 5. PREMIUM STATUS PUSHED UP */
-.firebase-status {
-    color: #4ade80;  /* Keep bright green for contrast */
-}
-@keyframes premiumPulse {
-    0%, 100% { box-shadow: 0 12px 36px rgba(255, 215, 0, 0.4); }
-    50% { box-shadow: 0 16px 48px rgba(255, 215, 0, 0.6); }
-}
-button.secondary {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
-    color: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
-    font-weight: 700;
-    margin-top: 8px;
-}
-/* 6. FIREBASE STATUS PUSHED UP */
-.firebase-status {
-    font-size: 12px;
-    color: #4ade80;
-    margin: 10px 0 0; /* WAS 20px → NOW 10px */
+    font-size: 14px;
+    color: #FFFFFF;  /* Full white for visibility */
+    margin-bottom: 8px;
     font-weight: 600;
 }
+
+/* Animal Emojis: Static, stronger glow shadow */
+.animal-emojis {
+    gap: 8px;
+    margin: 8px 0 10px;
+    padding: 10px 8px;
+    background: rgba(212,175,55,0.1);  /* Subtle gold tint */
+    border-radius: 20px;
+    border: 1px solid rgba(212,175,55,0.3);  /* Gold border */
+}
+
+.animal-emojis .animal-emoji {
+    font-size: 38px;
+    text-shadow: 0 0 20px rgba(212,175,55,0.9);  /* Static strong glow */
+    animation: none;  /* Remove float/glow animation */
+}
+
+/* Buttons: Static deeper shadows, high contrast text */
+button {
+    padding: 14px 32px;
+    font-size: 15px;
+    margin-top: 6px;
+    border-radius: 16px;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.6);  /* Deeper static shadow */
+    animation: none;  /* No pulse */
+    color: #FFFFFF;  /* High contrast white */
+}
+
+button::before {
+    display: none;  /* Remove shine effect */
+}
+
+#premiumBtn {
+    background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%);  /* Static gold gradient */
+    color: #0A0E1A;  /* Dark text for contrast */
+    box-shadow: 0 16px 48px rgba(255,215,0,0.6);
+}
+
+#premiumStatus {
+    padding: 12px 20px;
+    font-size: 15px;
+    margin-top: 8px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%);
+    color: #0A0E1A;  /* Dark text */
+    box-shadow: 0 12px 36px rgba(255,215,0,0.6);  /* Static shadow */
+}
+
+button.secondary {
+    background: linear-gradient(135deg, #2A2F45 0%, #1A1F35 100%);  /* Darker luxury bg */
+    color: #FFFFFF;
+    border: 1px solid #D4AF37;  /* Gold border */
+    box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+    margin-top: 8px;
+}
+
+/* Firebase Status: Brighter for visibility */
+.firebase-status {
+    font-size: 12px;
+    color: #FFFFFF;  /* Full white */
+    margin: 10px 0 0;
+    font-weight: 600;
+}
+
+
+
+
+
+
+
+
 
 /* Compact design styles */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
