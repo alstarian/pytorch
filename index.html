@@ -27,21 +27,26 @@
 
 /* PREMIUM HOME SCREEN - LUXURY EDITION */
 .modal {
-    background: linear-gradient(135deg, rgba(20, 25, 40, 0.95) 0%, rgba(10, 14, 26, 0.98) 100%);
-    border: 2px solid rgba(212, 175, 55, 0.3);  /* Darker gold */
-    border-radius: 28px;
-    padding: 32px 24px;  /* SHRINK FROM 60px → 32px */
-    width: 92%;
-    max-width: 420px;     /* SHRINK FROM 440px */
-    max-height: 85vh;     /* PREVENT OVERFLOW */
-    overflow: hidden;     /* NO SCROLL INSIDE */
+    background: linear-gradient(135deg, rgba(20, 25, 40, 0.98) 0%, rgba(10, 14, 26, 0.99) 100%);
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    border-radius: 24px;
+    padding: 24px 20px;        /* SUPER TIGHT */
+    width: 94%;
+    max-width: 380px;
+    max-height: 92vh;          /* FITS ALL SCREENS */
+    height: auto;
+    overflow: hidden;
     text-align: center;
     box-shadow: 
-        0 30px 80px rgba(0, 0, 0, 0.8),
+        0 25px 60px rgba(0, 0, 0, 0.85),
         inset 0 1px 0 rgba(255, 255, 255, 0.08),
-        0 0 60px rgba(212, 175, 55, 0.15);  /* Darker gold */
-    position: relative;
-    backdrop-filter: blur(25px);
+        0 0 40px rgba(212, 175, 55, 0.2);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    backdrop-filter: blur(20px);
+    z-index: 9999;
 }
 
 /* 3. DARKER GOLD BORDER */
@@ -66,17 +71,14 @@
 
 * 1. DARKER GOLD TITLE */
 h1 {
-    font-size: 64px;
+    font-size: 52px;           /* SMALLER TITLE */
     font-weight: 900;
     background: linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #D4AF37 100%);
-    background-size: 200% auto;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    margin-bottom: 12px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    filter: drop-shadow(0 8px 32px rgba(212, 175, 55, 0.6));
+    margin: 0 0 8px 0;         /* TIGHTER MARGIN */
+    letter-spacing: 2px;
     animation: titleShimmer 3s ease-in-out infinite;
 }
 
@@ -87,19 +89,19 @@ h1 {
 }
 
 .subtitle {
-    font-size: 16px;
-    color: rgba(255, 255, 255, 0.8);
-    margin-bottom: 32px;
+    font-size: 14px;           /* SMALLER */
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 16px;       /* TIGHTER */
     font-weight: 600;
-    letter-spacing: 0.5px;
 }
 
-/* HUGE GLOWING ANIMALS */
-/* 2. DARKER GOLD ANIMALS */
 .animal-emojis {
-    gap: 12px;      /* Tighter spacing */
-    margin: 20px 0; /* Less margin */
-    padding: 16px;  /* Smaller padding */
+    gap: 8px;                  /* TIGHT PACKING */
+    margin: 12px 0 16px;       /* MINIMAL */
+    padding: 12px 8px;
+    background: rgba(212, 175, 55, 0.06);
+    border-radius: 20px;
+    border: 1px solid rgba(212, 175, 55, 0.15);
 }
 
 
@@ -126,24 +128,10 @@ h1 {
 
 /* PREMIUM GOLD BUTTONS */
 button {
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    color: #1a1f35;
-    border: none;
-    padding: 20px 48px;
-    font-size: 18px;
-    font-weight: 800;
-    border-radius: 20px;
-    cursor: pointer;
-    margin-top: 20px;
-    width: 100%;
-    box-shadow: 
-        0 16px 48px rgba(255, 215, 0, 0.4),
-        inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    padding: 16px 36px;        /* SMALLER BUTTONS */
+    font-size: 16px;
+    margin-top: 12px;          /* TIGHTER */
+    border-radius: 18px;
 }
 
 button::before {
@@ -172,19 +160,10 @@ button:active {
 }
 
 #premiumStatus {
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    color: #1a1f35;
-    padding: 20px 32px;
-    border-radius: 20px;
-    font-size: 18px;
-    font-weight: 800;
-    box-shadow: 0 16px 48px rgba(255, 215, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 12px;
-    margin-top: 28px;
-    animation: premiumPulse 2s ease-in-out infinite;
+    padding: 14px 24px;
+    font-size: 16px;
+    margin-top: 16px;
+    border-radius: 18px;
 }
 
 @keyframes premiumPulse {
