@@ -3764,7 +3764,7 @@ for (let i = powerupNumbers.length - 1; i >= 0; i--) {
 let gamePausedByOrientation = false;
 
 
-ffunction forcePortraitPause() {
+function forcePortraitPause() {
     const isLandscape = window.innerWidth > window.innerHeight;
  
     if(isLandscape) {
@@ -3776,8 +3776,9 @@ ffunction forcePortraitPause() {
             cancelAnimationFrame(animationFrameId);
             animationFrameId = null;
         }
-        // Kill all audio and effects
-        if (audioCtx && audioCtx.state === 'suspended') {
+        
+        // 🔇 Kill all audio and effects
+        if (audioCtx && audioCtx.state === 'running') { // ← FIX: was 'suspended'
             audioCtx.suspend();
         }
         slowMoActive = false;
@@ -3785,25 +3786,23 @@ ffunction forcePortraitPause() {
         particles = [];
         
     } else if(gamePausedByOrientation) {
-        // TEST: Show alert to confirm this code runs
-        alert('Back to portrait! Should show pause menu now.');
-        
-        // SHOW PAUSE MENU when returning to portrait
+        // 🎮 SHOW PAUSE MENU when returning to portrait
         document.body.classList.remove('portrait-pause');
         gamePausedByOrientation = false;
         
-        // Resume audio
-        if (audioCtx && audioCtx.state === 'suspended') {
+        // ✅ Resume audio context (not game yet)
+        if (audioCtx && audioCtx.state === 'suspended') { // ← This one is correct
             audioCtx.resume();
         }
         
-        // Show the pause overlay so user can choose
+        // 🎯 Show pause overlay - user chooses Resume or Quit
         paused = true;
-        gameRunning = true;
+        gameRunning = false; // ← FIX: Keep it false until they click Resume
         document.getElementById('pauseOverlay').classList.remove('hidden');
-        document.getElementById('pauseButton').style.display = 'none';
+        document.getElementById('pauseButton').style.display = 'none'; // Hide pause button
     }
 }
+
 
 
 
