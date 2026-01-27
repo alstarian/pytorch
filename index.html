@@ -4217,19 +4217,17 @@ document.getElementById('pauseButton').addEventListener('click', () => {
 document.getElementById('resumeButton').addEventListener('click', () => {
     const overlay = document.getElementById('pauseOverlay');
     overlay.style.opacity = '0';
-    
+ 
     setTimeout(() => {
         paused = false;
         overlay.classList.add('hidden');
         document.getElementById('pauseButton').style.display = 'flex';
-        
-        // 🔥 FIX: ALWAYS restart if paused (remove the !animationFrameId check)
-        if(gameRunning) {
-            animationFrameId = requestAnimationFrame(gameLoop);
+     
+        if (gameRunning && !animationFrameId) {
+            requestAnimationFrame(gameLoop);
         }
-    }, 300);
+    }, 300); // Wait for fade out animation
 });
-
 // Quit button
 document.getElementById('quitButton').addEventListener('click', () => {
     const overlay = document.getElementById('pauseOverlay');
