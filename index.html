@@ -1936,6 +1936,14 @@ body {
         </div>
     </div>
    <script>
+
+
+
+
+
+
+
+
        window.addEventListener('DOMContentLoaded', () => {
     premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
     updatePremiumButton();
@@ -3693,6 +3701,9 @@ for (let i = powerupNumbers.length - 1; i >= 0; i--) {
 }
 // BULLETPROOF Portrait Lock
 let gamePausedByOrientation = false;
+
+
+
 function forcePortraitPause() {
     const isLandscape = window.innerWidth > window.innerHeight;
  
@@ -3705,6 +3716,19 @@ function forcePortraitPause() {
             cancelAnimationFrame(animationFrameId);
             animationFrameId = null;
         }
+
+// 👇 ADD THESE 5 LINES HERE:
+    if (audioCtx && audioCtx.state === 'running') {
+        audioCtx.suspend(); // Kill all beep sounds
+    }
+    slowMoActive = false;
+    document.getElementById('slowmoOverlay')?.classList.remove('active');
+    // Clear any active sounds
+    particles = []; // Stop particles
+    // End add
+
+
+        
     } else if(gamePausedByOrientation) {
         // RESUME ONLY when returning to portrait
         document.body.classList.remove('portrait-pause');
@@ -3723,6 +3747,13 @@ window.addEventListener('orientationchange', () => setTimeout(forcePortraitPause
 window.matchMedia('(orientation: landscape)').addEventListener('change', forcePortraitPause);
 // Initial check
 forcePortraitPause();
+
+
+
+
+
+
+
 function startGame() {
 
 
@@ -3733,9 +3764,10 @@ function startGame() {
     maxDifficulty = 1;
     currentZoneIndex = 0;  // Reset zone
     
-    // RESET SPAWN SPEEDS TO SLOW (LEVEL 1)
-    spawnSpeed = 2.0;      // Slow spawn speed
-    fallSpeed = 1.5;       // Slow fall speed
+   // 🚨 ADD THESE 3 LINES:
+    lastSpawn = 0;  // Force immediate fresh spawn timing
+    lastPowerupSpawn = 0;
+    lastDangerSpawn = 0;
 
 
     initAudio();
