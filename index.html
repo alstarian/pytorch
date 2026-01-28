@@ -23,109 +23,179 @@
 
 
 
-
 /* ===================================
-   MODERN HOME SCREEN REDESIGN
+   MODERN HOME SCREEN - FIXED VERSION
    =================================== */
 
-/* Modern Glassmorphism Home Screen Modal */
+/* Modern Glassmorphism Home Screen Modal - NO !important */
 #overlay .modal {
-    background: rgba(255, 255, 255, 0.08) !important;
-    backdrop-filter: blur(40px) !important;
-    -webkit-backdrop-filter: blur(40px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    border-radius: 32px !important;
-    padding: 40px 28px 36px !important;
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(40px);
+    -webkit-backdrop-filter: blur(40px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 32px;
+    padding: 40px 28px 36px;
     box-shadow: 
         0 24px 48px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
-    animation: modalSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    animation: modalSlideIn 0.5s ease-out;
+    position: relative;
+    z-index: 1001;
 }
 
 @keyframes modalSlideIn {
-    from { opacity: 0; transform: translate(-50%, -48%) scale(0.95); }
-    to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
 }
 
 /* Modern Blue-Purple-Pink Gradient Title */
 #overlay h1 {
-    font-size: 54px !important;
-    font-weight: 900 !important;
-    background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #ec4899 100%) !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    margin: 0 0 10px 0 !important;
-    letter-spacing: -1px !important;
-    filter: drop-shadow(0 4px 12px rgba(96, 165, 250, 0.3)) !important;
+    font-size: 54px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #ec4899 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0 0 10px 0;
+    letter-spacing: -1px;
+    line-height: 1;
+    filter: drop-shadow(0 4px 12px rgba(96, 165, 250, 0.3));
 }
 
 /* Clean Subtitle */
 #overlay .subtitle {
-    font-size: 15px !important;
-    color: rgba(255, 255, 255, 0.75) !important;
-    margin-bottom: 20px !important;
-    letter-spacing: -0.2px !important;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.75);
+    margin-bottom: 20px;
+    font-weight: 500;
+    letter-spacing: -0.2px;
 }
 
 /* Modern Animal Emojis */
 #overlay .animal-emojis {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 14px;
     padding: 20px 16px;
     background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 24px;
     margin: 0 0 24px 0;
+    flex-wrap: wrap;
 }
 
 #overlay .animal-emoji {
-    font-size: 38px !important;
-    animation: none !important;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2) !important;
+    font-size: 38px;
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
 }
 
-/* Modern Blue Gradient Buttons */
+/* Modern Blue Gradient Buttons - Clickable */
 #overlay button {
-    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%) !important;
-    border-radius: 16px !important;
-    padding: 17px 32px !important;
-    box-shadow: 0 8px 24px rgba(59, 130, 246, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    background: linear-gradient(135deg, #60a5fa 0%, #3b82f6 100%);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    padding: 17px 32px;
+    font-size: 16px;
+    font-weight: 700;
+    box-shadow: 
+        0 8px 24px rgba(59, 130, 246, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    margin-top: 12px;
+    width: 100%;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    z-index: 1002;
+}
+
+#overlay button:active {
+    transform: scale(0.97);
+    box-shadow: 
+        0 4px 12px rgba(59, 130, 246, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 /* Orange Premium Button */
 #overlay #premiumBtn {
-    background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%) !important;
-    box-shadow: 0 8px 24px rgba(245, 158, 11, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+    box-shadow: 
+        0 8px 24px rgba(245, 158, 11, 0.35),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 /* Green Premium Status */
 #overlay #premiumStatus {
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
-    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3) !important;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    color: white;
+    padding: 16px 24px;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 }
 
 /* Glass Secondary Buttons */
 #overlay button.secondary {
-    background: rgba(255, 255, 255, 0.08) !important;
-    border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    background: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 
+        0 4px 16px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.9);
+}
+
+#overlay button.secondary:hover {
+    background: rgba(255, 255, 255, 0.12);
 }
 
 /* Minimal Restore Button */
 #overlay #restoreBtn {
-    background: rgba(255, 255, 255, 0.05) !important;
-    border: 1px solid rgba(255, 255, 255, 0.08) !important;
-    font-size: 14px !important;
-    padding: 14px 24px !important;
-    color: rgba(255, 255, 255, 0.6) !important;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    font-size: 14px;
+    padding: 14px 24px;
+    color: rgba(255, 255, 255, 0.6);
+    box-shadow: none;
+    margin-top: 4px;
 }
 
 /* Modern Firebase Status */
 #overlay .firebase-status {
-    color: rgba(255, 255, 255, 0.5) !important;
-    font-size: 12px !important;
-    margin: 0 0 16px 0 !important;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 12px;
+    margin: 0 0 16px 0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
-#overlay .firebase-status.conne
+#overlay .firebase-status.connected {
+    color: #10b981;
+}
+
+/* Tablet Responsive */
+@media (min-width: 768px) {
+    #overlay .modal {
+        max-width: 480px;
+        padding: 48px 40px;
+        border-radius: 36px;
+    }
+    
+    #overlay h1 {
+        font-size: 64px;
+    }
+    
+    #overlay button {
+        padding: 20px 40px;
+        font-size: 17px;
+    }
+}
 
 
 
