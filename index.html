@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-title" content="Zoo Keeper Pro">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -16,176 +17,118 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
+/* ULTRA-COMPACT LUXURY HOME SCREEN - STATIC & HIGH-CONTRAST */
 
-
-
-
-
-
-
-
-
-/* PREMIUM HOME SCREEN - LUXURY EDITION */
+/* Modal: Deeper shadows for luxury depth, no animations */
 .modal {
-    background: linear-gradient(135deg, rgba(20, 25, 40, 0.98) 0%, rgba(10, 14, 26, 0.99) 100%);
-    border: 2px solid rgba(212, 175, 55, 0.3);
-    border-radius: 24px;
-    padding: 24px 20px;        /* SUPER TIGHT */
-    width: 94%;
-    max-width: 380px;
-    max-height: 92vh;          /* FITS ALL SCREENS */
-    height: auto;
+    background: linear-gradient(135deg, #1A1F35 0%, #0A0E1A 100%);  /* Darker gradient for elegance */
+    border: 2px solid #D4AF37;  /* Solid gold border, no glow animation */
+    border-radius: 20px;
+    padding: env(safe-area-inset-top, 20px) 16px 16px;  /* Compact padding */
+    width: 90%;
+    max-width: 360px;
+    max-height: 90vh;
     overflow: hidden;
     text-align: center;
-    box-shadow: 
-        0 25px 60px rgba(0, 0, 0, 0.85),
-        inset 0 1px 0 rgba(255, 255, 255, 0.08),
-        0 0 40px rgba(212, 175, 55, 0.2);
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    backdrop-filter: blur(20px);
-    z-index: 9999;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.9),  /* Deeper static shadow */
+                inset 0 2px 4px rgba(212,175,55,0.3);  /* Inner gold highlight */
+    backdrop-filter: blur(15px);  /* Softer blur for premium feel */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;  /* Tight spacing */
 }
 
-/* 3. DARKER GOLD BORDER */
+/* Remove before pseudo-element (no glowing border) */
 .modal::before {
-    content: '';
-    position: absolute;
-    top: -4px;
-    left: -4px;
-    right: -4px;
-    bottom: -4px;
-    background: linear-gradient(45deg, #D4AF37, #B8860B, #DAA520, #D4AF37);
-    border-radius: 32px;
-    z-index: -1;
-    filter: blur(12px);
-    animation: borderGlow 3s ease-in-out infinite;
+    display: none;  /* Static - no animation */
 }
 
-@keyframes borderGlow {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 1; }
-}
-
-* 1. DARKER GOLD TITLE */
+/* Title: Static gold, bolder shadow for contrast */
 h1 {
-    font-size: 52px;           /* SMALLER TITLE */
+    font-size: 48px;
     font-weight: 900;
-    background: linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #D4AF37 100%);
+    background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin: 0 0 8px 0;         /* TIGHTER MARGIN */
+    margin: 0 0 6px 0;
     letter-spacing: 2px;
-    animation: titleShimmer 3s ease-in-out infinite;
+    text-transform: uppercase;
+    filter: drop-shadow(0 8px 32px rgba(212,175,55,0.7));  /* Stronger static shadow */
+    line-height: 1;
+    animation: none;  /* Remove shimmer */
 }
 
-
-@keyframes titleShimmer {
-    0%, 100% { background-position: 0% 50%; filter: brightness(1); }
-    50% { background-position: 100% 50%; filter: brightness(1.3); }
-}
-
+/* Subtitle: Brighter white for high contrast */
 .subtitle {
-    font-size: 14px;           /* SMALLER */
-    color: rgba(255, 255, 255, 0.85);
-    margin-bottom: 16px;       /* TIGHTER */
+    font-size: 14px;
+    color: #FFFFFF;  /* Full white for visibility */
+    margin-bottom: 8px;
     font-weight: 600;
 }
 
+/* Animal Emojis: Static, stronger glow shadow */
 .animal-emojis {
-    gap: 8px;                  /* TIGHT PACKING */
-    margin: 12px 0 16px;       /* MINIMAL */
-    padding: 12px 8px;
-    background: rgba(212, 175, 55, 0.06);
+    gap: 8px;
+    margin: 8px 0 10px;
+    padding: 10px 8px;
+    background: rgba(212,175,55,0.1);  /* Subtle gold tint */
     border-radius: 20px;
-    border: 1px solid rgba(212, 175, 55, 0.15);
+    border: 1px solid rgba(212,175,55,0.3);  /* Gold border */
 }
-
 
 .animal-emojis .animal-emoji {
-    font-size: 56px;
-    animation: floatGlow 3s ease-in-out infinite;
-    text-shadow: 
-        0 0 20px rgba(255, 215, 0, 0.8),
-        0 0 40px rgba(255, 215, 0, 0.4);
-    filter: drop-shadow(0 8px 24px rgba(255, 215, 0, 0.3));
+    font-size: 38px;
+    text-shadow: 0 0 20px rgba(212,175,55,0.9);  /* Static strong glow */
+    animation: none;  /* Remove float/glow animation */
 }
 
-.animal-emojis .animal-emoji:nth-child(1) { animation-delay: 0s; }
-.animal-emojis .animal-emoji:nth-child(2) { animation-delay: 0.3s; }
-.animal-emojis .animal-emoji:nth-child(3) { animation-delay: 0.6s; }
-.animal-emojis .animal-emoji:nth-child(4) { animation-delay: 0.9s; }
-.animal-emojis .animal-emoji:nth-child(5) { animation-delay: 1.2s; }
-.animal-emojis .animal-emoji:nth-child(6) { animation-delay: 1.5s; }
-
-@keyframes floatGlow {
-    0%, 100% { transform: translateY(0px) scale(1); }
-    50% { transform: translateY(-8px) scale(1.05); }
-}
-
-/* PREMIUM GOLD BUTTONS */
+/* Buttons: Static deeper shadows, high contrast text */
 button {
-    padding: 16px 36px;        /* SMALLER BUTTONS */
-    font-size: 16px;
-    margin-top: 12px;          /* TIGHTER */
-    border-radius: 18px;
+    padding: 14px 32px;
+    font-size: 15px;
+    margin-top: 6px;
+    border-radius: 16px;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.6);  /* Deeper static shadow */
+    animation: none;  /* No pulse */
+    color: #FFFFFF;  /* High contrast white */
 }
 
 button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-    transition: left 0.6s;
-}
-
-button:active::before {
-    left: 100%;
-}
-
-button:active {
-    transform: scale(0.98);
+    display: none;  /* Remove shine effect */
 }
 
 #premiumBtn {
-    background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%);
-    color: white;
-    box-shadow: 0 16px 48px rgba(78, 205, 196, 0.4);
+    background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%);  /* Static gold gradient */
+    color: #0A0E1A;  /* Dark text for contrast */
+    box-shadow: 0 16px 48px rgba(255,215,0,0.6);
 }
 
 #premiumStatus {
-    padding: 14px 24px;
-    font-size: 16px;
-    margin-top: 16px;
-    border-radius: 18px;
-}
-
-@keyframes premiumPulse {
-    0%, 100% { box-shadow: 0 16px 48px rgba(255, 215, 0, 0.4); }
-    50% { box-shadow: 0 24px 64px rgba(255, 215, 0, 0.6); }
+    padding: 12px 20px;
+    font-size: 15px;
+    margin-top: 8px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%);
+    color: #0A0E1A;  /* Dark text */
+    box-shadow: 0 12px 36px rgba(255,215,0,0.6);  /* Static shadow */
 }
 
 button.secondary {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
-    color: rgba(255, 255, 255, 0.95);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-    font-weight: 700;
-    margin-top: 12px;
+    background: linear-gradient(135deg, #2A2F45 0%, #1A1F35 100%);  /* Darker luxury bg */
+    color: #FFFFFF;
+    border: 1px solid #D4AF37;  /* Gold border */
+    box-shadow: 0 12px 36px rgba(0,0,0,0.6);
+    margin-top: 8px;
 }
 
+/* Firebase Status: Brighter for visibility */
 .firebase-status {
-    font-size: 14px;
-    color: #4ade80;
-    margin: 20px 0;
+    font-size: 12px;
+    color: #FFFFFF;  /* Full white */
+    margin: 10px 0 0;
     font-weight: 600;
-    letter-spacing: 0.5px;
 }
 
 
@@ -198,34 +141,82 @@ button.secondary {
 
 
 
-        
-        /* Compact design styles */
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
-        body {
-            font-family: 'Poppins', -apple-system, sans-serif;
-            background: linear-gradient(135deg, #0a0e1a 0%, #1a1f35 100%);
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        #overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 14, 26, 0.97);
-            backdrop-filter: blur(20px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            overflow: hidden; /* No scroll */
-        }
+
+/* Make leaderboard panel bigger/wider/taller modal */
+#leaderboardScreen .modal {
+    max-width: 95% !important;     /* WAS 90% → NOW 95% (WIDER!) */
+    max-height: 95vh;
+    padding: 30px 24px;            /* WAS 30px 20px → MORE SIDE PADDING */
+    border-radius: 24px;
+}
+
+/* Leaderboard list - Bigger, only vertical scroll, no horizontal */
+.leaderboard-list {
+    max-height: 70vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin: 15px 0;
+    padding: 0 12px;              /* WAS 10px → NOW 12px */
+}
+
+/* Ensure items don't cause horizontal scroll */
+.leaderboard-item {
+    padding: 12px 18px;           /* WAS 10px 14px → BIGGER PADDING */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* For iPad/tablet - Even bigger modal */
+@media (min-width: 768px) and (orientation: portrait) {
+    #leaderboardScreen .modal {
+        max-width: 85% !important;  /* WAS 80% → NOW 85% */
+        padding: 40px 36px;         /* MORE PADDING */
+    }
+    
+    .leaderboard-list {
+        max-height: 75vh;
+        padding: 0 16px;            /* EXTRA PADDING */
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Compact design styles */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
+body {
+    font-family: 'Poppins', -apple-system, sans-serif;
+    background: linear-gradient(135deg, #0a0e1a 0%, #1a1f35 100%);
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(10, 14, 26, 0.97);
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    overflow: hidden; /* No scroll */
+}
 /* BALANCED GAME OVER SCREEN - SPREADS EVENLY, NO SCROLLING */
 #gameOverScreen .modal {
     padding: 40px 24px 24px !important; /* ← More breathing room */
@@ -281,21 +272,33 @@ button.secondary {
             flex-direction: column;
             gap: 16px;
         }
-        h1 {
-            font-size: 36px; /* Smaller title */
-            font-weight: 800;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 4px;
-            letter-spacing: -0.5px;
-        }
+
+
+#overlay h1 {
+    font-size: 48px;
+    font-weight: 900;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    /* ↑ THIS is how you get Apple's San Francisco font! */
+    background: linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #D4AF37 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0 0 6px 0;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    filter: drop-shadow(0 8px 32px rgba(212, 175, 55, 0.7));
+    line-height: 1;
+}
+
+
         .subtitle {
             font-size: 14px; /* Smaller subtitle */
             color: rgba(255, 255, 255, 0.7);
             margin-bottom: 16px;
             font-weight: 500;
         }
+
+
+
         /* Glowing Animal Emojis Row */
         .animal-emojis {
             display: flex;
@@ -458,69 +461,69 @@ button.secondary {
                 margin: 0;
                 border: none;
             }
-          
+         
             /* Scale up HUD elements */
             .stat-box {
                 padding: 16px 24px;
                 min-width: 110px;
             }
-          
+         
             .stat-label {
                 font-size: 12px;
             }
-          
+         
             .stat-value {
                 font-size: 40px;
             }
-          
+         
             .heart {
                 width: 16px;
                 height: 16px;
             }
-          
+         
             /* Larger pause button */
             #pauseButton {
                 width: 64px;
                 height: 64px;
                 font-size: 34px;
             }
-          
+         
             /* Scale up streak bar */
             #streakBar {
                 padding: 16px 20px;
             }
-          
+         
             .streak-text {
                 font-size: 15px;
             }
-          
+         
             .streak-count {
                 font-size: 19px;
             }
-          
+         
             .progress-bar {
                 height: 11px;
             }
-          
+         
             /* Scale up difficulty indicator */
             #difficultyIndicator {
                 padding: 12px 18px;
             }
-          
+         
             .difficulty-text {
                 font-size: 13px;
             }
-          
+         
             .difficulty-level {
                 font-size: 26px;
             }
-          
+         
             /* Larger combo */
             #combo {
                 font-size: 24px;
                 padding: 12px 26px;
             }
-          
+         
             /* Scale modals appropriately */
             .modal {
                 max-width: 500px;
@@ -532,42 +535,42 @@ button.secondary {
                 box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7),
                             inset 0 1px 0 rgba(255, 255, 255, 0.05);
             }
-          
+         
             .pause-modal {
                 max-width: 450px;
                 padding: 55px 45px;
             }
-          
+         
             h1 {
                 font-size: 58px;
             }
-          
+         
             h2 {
                 font-size: 48px;
             }
-          
+         
             .subtitle, .pause-subtitle {
                 font-size: 19px;
             }
-          
+         
             button {
                 padding: 24px 60px;
                 font-size: 20px;
             }
-          
+         
             /* Larger animal emojis for iPad */
             .animal-item {
                 padding: 18px 22px;
             }
-          
+         
             .animal-emoji {
                 font-size: 40px;
             }
-          
+         
             .animal-name {
                 font-size: 18px;
             }
-          
+         
             .animal-points {
                 font-size: 16px;
             }
@@ -578,7 +581,7 @@ button.secondary {
                 width: 100vw !important;
                 max-width: 100vw !important;
             }
-          
+         
             canvas {
                 width: 100vw !important;
                 max-width: 100vw !important;
@@ -591,12 +594,12 @@ button.secondary {
                 width: 100vw !important;
                 max-width: 100vw !important;
             }
-          
+         
             canvas {
                 width: 100vw !important;
                 max-width: 100vw !important;
             }
-          
+         
             /* Full-screen modals on iPad */
             .modal {
                 width: 100% !important;
@@ -607,7 +610,7 @@ button.secondary {
                 padding: 60px 24px 44px !important;
                 margin: 0 !important;
             }
-          
+         
             .pause-modal {
                 width: 100% !important;
                 max-width: 100% !important;
@@ -642,7 +645,7 @@ button.secondary {
                         }
                                 /* Pause button - top-right, matches your HUD style */
                     /* Pause button - centered between score and lives */
-                
+               
         #pauseButton {
             position: absolute;
             top: calc(10px + env(safe-area-inset-top)); /* Much closer - was 30px */
@@ -798,7 +801,7 @@ button.secondary {
                             color: #fff !important;
                             font-weight: 700;
                         }
-        
+       
                 .stat-box {
                     display: flex;
                     flex-direction: column;
@@ -1020,7 +1023,7 @@ button.secondary {
                     justify-content: center;
                     z-index: 1000;
                 }
-            
+           
         .modal {
             background: rgba(20, 25, 40, 0.95);
             border: 1px solid rgba(102, 126, 234, 0.2);
@@ -1065,7 +1068,7 @@ button.secondary {
             }
         }
                 h1 {
-                    font-size: 44px;
+                    font-size: 36px; /* COMPACT */
                     font-weight: 800;
                     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                     -webkit-background-clip: text;
@@ -1087,10 +1090,24 @@ button.secondary {
                 .subtitle {
                     font-size: 15px;
                     color: rgba(255, 255, 255, 0.6);
-                    margin-bottom: 28px;
+                    margin-bottom: 12px; /* COMPACT */
                     font-weight: 600;
                 }
-                .animal-list {
+                .animal-emojis {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin: 8px 0 12px; /* COMPACT */
+    padding: 8px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+}
+
+.animal-emoji {
+    font-size: 32px; /* COMPACT - was bigger */
+}
+
+.animal-list {
                     margin: 24px 0;
                     background: rgba(255, 255, 255, 0.02);
                     border-radius: 20px;
@@ -1138,12 +1155,12 @@ button.secondary {
                     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
                     color: white;
                     border: none;
-                    padding: 18px 44px;
+                    padding: 14px 32px; /* COMPACT */
                     font-size: 16px;
                     font-weight: 700;
                     border-radius: 16px;
                     cursor: pointer;
-                    margin-top: 24px;
+                    margin-top: 8px; /* COMPACT BUTTONS */
                     width: 100%;
                     box-shadow: 0 12px 32px rgba(102, 126, 234, 0.4);
                     font-family: 'Inter', sans-serif;
@@ -1158,7 +1175,7 @@ button.secondary {
                 button.secondary {
                     background: rgba(255, 255, 255, 0.1);
                     box-shadow: none;
-                    margin-top: 10px;
+                    margin-top: 6px; /* COMPACT SECONDARY */
                 }
                 .instruction {
                     font-size: 13px;
@@ -1375,7 +1392,7 @@ button.secondary {
                     padding: 16px 12px; /* ← Much more padding */
                     text-align: center;
                 }
-            
+           
                     .stat-card-value {
                         font-size: 32px; /* ← Bigger numbers */
                         font-weight: 800;
@@ -1481,7 +1498,7 @@ button.secondary {
                 .firebase-status {
                     font-size: 11px;
                     color: rgba(255, 255, 255, 0.4);
-                    margin-top: 10px;
+                    margin-top: 6px; /* COMPACT SECONDARY */
                 }
                 .firebase-status.connected {
                     color: #4ade80;
@@ -1513,12 +1530,12 @@ button.secondary {
                 gap: 0px;
                 line-height: 1.4;
             }
-          
+         
             body::after {
                 content: "";
                 display: none;
             }
-          
+         
             /* Hide game content in landscape */
             #gameContainer,
             #overlay,
@@ -1547,92 +1564,92 @@ button.secondary {
                 border-left: 1px solid rgba(102, 126, 234, 0.2);
                 border-right: 1px solid rgba(102, 126, 234, 0.2);
             }
-          
+         
             /* Scale up HUD elements */
             .stat-box {
                 padding: 14px 22px;
                 min-width: 100px;
             }
-          
+         
             .stat-label {
                 font-size: 11px;
             }
-          
+         
             .stat-value {
                 font-size: 36px;
             }
-          
+         
             .heart {
                 width: 14px;
                 height: 14px;
             }
-          
+         
             /* Larger pause button */
             #pauseButton {
                 width: 56px;
                 height: 56px;
                 font-size: 30px;
             }
-          
+         
             /* Scale up streak bar */
             #streakBar {
                 padding: 14px 18px;
             }
-          
+         
             .streak-text {
                 font-size: 13px;
             }
-          
+         
             .streak-count {
                 font-size: 16px;
             }
-          
+         
             .progress-bar {
                 height: 9px;
             }
-          
+         
             /* Scale up difficulty indicator */
             #difficultyIndicator {
                 padding: 10px 16px;
             }
-          
+         
             .difficulty-text {
                 font-size: 11px;
             }
-          
+         
             .difficulty-level {
                 font-size: 20px;
             }
-          
+         
             /* Larger combo */
             #combo {
                 font-size: 20px;
                 padding: 10px 22px;
             }
-          
+         
             /* Scale modals appropriately */
             .modal {
                 max-width: 450px;
                 padding: 50px 40px;
             }
-          
+         
             .pause-modal {
                 max-width: 400px;
                 padding: 50px 40px;
             }
-          
+         
             h1 {
                 font-size: 52px;
             }
-          
+         
             h2 {
                 font-size: 42px;
             }
-          
+         
             .subtitle, .pause-subtitle {
                 font-size: 17px;
             }
-          
+         
             button {
                 padding: 20px 50px;
                 font-size: 18px;
@@ -1693,7 +1710,7 @@ button.secondary {
             0%, 100% { text-shadow: 0 0 20px #00ffff; }
             50% { text-shadow: 0 0 40px #00ffff; }
         }
-              
+             
             /* ADD NEW CELEBRATION & ZONE CSS HERE */
             /* Confetti particles */
         .confetti {
@@ -1794,7 +1811,6 @@ button.secondary {
                 <div class="difficulty-level" id="diffLevel">1</div>
             </div>
         </div>
- 
         <div id="combo"></div>
         <canvas id="gameCanvas"></canvas>
         <div id="pauseButton">⏸️</div>
@@ -1860,7 +1876,7 @@ button.secondary {
                 <p class="stats" id="stats">0 animals rescued</p>
                 <p class="stats" id="streakStats">Best Streak: 0</p>
                 <p class="stats" id="diffStats">Reached Level: 1</p>
-                <p class="stats" id="premiumStats">⭐ Premium: 0 (0/14 species)</p>
+                <p class="stats" id="premiumStats">⭐ Premium: 0 (0/16 species)</p>
                 <p class="stats" id="almostMsg" style="color: #FFD700;"></p>
                 <input type="text" id="playerNameInput" class="name-input" placeholder="Enter your name" maxlength="20" />
                 <button id="submitScoreBtn">🏆 Submit to Leaderboard</button>
@@ -1899,7 +1915,7 @@ button.secondary {
                     <div class="stat-card-label">⭐ Total Caught</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-card-value" id="premiumCollection">0/14</div>
+                    <div class="stat-card-value" id="premiumCollection">0/16</div>
                     <div class="stat-card-label">Species Found</div>
                 </div>
                 <div class="stat-card">
@@ -1934,18 +1950,22 @@ button.secondary {
         </div>
     </div>
    <script>
+
+
+
+
+
+
+
+
        window.addEventListener('DOMContentLoaded', () => {
     premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
     updatePremiumButton();
 });
-
-
         //localStorage.setItem('premiumUnlocked', 'true');
         //window.addEventListener('DOMContentLoaded', () => {
             //premiumUnlocked = true;
             //updatePremiumButton(); // ✅ Now safe!
-
-
         const firebaseConfig = {
             apiKey: "AIzaSyDWLgSdmM1E3Mq0_oVQK3H6UfvJWv0A8HM",
             authDomain: "zookeeper-b75c4.firebaseapp.com",
@@ -2102,10 +2122,10 @@ function updatePremiumButton() {
 }
 // Call on page load
 updatePremiumButton();
-      
-        const BASKET_RADIUS = 40;
-      
      
+        const BASKET_RADIUS = 40;
+     
+    
         let backgroundElements = []; // ADD
 let currentZoneIndex = 0; // Tracks current zone
 // ADD THE DEBUG TOGGLE HERE
@@ -2122,9 +2142,6 @@ const progressionZones = [
 // Custom score thresholds for each zone (index matches progressionZones)
 // Zone 0: 0 points, Zone 1: 3000+, Zone 2: 8000+, etc.
 const zoneScoreThresholds = [0, 10000, 20000, 40000, 80000, 100000,150000];
-
-
-
 function createBackgroundElements(zoneName) {
     backgroundElements = []; // clear previous
     if (zoneName === "Training Grounds") {
@@ -2217,7 +2234,7 @@ function createBackgroundElements(zoneName) {
                 size: 40
             });
         }
-      
+     
         // 🌾 GRASS BLOWING (slow drift)
         for (let i = 0; i < 8; i++) {
             backgroundElements.push({
@@ -2228,7 +2245,7 @@ function createBackgroundElements(zoneName) {
                 size: 28 + Math.random() * 8
             });
         }
-      
+     
         // 🌳 ACACIA TREE (static, background)
         backgroundElements.push({
             emoji: "🌳",
@@ -2237,7 +2254,7 @@ function createBackgroundElements(zoneName) {
             speed: 0,
             size: 50
         });
-    } 
+    }
     else if (zoneName === "Mystic Forest") {
         // 🍄 FLOATING MUSHROOMS (drift upward)
         for (let i = 0; i < 10; i++) {
@@ -2252,7 +2269,7 @@ function createBackgroundElements(zoneName) {
                 size: 24 + Math.random() * 12
             });
         }
-      
+     
         // ✨ SPARKLES (floating upward)
         for (let i = 0; i < 15; i++) {
             backgroundElements.push({
@@ -2266,7 +2283,7 @@ function createBackgroundElements(zoneName) {
                 size: 16 + Math.random() * 8
             });
         }
-      
+     
         // 🌙 MYSTIC MOON (static)
         backgroundElements.push({
             emoji: "🌙",
@@ -2275,7 +2292,7 @@ function createBackgroundElements(zoneName) {
             speed: 0,
             size: 50
         });
-    } 
+    }
     else if (zoneName === "Volcanic Valley") {
         // 🔥 RISING FLAMES
         for (let i = 0; i < 6; i++) {
@@ -2293,7 +2310,7 @@ function createBackgroundElements(zoneName) {
                 opacity: 0.4
             });
         }
-      
+     
         // 💥 EXPLOSIONS
         for (let i = 0; i < 3; i++) {
             backgroundElements.push({
@@ -2308,7 +2325,7 @@ function createBackgroundElements(zoneName) {
                 opacity: 0.3
             });
         }
-      
+     
         // 🌋 VOLCANO
         backgroundElements.push({
             emoji: "🌋",
@@ -2333,7 +2350,7 @@ function createBackgroundElements(zoneName) {
                 opacity: 0.6
             });
         }
-        
+       
         // 🌊 WAVES
         for (let i = 0; i < 5; i++) {
             backgroundElements.push({
@@ -2344,7 +2361,7 @@ function createBackgroundElements(zoneName) {
                 size: 35 + Math.random() * 10
             });
         }
-        
+       
         // 🪸 CORAL
         backgroundElements.push({
             emoji: "🪸",
@@ -2359,13 +2376,6 @@ function createBackgroundElements(zoneName) {
         backgroundElements = [];
     }
 }
-
-
-
-
-
-
-
         const dangerTypes = [
     { emoji: '💣', name: 'bomb', penalty: -1, color: '#FF0000' },
     { emoji: '🧨', name: 'tnt', penalty: -1, color: '#FF4500' }
@@ -2408,7 +2418,7 @@ const zones = [
 // Confetti celebration
 function throwConfetti(count = 50) {
     const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F'];
-  
+ 
     for (let i = 0; i < count; i++) {
         setTimeout(() => {
             const confetti = document.createElement('div');
@@ -2418,7 +2428,7 @@ function throwConfetti(count = 50) {
             confetti.style.animationDelay = Math.random() * 0.3 + 's';
             confetti.style.animationDuration = (Math.random() * 1 + 1.5) + 's';
             document.body.appendChild(confetti);
-          
+         
             setTimeout(() => confetti.remove(), 2500);
         }, i * 30);
     }
@@ -2433,23 +2443,23 @@ function shakeScreen() {
 function launchFirework(x, y) {
     const colors = ['#FFD700', '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A'];
     const particleCount = 30;
-  
+ 
     for (let i = 0; i < particleCount; i++) {
         const firework = document.createElement('div');
         firework.className = 'firework';
         firework.style.left = x + 'px';
         firework.style.top = y + 'px';
         firework.style.background = colors[Math.floor(Math.random() * colors.length)];
-      
+     
         const angle = (Math.PI * 2 * i) / particleCount;
         const velocity = 50 + Math.random() * 50;
         const tx = Math.cos(angle) * velocity;
         const ty = Math.sin(angle) * velocity;
-      
+     
         firework.style.setProperty('--tx', tx + 'px');
         firework.style.setProperty('--ty', ty + 'px');
         firework.style.animation = 'fireworkBurst 1s ease-out forwards';
-      
+     
         document.body.appendChild(firework);
         setTimeout(() => firework.remove(), 1000);
     }
@@ -2511,7 +2521,7 @@ function showZoneTransition(zoneName) {
 // Combo voice messages
 function playComboSound(comboLevel) {
     if (!audioCtx) return;
-  
+ 
     const messages = [
         { min: 3, text: 'Nice!', freq: 600 },
         { min: 5, text: 'Great!', freq: 700 },
@@ -2520,16 +2530,16 @@ function playComboSound(comboLevel) {
         { min: 15, text: 'UNSTOPPABLE!', freq: 1000 },
         { min: 20, text: 'LEGENDARY!', freq: 1200 }
     ];
-  
+ 
     let message = messages[0];
     for (let msg of messages) {
         if (comboLevel >= msg.min) {
             message = msg;
         }
     }
-  
-  
-  
+ 
+ 
+ 
     showComboMessage(message.text);
 }
 // Visual combo message
@@ -2555,9 +2565,9 @@ function showComboMessage(text) {
 function checkAchievement(achievementId) {
     const ach = achievementsList[achievementId];
     if (!ach || achievements[achievementId]) return;
-  
+ 
     let unlocked = false;
-  
+ 
     switch(ach.type) {
         case 'totalCaught':
             if (totalAnimalsCaught >= ach.target) unlocked = true;
@@ -2581,7 +2591,7 @@ function checkAchievement(achievementId) {
             if (difficulty >= ach.target) unlocked = true;
             break;
     }
-  
+ 
     if (unlocked) {
         achievements[achievementId] = true;
         localStorage.setItem('achievements', JSON.stringify(achievements));
@@ -2596,7 +2606,7 @@ function checkSpeedDemon() {
     gameAchievementTracker.catchTimestamps = gameAchievementTracker.catchTimestamps.filter(
         time => now - time <= 3000
     );
-  
+ 
     if (gameAchievementTracker.catchTimestamps.length >= 5) {
         checkAchievement('speedDemon');
     }
@@ -2643,7 +2653,7 @@ function resetGameTracker() {
         }
         function catchSound() {
     beep(523, 0.08);
-  
+ 
     // Better haptics for modern devices
     if (navigator.vibrate) {
         if (combo >= 10) {
@@ -2665,14 +2675,61 @@ function resetGameTracker() {
                 setTimeout(() => beep(523 + (i * 100), 0.15, 'sine', 0.4), i * 100);
             }
         }
-        function missSound() {
-    beep(392, 0.15);
-  
-    // Stronger "warning" pattern for misses
+
+
+
+        
+function missSound() {
+    if (!audioCtx) return;
+    
+    // Resume audio context if suspended
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    
+    // Sad descending tones (C → G → E)
+    const now = audioCtx.currentTime;
+    
+    // Note 1: High C (523 Hz)
+    const osc1 = audioCtx.createOscillator();
+    const gain1 = audioCtx.createGain();
+    osc1.connect(gain1);
+    gain1.connect(audioCtx.destination);
+    osc1.frequency.value = 523;
+    gain1.gain.setValueAtTime(0.3, now);
+    gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+    osc1.start(now);
+    osc1.stop(now + 0.15);
+    
+    // Note 2: G (392 Hz) - starts after 0.08s
+    const osc2 = audioCtx.createOscillator();
+    const gain2 = audioCtx.createGain();
+    osc2.connect(gain2);
+    gain2.connect(audioCtx.destination);
+    osc2.frequency.value = 392;
+    gain2.gain.setValueAtTime(0.35, now + 0.08);
+    gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+    osc2.start(now + 0.08);
+    osc2.stop(now + 0.25);
+    
+    // Note 3: Low E (330 Hz) - starts after 0.16s
+    const osc3 = audioCtx.createOscillator();
+    const gain3 = audioCtx.createGain();
+    osc3.connect(gain3);
+    gain3.connect(audioCtx.destination);
+    osc3.frequency.value = 330;
+    gain3.gain.setValueAtTime(0.4, now + 0.16);
+    gain3.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+    osc3.start(now + 0.16);
+    osc3.stop(now + 0.4);
+ 
+    // Gentle "oops" vibration pattern
     if (navigator.vibrate) {
-        navigator.vibrate([30, 20, 30]); // Heavy double-thud
+        navigator.vibrate([20, 15, 20]);
     }
 }
+
+
+
+
         function levelUpSound() {
             beep(659, 0.12);
             setTimeout(() => beep(784, 0.12), 70);
@@ -2694,14 +2751,46 @@ const ctx = canvas.getContext('2d', { alpha: false });
 // Force canvas to use full viewport dimensions
 function resizeCanvas() {
     const dpr = window.devicePixelRatio || 1;
-    canvas.width = window.innerWidth * dpr;
-    canvas.height = window.innerHeight * dpr;
+    gameWidth = window.innerWidth;
+    gameHeight = window.innerHeight;
+    canvas.width = gameWidth * dpr;
+    canvas.height = gameHeight * dpr;
     ctx.scale(dpr, dpr);
+
+    // Reposition player
+    player.x = Math.max(0, Math.min(gameWidth - 80, player.x));
+    player.y = gameHeight - 110;
+
+    // Regenerate stars if they exist
+    stars = [];
+    for(let i = 0; i < 100; i++) {
+        stars.push({
+            x: Math.random() * gameWidth,
+            y: Math.random() * gameHeight * 0.75,
+            size: Math.random() * 2 + 0.5,
+            opacity: Math.random() * 0.8 + 0.2,
+            twinkle: Math.random() * Math.PI * 2
+        });
+    }
+
+    // Regenerate background elements for current zone
+    if (progressionZones[currentZoneIndex]) {
+        createBackgroundElements(progressionZones[currentZoneIndex].emojiZone);
+    }
+
+    // Redraw immediately if game is running
+    if (gameRunning) {
+        ctx.clearRect(0, 0, gameWidth, gameHeight);
+        drawBackground();
+        drawStars();
+        drawGround();
+        drawAnimals();
+        updateParticles();
+        drawPlayer();
+    }
 }
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
-let gameWidth = window.innerWidth;
-let gameHeight = window.innerHeight;
         let gameRunning = false;
         let score = 0;
         let lives = 3;
@@ -2775,15 +2864,11 @@ let gameHeight = window.innerHeight;
     // PREMIUM ANIMALS - VOLCANIC VALLEY
     { emoji: "🐉", name: "Dragon", points: 200, color: "#FF4500", premium: true, zone: "Volcanic Valley", baseSpeed: 4.5 },
     { emoji: "🕊️", name: "Phoenix", points: 220, color: "#FF6347", premium: true, zone: "Volcanic Valley", baseSpeed: 4.7 },
-
     // ADD THESE - PREMIUM ANIMALS - OCEAN DEPTHS
     { emoji: "🐳", name: "Blue Whale", points: 230, color: "#4169E1", premium: true, zone: "Ocean Depths", baseSpeed: 4.9 },
     { emoji: "🦈", name: "Shark", points: 250, color: "#708090", premium: true, zone: "Ocean Depths", baseSpeed: 5.0 }
-
-
-
 ];
-   
+  
         const powerupType = {
             emoji: '6️⃣7️⃣',
             name: 'powerup67',
@@ -2802,7 +2887,6 @@ let gameHeight = window.innerHeight;
     document.getElementById('bestScore').textContent = currentHighScore;
     document.getElementById('longestStreak').textContent = bestStreak;
     //document.getElementById('totalPowerups').textContent = totalPowerupsCaught;
- 
     /*if (premiumUnlocked) {
     document.getElementById('totalPremiums').textContent = totalPremiumsCaught;
     document.getElementById('premiumCollection').textContent = `${premiumSpeciesCaught.length}/14`;
@@ -2910,20 +2994,61 @@ document.getElementById('premiumCollection').textContent = `${premiumSpeciesCaug
     animals.forEach(a => {
         if(!a.baseSpeed) a.baseSpeed = a.speed;
         if(!a.baseVx && a.vx !== undefined) a.baseVx = a.vx;
+        if(!a.baseSwerveSpeed && a.swerveSpeed !== undefined) a.baseSwerveSpeed = a.swerveSpeed;
+        if(!a.baseRotationSpeed) a.baseRotationSpeed = 0.04 + (difficulty * 0.003); // Assume default rotation speed
         a.speed *= 0.3;
         if(a.vx !== undefined) a.vx *= 0.3;
+        if(a.swerveSpeed !== undefined) a.swerveSpeed *= 0.3;
     });
         // ⚡ SLOW DOWN DANGER ITEMS TOO! ⚡
     dangerItems.forEach(d => {
         if(!d.baseSpeed) d.baseSpeed = d.speed;
+        if(!d.baseSwerveSpeed && d.swerveSpeed !== undefined) d.baseSwerveSpeed = d.swerveSpeed;
+        if(!d.baseRotationSpeed) d.baseRotationSpeed = 0.06; // Assume default
         d.speed *= 0.3;
+        if(d.swerveSpeed !== undefined) d.swerveSpeed *= 0.3;
+    });
+    // Slow down powerups
+    powerupNumbers.forEach(p => {
+        if(!p.baseSpeed) p.baseSpeed = p.speed;
+        if(!p.baseSwerveSpeed && p.swerveSpeed !== undefined) p.baseSwerveSpeed = p.swerveSpeed;
+        if(!p.baseRotationSpeed) p.baseRotationSpeed = 0.04; // Assume default
+        p.speed *= 0.3;
+        if(p.swerveSpeed !== undefined) p.swerveSpeed *= 0.3;
+    });
+    // Slow down background elements
+    backgroundElements.forEach(elem => {
+        if (elem.speedY && !elem.baseSpeedY) elem.baseSpeedY = elem.speedY;
+        if (elem.speed && !elem.baseSpeed) elem.baseSpeed = elem.speed;
+        if (elem.swaySpeed && !elem.baseSwaySpeed) elem.baseSwaySpeed = elem.swaySpeed;
+        if (elem.rotationSpeed && !elem.baseRotationSpeed) elem.baseRotationSpeed = elem.rotationSpeed;
+        if (elem.waveSpeed && !elem.baseWaveSpeed) elem.baseWaveSpeed = elem.waveSpeed;
+        if (elem.pulseSpeed && !elem.basePulseSpeed) elem.basePulseSpeed = elem.pulseSpeed;
+        if (elem.speedY) elem.speedY *= 0.3;
+        if (elem.speed) elem.speed *= 0.3;
+        if (elem.swaySpeed) elem.swaySpeed *= 0.3;
+        if (elem.rotationSpeed) elem.rotationSpeed *= 0.3;
+        if (elem.waveSpeed) elem.waveSpeed *= 0.3;
+        if (elem.pulseSpeed) elem.pulseSpeed *= 0.3;
     });
 }
 function checkSlowMo(time) {
+
+
+// Don't run if game isn't active
+    if(!gameRunning) {
+        slowMoActive = false;
+        document.getElementById('slowmoOverlay').classList.remove('active');
+        return;
+    }
+
+
+
+
     if(slowMoActive && time >= slowMoEndTime) {
         slowMoActive = false;
         document.getElementById('slowmoOverlay').classList.remove('active');
-      
+     
         // Speed up existing animals back to normal
         animals.forEach(a => {
             if(a.baseSpeed) {
@@ -2934,12 +3059,70 @@ function checkSlowMo(time) {
                 a.vx = a.baseVx;
                 delete a.baseVx;
             }
+            if (a.baseSwerveSpeed !== undefined) {
+                a.swerveSpeed = a.baseSwerveSpeed;
+                delete a.baseSwerveSpeed;
+            }
+            if (a.baseRotationSpeed) {
+                // Restore rotation speed
+                delete a.baseRotationSpeed;
+            }
         });
                     // ⚡ SPEED DANGER ITEMS BACK UP! ⚡
         dangerItems.forEach(d => {
             if(d.baseSpeed) {
                 d.speed = d.baseSpeed;
                 delete d.baseSpeed;
+            }
+            if (d.baseSwerveSpeed !== undefined) {
+                d.swerveSpeed = d.baseSwerveSpeed;
+                delete d.baseSwerveSpeed;
+            }
+            if (d.baseRotationSpeed) {
+                // Restore
+                delete d.baseRotationSpeed;
+            }
+        });
+        // Speed up powerups
+        powerupNumbers.forEach(p => {
+            if(p.baseSpeed) {
+                p.speed = p.baseSpeed;
+                delete p.baseSpeed;
+            }
+            if (p.baseSwerveSpeed !== undefined) {
+                p.swerveSpeed = p.baseSwerveSpeed;
+                delete p.baseSwerveSpeed;
+            }
+            if (p.baseRotationSpeed) {
+                // Restore
+                delete p.baseRotationSpeed;
+            }
+        });
+        // Speed up background elements
+        backgroundElements.forEach(elem => {
+            if (elem.baseSpeedY) {
+                elem.speedY = elem.baseSpeedY;
+                delete elem.baseSpeedY;
+            }
+            if (elem.baseSpeed) {
+                elem.speed = elem.baseSpeed;
+                delete elem.baseSpeed;
+            }
+            if (elem.baseSwaySpeed) {
+                elem.swaySpeed = elem.baseSwaySpeed;
+                delete elem.baseSwaySpeed;
+            }
+            if (elem.baseRotationSpeed) {
+                elem.rotationSpeed = elem.baseRotationSpeed;
+                delete elem.baseRotationSpeed;
+            }
+            if (elem.baseWaveSpeed) {
+                elem.waveSpeed = elem.baseWaveSpeed;
+                delete elem.baseWaveSpeed;
+            }
+            if (elem.basePulseSpeed) {
+                elem.pulseSpeed = elem.basePulseSpeed;
+                delete elem.basePulseSpeed;
             }
         });
     }
@@ -3015,19 +3198,19 @@ function checkSlowMo(time) {
                     type: powerupType,
                     rotation: 0,
                     speed: powerupType.baseSpeed * speedMultiplier,
-                  
+                 
                     // NEW: Randomized motion for powerups too
                     swerveSpeed: (Math.random() * 0.04 + 0.01) * (Math.random() > 0.5 ? 1 : -1),
                     swerveAmount: 15 + Math.random() * 30,
                     swerveOffset: Math.random() * Math.PI * 2,
-                  
+                 
                     // NEW: Random horizontal velocity
                     vx: (Math.random() - 0.5) * 5
                 });
             }
                  function spawn() {
     const currentZoneName = progressionZones[currentZoneIndex].name;
-    
+   
     // FIXED: Filter regular animals based on current zone
     let regularTypes;
     if (currentZoneName === "Ocean Depths") {
@@ -3037,10 +3220,10 @@ function checkSlowMo(time) {
         // In other zones: only show land animals (exclude ocean animals)
         regularTypes = types.filter(t => !t.premium && t.zone === "land");
     }
-    
+   
     // Premium animals only in their correct zone
     const premiumTypes = types.filter(t => t.premium && t.zone === currentZoneName);
-    
+   
     // Choose 10% chance for premium if UNLOCKED and available
     let type;
     if (premiumUnlocked && premiumTypes.length > 0 && Math.random() < 0.1) {
@@ -3048,26 +3231,28 @@ function checkSlowMo(time) {
     } else {
         type = regularTypes[Math.floor(Math.random() * regularTypes.length)];
     }
-    
+   
     // Zone-based speed boost for regular animals
     // Zone-based speed boost - PREMIUMS ARE SLOWER
     let speedMultiplier;
     if (type.premium) {
-        // Premiums always fall slower (max 1.3x speed regardless of zone/difficulty)
         speedMultiplier = slowMoActive ? 0.3 : Math.min(1 + (difficulty * 0.01), 1.3);
     } else {
-       if (currentZoneIndex >= 2) { // Jungle+ zones (2,3,4,5)
-        speedMultiplier = slowMoActive ? 0.3 : (difficulty >= 40 ? 2.8 : 2.5);
+       if (currentZoneIndex >= 2) {
+        speedMultiplier = slowMoActive ? 0.3 : (difficulty >= 40 ? 2.8 :
+                                               difficulty >= 30 ? 2.4 :
+                                               difficulty >= 20 ? 2.0 :
+                                               Math.min(1 + (difficulty * 0.06), 1.8));
         } else {
             speedMultiplier = slowMoActive ? 0.3 : (difficulty >= 40 ? 2.2 :
                                                    difficulty >= 30 ? 2.0 :
                                                    Math.min(1 + (difficulty * 0.06), 1.8));
         }
     }
-    
+   
     const swerveSpeedMultiplier = slowMoActive ? 0.3 : (Math.min(1 + (difficulty * 0.05), 1.5));
     const swerveAmountMultiplier = Math.min(1 + (difficulty * 0.08), 1.6);
-    
+   
     animals.push({
         x: Math.random() * (gameWidth - 60) + 30,
         y: -50,
@@ -3082,9 +3267,9 @@ function checkSlowMo(time) {
 }
         function spawnDanger() {
     const type = dangerTypes[Math.floor(Math.random() * dangerTypes.length)]; // Random bomb or TNT
-  
+ 
     const speedMultiplier = slowMoActive ? 0.3 : (Math.min(1 + (difficulty * 0.06), 1.8));
-  
+ 
     dangerItems.push({
         x: Math.random() * (gameWidth - 60) + 30,
         y: -50,
@@ -3132,6 +3317,7 @@ function checkSlowMo(time) {
         }
         function drawAnimals() {
     const emojiSize = window.innerWidth > 768 ? 64 : 48;
+    const slowMoFactor = slowMoActive ? 0.3 : 1;
     // Draw animals with premium flair
     animals.forEach(a => {
         ctx.save();
@@ -3155,7 +3341,7 @@ function checkSlowMo(time) {
         ctx.shadowBlur = 0;
         ctx.restore();
         // Rotation update
-        a.rotation += slowMoActive ? 0.015 : (0.04 + (difficulty * 0.003));
+        a.rotation += (0.04 + (difficulty * 0.003)) * slowMoFactor;
         a.currentX = a.x;
         // Premium trailing sparkles (magical trail)
         if (a.type.premium && Math.random() < 0.35) {
@@ -3164,7 +3350,7 @@ function checkSlowMo(time) {
     });
     // Danger items (unchanged - keep red glow)
     dangerItems.forEach(d => {
-        d.swerveOffset += d.swerveSpeed;
+        d.swerveOffset += d.swerveSpeed * slowMoFactor;
         const swerveX = Math.sin(d.swerveOffset) * d.swerveAmount;
         ctx.save();
         ctx.translate(d.x + swerveX, d.y);
@@ -3178,12 +3364,12 @@ function checkSlowMo(time) {
         ctx.fillText(d.type.emoji, 0, 0);
         ctx.shadowBlur = 0;
         ctx.restore();
-        d.rotation += slowMoActive ? 0.02 : 0.06;
+        d.rotation += 0.06 * slowMoFactor;
         d.currentX = d.x + swerveX;
     });
     // Powerups (unchanged - keep cyan glow)
     powerupNumbers.forEach(p => {
-        p.swerveOffset += p.swerveSpeed;
+        p.swerveOffset += p.swerveSpeed * slowMoFactor;
         const swerveX = Math.sin(p.swerveOffset) * p.swerveAmount;
         ctx.save();
         ctx.translate(p.x + swerveX, p.y);
@@ -3196,7 +3382,7 @@ function checkSlowMo(time) {
         ctx.fillText(p.type.emoji, 0, 0);
         ctx.shadowBlur = 0;
         ctx.restore();
-        p.rotation += slowMoActive ? 0.015 : 0.04;
+        p.rotation += 0.04 * slowMoFactor;
         p.currentX = p.x + swerveX;
     });
 }
@@ -3265,18 +3451,19 @@ function checkSlowMo(time) {
                     difficulty = newDifficulty;
                     if(difficulty > maxDifficulty) maxDifficulty = difficulty;
                     updateDifficultyDisplay();
-                  
-              
-                  
-                  
+                 
+             
+                 
+                 
                     showAchievement('⬆️', 'Level Up!', `Level ${difficulty}`);
                     checkAchievements();
-                  
+                 
                     // NEW: Check zone achievement
                     checkAchievement('zoneExplorer');
                 }
             }
 function drawBackground() {
+    const slowMoFactor = slowMoActive ? 0.3 : 1;
     // LAYER 1: Static background elements first (sun, moon, tree, volcano)
     backgroundElements.forEach((elem) => {
         if (elem.speed === 0 && !elem.speedY && !elem.pulse) {
@@ -3299,19 +3486,19 @@ function drawBackground() {
             let drawY = elem.y;
             // === VERTICAL MOVEMENT (snow, leaves, flames, mushrooms, sparkles) ===
             if (elem.speedY) {
-                elem.y += elem.speedY * (slowMoActive ? 0.4 : 1);
+                elem.y += elem.speedY * slowMoFactor;
                 // Apply custom opacity for subtle effects
                 if (elem.opacity !== undefined) {
                     ctx.globalAlpha = elem.opacity;
                 }
                 // Sway side-to-side
                 if (elem.swayAmount) {
-                    elem.swayOffset = (elem.swayOffset || 0) + elem.swaySpeed;
+                    elem.swayOffset = (elem.swayOffset || 0) + elem.swaySpeed * slowMoFactor;
                     drawX += Math.sin(elem.swayOffset) * elem.swayAmount;
                 }
                 // Rotation (for leaves, snowflakes, flames)
                 if (elem.rotationSpeed) {
-                    elem.rotation = (elem.rotation || 0) + elem.rotationSpeed * (slowMoActive ? 0.4 : 1);
+                    elem.rotation = (elem.rotation || 0) + elem.rotationSpeed * slowMoFactor;
                 }
                 // Draw with rotation if needed
                 if (elem.rotation) {
@@ -3339,11 +3526,11 @@ function drawBackground() {
             }
             // === HORIZONTAL MOVEMENT (clouds, eagles, butterflies, grass) ===
             else if (elem.speed > 0) {
-                elem.x += elem.speed * (slowMoActive ? 0.4 : 1);
+                elem.x += elem.speed * slowMoFactor;
                 drawX = elem.x;
                 // Vertical wave motion (for eagles and butterflies)
                 if (elem.waveAmount) {
-                    elem.waveOffset = (elem.waveOffset || 0) + elem.waveSpeed;
+                    elem.waveOffset = (elem.waveOffset || 0) + elem.waveSpeed * slowMoFactor;
                     drawY += Math.sin(elem.waveOffset) * elem.waveAmount;
                 }
                 ctx.fillText(elem.emoji, drawX, drawY);
@@ -3359,7 +3546,7 @@ function drawBackground() {
             else if (elem.pulse) {
                 const scale = 1 + Math.sin(elem.pulseOffset) * 0.2;
                 ctx.globalAlpha = 0.6 + Math.sin(elem.pulseOffset) * 0.3;
-                elem.pulseOffset += elem.pulseSpeed;
+                elem.pulseOffset += elem.pulseSpeed * slowMoFactor;
                 ctx.font = `${elem.size * scale}px Arial, "Apple Color Emoji", sans-serif`;
                 ctx.fillText(elem.emoji, elem.x, elem.y);
             }
@@ -3390,7 +3577,7 @@ if (newZoneIndex > currentZoneIndex && newZoneIndex < progressionZones.length) {
         localStorage.setItem('highestZoneReached', zoneName);
     }
     // End new lines
-   
+  
     const zone = progressionZones[currentZoneIndex];
     // === TRUE FRESH LEVEL START ===
     // Clear EVERYTHING from the old zone (no carry-over animals/particles)
@@ -3409,16 +3596,16 @@ if (newZoneIndex > currentZoneIndex && newZoneIndex < progressionZones.length) {
     const canvas = document.getElementById('gameCanvas');
     canvas.style.background = zone.background;
     document.getElementById('diffLevel').style.color = zone.color;
-  
+ 
     if (zone.emojiZone) {
         createBackgroundElements(zone.emojiZone);
     } else {
         backgroundElements = [];
     }
-  
+ 
     // Modal + 2-second pause
     showZoneTransition(zone.name);
-  
+ 
     throwConfetti(100);
 }
     // ALWAYS DRAW THE SCENE (even when paused)
@@ -3435,7 +3622,7 @@ if (newZoneIndex > currentZoneIndex && newZoneIndex < progressionZones.length) {
         return; // Exit early - don't update positions, spawns, collisions
     }
     // ACTIVE GAME LOGIC (only runs when NOT paused)
-  
+ 
     // Calculate spawn delay based on difficulty
     const baseSpawnDelay = 1300;
     const reductionPerLevel = 25;
@@ -3443,7 +3630,7 @@ if (newZoneIndex > currentZoneIndex && newZoneIndex < progressionZones.length) {
     if (difficulty >= 40) minSpawnDelay = 500;
     else if (difficulty >= 30) minSpawnDelay = 600;
     const spawnDelay = Math.max(minSpawnDelay, baseSpawnDelay - (difficulty * reductionPerLevel));
-  
+ 
     // Spawn animals
     if (time - lastSpawn > spawnDelay) {
         spawn(); // CHANGED: was spawnAnimal()
@@ -3483,15 +3670,15 @@ if (time - lastHeartSpawn > 20000 && lives < 5 && Math.random() < 0.05) {
     // Update and check animals (ALL YOUR ANIMAL LOGIC HERE)
     for (let i = animals.length - 1; i >= 0; i--) {
         animals[i].y += animals[i].speed;
-      
+     
         // Add horizontal velocity if it doesn't exist
         if (animals[i].vx === undefined) {
             animals[i].vx = (Math.random() - 0.5) * 3;
         }
-      
+     
         // Move horizontally
         animals[i].x += animals[i].vx;
-      
+     
         // Bounce off left wall
         if (animals[i].x < 30) {
             animals[i].x = 30;
@@ -3499,7 +3686,7 @@ if (time - lastHeartSpawn > 20000 && lives < 5 && Math.random() < 0.05) {
             createParticles(30, animals[i].y, animals[i].type.color, 8);
             if (audioCtx) beep(400, 0.06, 'sine', 0.15);
         }
-      
+     
         // Bounce off right wall
         if (animals[i].x > gameWidth - 30) {
             animals[i].x = gameWidth - 30;
@@ -3507,14 +3694,14 @@ if (time - lastHeartSpawn > 20000 && lives < 5 && Math.random() < 0.05) {
             createParticles(gameWidth - 30, animals[i].y, animals[i].type.color, 8);
             if (audioCtx) beep(400, 0.06, 'sine', 0.15);
         }
-      
+     
         const hit = checkHit(animals[i]);
-      
+     
         if (hit === true) {
             catchSound();
             streak++;
             updateStreak();
-          
+         
             gameAchievementTracker.consecutiveCatches++;
             checkSpeedDemon();
             checkAchievement('first100');
@@ -3522,7 +3709,7 @@ if (time - lastHeartSpawn > 20000 && lives < 5 && Math.random() < 0.05) {
             checkAchievement('noMiss');
             checkAchievement('scoreHero');
             checkAchievement('zoneExplorer');
-          
+         
             if (time - lastCatch < 1800) {
                 combo++;
                 if (combo > 1) showCombo();
@@ -3531,31 +3718,31 @@ if (time - lastHeartSpawn > 20000 && lives < 5 && Math.random() < 0.05) {
                 combo = 1;
             }
             lastCatch = time;
-          
+         
             const points = animals[i].type.points * Math.max(1, combo);
             score += points;
               if (animals[i].type.premium) {
     createParticles(animals[i].x, animals[i].y, '#FFD700', 60);
-  
+ 
     // ✅ Track total premium catches
     totalPremiumsCaught++;
     localStorage.setItem('totalPremiumsCaught', totalPremiumsCaught);
-  
+ 
     // ✅ Track unique species caught (THIS WAS MISSING!)
     if (!premiumSpeciesCaught.includes(animals[i].type.name)) {
         premiumSpeciesCaught.push(animals[i].type.name);
         localStorage.setItem('premiumSpeciesCaught', JSON.stringify(premiumSpeciesCaught));
-      
+     
         // Show special achievement for first catch of this species
         showAchievement('✨', 'New Discovery!', `First ${animals[i].type.name} caught!`);
-      
+     
         // Master collector achievement (caught all 14)
-        if (premiumSpeciesCaught.length === 14) {
+        if (premiumSpeciesCaught.length === 16) {
             showAchievement('👑', 'Master Collector!', 'All premium animals caught!');
             celebrateAchievement('milestone');
         }
     }
-  
+ 
     if (lives < 5) {
         lives++;
         updateLives();
@@ -3576,38 +3763,53 @@ if (time - lastHeartSpawn > 20000 && lives < 5 && Math.random() < 0.05) {
     beep(1000, 0.2);
     if (navigator.vibrate) navigator.vibrate([20, 30, 20]);
 }
-          
+         
             rescued[animals[i].type.name] = (rescued[animals[i].type.name] || 0) + 1;
             animalCounts[animals[i].type.name] = (animalCounts[animals[i].type.name] || 0) + 1;
-          
+         
             updateScore();
             updateDifficulty();
-          
+         
             createParticles(animals[i].x, animals[i].y, animals[i].type.color, 25);
-          
+         
             animals.splice(i, 1);
-          
+         
             if (navigator.vibrate) navigator.vibrate(15);
             continue;
         }
-      
+     
         // Missed animal - fell off screen
         if (animals[i].y > gameHeight - 90) {
             missSound();
             lives--;
             combo = 0;
             streak = 0;
-          
+         
             gameAchievementTracker.consecutiveCatches = 0;
-          
+         
             updateStreak();
             updateLives();
             animals.splice(i, 1);
-          
-            if (lives <= 0) {
-                endGame();
-                return;
-            }
+         
+           if (lives <= 0) {
+    gameRunning = false;
+    
+    // STOP GAME LOOP
+    if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+    }
+    
+    // KILL ALL AUDIO
+    document.querySelectorAll('audio').forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
+    });
+    
+    endGame();
+    return;
+}
+
         }
     }
     // Update power-up numbers
@@ -3650,25 +3852,40 @@ for (let i = powerupNumbers.length - 1; i >= 0; i--) {
     // Update danger items
     for (let i = dangerItems.length - 1; i >= 0; i--) {
         dangerItems[i].y += dangerItems[i].speed;
-      
+     
         const hit = checkHit(dangerItems[i]);
-      
+     
         if (hit === true) {
             missSound();
             lives += dangerItems[i].type.penalty;
             createParticles(dangerItems[i].x, dangerItems[i].y, dangerItems[i].type.color, 20);
             dangerItems.splice(i, 1);
             updateLives();
-          
+         
             if (navigator.vibrate) navigator.vibrate([50, 50, 50]);
-          
-            if (lives <= 0) {
-                endGame();
-                return;
-            }
+         
+         if (lives <= 0) {
+    gameRunning = false;
+    
+    // STOP GAME LOOP
+    if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+    }
+    
+    // KILL ALL AUDIO
+    document.querySelectorAll('audio').forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
+    });
+    
+    endGame();
+    return;
+}
+
             continue;
         }
-      
+     
         if (dangerItems[i].y > gameHeight) {
             dangerItems.splice(i, 1);
         }
@@ -3678,9 +3895,12 @@ for (let i = powerupNumbers.length - 1; i >= 0; i--) {
 }
 // BULLETPROOF Portrait Lock
 let gamePausedByOrientation = false;
+
+
+
 function forcePortraitPause() {
     const isLandscape = window.innerWidth > window.innerHeight;
-  
+ 
     if(isLandscape) {
         // FORCE PAUSE - Stop gameLoop completely
         document.body.classList.add('portrait-pause');
@@ -3690,36 +3910,80 @@ function forcePortraitPause() {
             cancelAnimationFrame(animationFrameId);
             animationFrameId = null;
         }
+
+        // Kill all audio and effects
+        if (audioCtx && audioCtx.state === 'running') {
+            audioCtx.suspend(); // Kill all beep sounds
+        }
+        slowMoActive = false;
+        document.getElementById('slowmoOverlay')?.classList.remove('active');
+        particles = []; // Stop particles
+        
     } else if(gamePausedByOrientation) {
         // RESUME ONLY when returning to portrait
         document.body.classList.remove('portrait-pause');
         gamePausedByOrientation = false;
+        
+        resizeCanvas(); // Force resize and regenerate elements
+        
         if(paused) {
-            resumeGame(); // Resume if pause button was used
+            // Keep paused - user manually paused with button
+            paused = true;
+            document.getElementById('pauseOverlay').classList.remove('hidden');
+            document.getElementById('pauseButton').style.display = 'none';
         } else {
             gameRunning = true; // Restart gameLoop
             gameLoop(performance.now()); // Restart animation
         }
     }
 }
-// Listen for ALL orientation events
-window.addEventListener('resize', () => setTimeout(forcePortraitPause, 50));
-window.addEventListener('orientationchange', () => setTimeout(forcePortraitPause, 150));
-window.matchMedia('(orientation: landscape)').addEventListener('change', forcePortraitPause);
-// Initial check
-forcePortraitPause();
+
+
+
+
+
+
+
 function startGame() {
+
+
+
+
+// RESET DIFFICULTY TO LEVEL 1
+    difficulty = 1;
+    maxDifficulty = 1;
+    currentZoneIndex = 0;  // Reset zone
+    
+   // 🚨 ADD THESE 3 LINES:
+    lastSpawn = 0;  // Force immediate fresh spawn timing
+    lastPowerupSpawn = 0;
+    lastDangerSpawn = 0;
+
+
+
+    // CRITICAL: Clear all leftover speed flags from previous game
+    animals.forEach(a => {
+        delete a.baseSpeed;
+        delete a.baseVx;
+    });
+    dangerItems.forEach(d => {
+        delete d.baseSpeed;
+    });
+
+    initAudio();
+
+
     initAudio();
     console.log("START GAME CALLED!");
     resetGameTracker();
     totalPlays++;
     localStorage.setItem('totalPlays', totalPlays);
-    
+   
     // Hide screens
     document.getElementById('overlay').classList.add('hidden');
     document.getElementById('statsScreen').classList.add('hidden');
     document.getElementById('leaderboardScreen').classList.add('hidden');
-    
+   
     // Reset game state
     gameRunning = true;
     paused = false;
@@ -3732,17 +3996,17 @@ function startGame() {
     maxDifficulty = 1;
     slowMoActive = false;
     powerupsCaught = 0;
-    
+   
     // Reset arrays (only once!)
     animals = [];
     powerupNumbers = [];
     dangerItems = [];
     particles = [];
     rescued = {};
-    
+   
     // Reset player position
     player.x = gameWidth / 2 - 40;
-    
+   
     // Set initial zone
     currentZoneIndex = 0;
     const initialZone = progressionZones[0];
@@ -3750,29 +4014,28 @@ function startGame() {
     canvas.style.background = initialZone.background;
     document.getElementById('diffLevel').style.color = initialZone.color;
     createBackgroundElements(initialZone.emojiZone);
-    
-    // Set spawn timers (only once!)
+   
+    // Reset spawn timers (only once!)
     lastSpawn = performance.now() + 2000;
     lastPowerupSpawn = performance.now() + 12000;
     lastDangerSpawn = performance.now() + 10000;
-    
+   
     // Show zone transition
     showZoneTransition(initialZone.name);
-    
+   
     // Update UI
     updateScore();
     updateStreak();
     updateStreakReward();
     updateLives();
     updateDifficultyDisplay();
-    
+   
     // Show pause button
     document.getElementById('pauseButton').style.display = 'flex';
-    
+   
     // Start game loop (ONLY ONCE!)
     animationFrameId = requestAnimationFrame(gameLoop);
 }
-
         function endGame() {
             gameRunning = false;
             slowMoActive = false;
@@ -3812,16 +4075,16 @@ function startGame() {
                 localStorage.setItem('zooKeeperHighScore', highScore);
                 document.getElementById('newHighScore').classList.remove('hidden');
                 document.getElementById('gameOverTitle').textContent = '🏆 NEW RECORD! 🏆';
-              
+             
                 // NEW: Epic celebration for high score
                 celebrateAchievement('highscore');
-              
+             
                 achievementSound();
                 setTimeout(bigWinSound, 500);
                     updateMainMenuHighScore();
                 } else {
     document.getElementById('newHighScore').classList.add('hidden');
-   
+  
     // ✅ DYNAMIC TITLE based on score
     let gameOverTitle = 'Game Over!';
     if (score === 0) {
@@ -3840,7 +4103,7 @@ function startGame() {
         gameOverTitle = 'LEGENDARY! 🔥';
     }
     document.getElementById('gameOverTitle').textContent = gameOverTitle;
-   
+  
     const diff = highScore - score;
     const urgeEl = document.getElementById('urgePlayAgain');
     if(diff <= 50) {
@@ -3908,7 +4171,7 @@ document.getElementById("badge").textContent = msg;
             const playerName = document.getElementById('playerNameInput').value;
             submitScoreToLeaderboard(playerName, score);
         });
-      
+     
             // 2. ADD THESE NEW LISTENERS (replace old touchmove/mousemove)
             canvas.addEventListener('touchstart', handlePointerDown, { passive: false });
             canvas.addEventListener('mousedown', handlePointerDown);
@@ -3918,7 +4181,7 @@ document.getElementById("badge").textContent = msg;
                 const x = (e.type === 'touchstart' ? e.touches[0].clientX : e.clientX) - rect.left;
                 const basketCenterX = player.x + 40; // Basket center
                 const dist = Math.abs(x - basketCenterX);
-              
+             
                 // Drag starts ONLY if tap within 40px of basket center
                 if (dist <= BASKET_RADIUS) {
                     isDragging = true;
@@ -3950,7 +4213,7 @@ document.getElementById("badge").textContent = msg;
         // Pause button functionality
 document.getElementById('pauseButton').addEventListener('click', () => {
     if (!gameRunning) return; // Don't allow pausing if game isn't running
-  
+ 
     paused = true;
     document.getElementById('pauseOverlay').classList.remove('hidden');
     document.getElementById('pauseButton').style.display = 'none'; // Hide pause button when paused
@@ -3960,7 +4223,7 @@ document.getElementById('resumeButton').addEventListener('click', () => {
     paused = false;
     document.getElementById('pauseOverlay').classList.add('hidden');
     document.getElementById('pauseButton').style.display = 'flex'; // Show pause button again
-  
+ 
     // Resume the game loop
     if (gameRunning && !animationFrameId) {
         requestAnimationFrame(gameLoop);
@@ -3973,7 +4236,7 @@ document.getElementById('quitButton').addEventListener('click', () => {
     document.getElementById('pauseOverlay').classList.add('hidden');
     document.getElementById('pauseButton').style.display = 'flex';
     document.getElementById('overlay').classList.remove('hidden');
-  
+ 
     // Cancel any ongoing animation frame
     if (animationFrameId) {
         cancelAnimationFrame(animationFrameId);
@@ -4029,12 +4292,12 @@ window.addEventListener('focus', () => {
 // Pause button functionality
 document.getElementById('pauseButton').addEventListener('click', () => {
     if (!gameRunning) return;
-  
+ 
     paused = true;
     const overlay = document.getElementById('pauseOverlay');
     overlay.classList.remove('hidden');
     document.getElementById('pauseButton').style.display = 'none';
-  
+ 
     // Add a small delay for the animation to look smooth
     setTimeout(() => overlay.style.opacity = '1', 10);
 });
@@ -4042,12 +4305,12 @@ document.getElementById('pauseButton').addEventListener('click', () => {
 document.getElementById('resumeButton').addEventListener('click', () => {
     const overlay = document.getElementById('pauseOverlay');
     overlay.style.opacity = '0';
-  
+ 
     setTimeout(() => {
         paused = false;
         overlay.classList.add('hidden');
         document.getElementById('pauseButton').style.display = 'flex';
-      
+     
         if (gameRunning && !animationFrameId) {
             requestAnimationFrame(gameLoop);
         }
@@ -4057,14 +4320,14 @@ document.getElementById('resumeButton').addEventListener('click', () => {
 document.getElementById('quitButton').addEventListener('click', () => {
     const overlay = document.getElementById('pauseOverlay');
     overlay.style.opacity = '0';
-  
+ 
     setTimeout(() => {
         paused = false;
         gameRunning = false;
         overlay.classList.add('hidden');
         document.getElementById('pauseButton').style.display = 'flex';
         document.getElementById('overlay').classList.remove('hidden');
-      
+     
         if (animationFrameId) {
             cancelAnimationFrame(animationFrameId);
             animationFrameId = null;
@@ -4084,13 +4347,13 @@ async function initIAP() {
     const NativePurchases = window.Capacitor.Plugins.NativePurchases;
     await NativePurchases.initialize();
     console.log('✅ IAP initialized successfully');
-  
+ 
     // Check for premium product (logs when dev account ready)
     const { products } = await NativePurchases.getProducts({
       productIdentifiers: ['com.alstarian.zookeeper.premiumanimals'],
       productType: 'INAPP'
     });
-  
+ 
     if (products && products.length > 0) {
       console.log('✅ Premium product ready:', products[0].identifier);
     }
@@ -4098,14 +4361,6 @@ async function initIAP() {
     console.log('IAP init (normal without dev account):', e.message);
   }
 }
-
-
-
-
-
-
-
-
 // Buy Premium Animals button
 async function buyPremiumAnimals() {
   if (premiumUnlocked) {
@@ -4120,18 +4375,18 @@ async function buyPremiumAnimals() {
       productIdentifier: 'com.alstarian.zookeeper.premiumanimals',
       productType: 'INAPP'
     });
-  
+ 
     // Success! Unlock premium forever
     premiumUnlocked = true
     localStorage.setItem('premiumUnlocked', 'true');
-  
+ 
     alert('🎉 PREMIUM ANIMALS UNLOCKED!\n\n16 rare species now available in ALL zones:\n🦄 Unicorn • 🐺 Arctic Wolf\n🐒 Golden Monkey • 🐉 Dragon\n🦅 Golden Eagle • 🦚 Macaw\n🐋 Whale • 🦈 Shark\nand 8 more!'); // ← CHANGE: 14 to 16
-  
+ 
     // Celebrate!
     throwConfetti(100);
     showAchievement('🦄', 'Premium Unlocked!', '16 rare animals added!');
     updatePremiumButton();
-  
+ 
   } catch (e) {
     if (e.message && (e.message.includes('cancelled') || e.message.includes('user cancelled'))) {
       console.log('User cancelled purchase');
@@ -4145,16 +4400,16 @@ async function restorePurchases() {
   try {
     const NativePurchases = window.Capacitor.Plugins.NativePurchases;
     await NativePurchases.restorePurchases();
-  
+ 
     alert('✅ Purchases restored!\n\nPremium Animals will be unlocked if previously purchased.');
-  
+ 
     // Check if premium was restored
     setTimeout(() => {
       if (premiumUnlocked) {
         alert('🎉 Premium Animals restored from previous purchase!');
       }
     }, 1000);
-  
+ 
   } catch (e) {
     alert('Restore complete. No previous purchases found.');
   }
@@ -4170,8 +4425,44 @@ initIAP();
                 document.getElementById(button.dataset.tab + '-list').classList.add('active');
             });
         });
+
+
+
+window.addEventListener('resize', function() {
+    // ONLY stop audio if game is actually running
+    if(gameRunning) {
+        document.querySelectorAll('audio').forEach(audio => {
+            audio.pause();
+            audio.currentTime = 0;
+        });
+    }
+    
+    if (window.innerWidth > window.innerHeight) {
+        // Landscape - stop game completely
+        if (animationFrameId) {
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+        }
+    }
+    forcePortraitPause();
+});
+
+
+// FIX ROTATION AUDIO BUG
+window.addEventListener('resize', function() {
+    document.querySelectorAll('audio').forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
+    });
+});
+
+
+
+
+
+
     </script>
-   
+  
 <!-- Zone Transition Modal -->
 <div id="zoneTransitionModal" class="hidden">
     <div class="zone-modal-content">
