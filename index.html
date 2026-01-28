@@ -16,6 +16,166 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
+
+
+
+
+/* Redesigned Home Screen */
+.redesigned-home {
+  padding: 60px 32px;
+  max-width: 420px;
+  gap: 20px;
+}
+
+.roar-title {
+  font-size: 48px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF6B6B 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin: 0 0 12px;
+  animation: roarPulse 3s infinite;
+  text-align: center;
+  letter-spacing: -1px;
+}
+
+@keyframes roarPulse {
+  0%, 100% { transform: scale(1); text-shadow: 0 0 20px rgba(255,215,0,0.5); }
+  50% { transform: scale(1.05); text-shadow: 0 0 40px rgba(255,107,107,0.8); }
+}
+
+.hero-stats {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.stat-badge {
+  background: rgba(20,25,40,0.9);
+  border: 2px solid rgba(255,215,0,0.4);
+  border-radius: 16px;
+  padding: 12px 20px;
+  text-align: center;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+
+.stat-value {
+  display: block;
+  font-size: 28px;
+  font-weight: 900;
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat-label {
+  font-size: 11px;
+  color: rgba(255,255,255,0.7);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.animal-parade {
+  display: flex;
+  gap: 12px;
+  animation: parade 20s linear infinite;
+  padding: 20px 0;
+  overflow: hidden;
+}
+
+.animal-parade span {
+  font-size: 44px;
+  animation: bounce 1s infinite alternate;
+  flex-shrink: 0;
+}
+
+@keyframes parade {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.hero-play {
+  background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%);
+  color: #1a1f35;
+  border: none;
+  padding: 24px 60px;
+  font-size: 20px;
+  font-weight: 900;
+  border-radius: 24px;
+  width: 100%;
+  box-shadow: 0 16px 48px rgba(78,205,196,0.4);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  animation: heroPulse 2s infinite;
+}
+
+.hero-play:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 64px rgba(78,205,196,0.6);
+}
+
+@keyframes heroPulse {
+  0%, 100% { box-shadow: 0 16px 48px rgba(78,205,196,0.4); }
+  50% { box-shadow: 0 24px 64px rgba(78,205,196,0.6); }
+}
+
+.secondary-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.sec-btn {
+  background: rgba(255,255,255,0.08);
+  color: rgba(255,255,255,0.9);
+  border: 1px solid rgba(255,255,255,0.2);
+  padding: 14px 32px;
+  border-radius: 16px;
+  font-size: 15px;
+  font-weight: 700;
+  transition: all 0.2s;
+  width: 100%;
+  max-width: 280px;
+}
+
+.sec-btn:hover {
+  background: rgba(255,255,255,0.15);
+  transform: translateY(-1px);
+}
+
+.premium-glow {
+  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+  color: #1a1f35 !important;
+  box-shadow: 0 0 32px rgba(255,215,0,0.6);
+}
+
+.firebase-status.hidden,
+.restore-btn {
+  font-size: 13px;
+  color: #4ade80;
+  margin-top: 16px;
+}
+
+/* Responsive */
+@media (min-width: 768px) {
+  .roar-title { font-size: 56px; }
+  .hero-play { padding: 28px 72px; font-size: 22px; }
+  .secondary-row { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+  .sec-btn { width: auto; max-width: none; }
+}
+
+
+
+
+
+
+
+
+
+
         /* Compact design styles */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
         body {
@@ -1628,44 +1788,55 @@
     </div>
     <div class="slowmo-overlay" id="slowmoOverlay"></div>
     <div id="overlay">
-        <div class="modal">
-            <h1>Zoo Keeper</h1>
-            <p class="subtitle">Catch animals to build your zoo! Unlock premiums for epic rewards.</p>
-            <!-- Glowing Animal Emojis Row -->
-            <div class="animal-emojis">
-                <span class="animal-emoji">🦁</span>
-                <span class="animal-emoji">🐘</span>
-                <span class="animal-emoji">🦓</span>
-                <span class="animal-emoji">🦭</span>
-                <span class="animal-emoji">🦜</span>
-                <span class="animal-emoji">🦅</span>
-            </div>
-            <p class="firebase-status" id="firebaseStatus">Connecting to leaderboard...</p>
-            <button id="startBtn"><span>▶️</span> Start Playing</button>
-            <button id="premiumBtn" onclick="buyPremiumAnimals()">💎 Unlock Premiums</button>
-                        <div id="premiumStatus" class="hidden" style="
-                background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-                color: #1a1f35;
-                padding: 12px 24px;
-                border-radius: 12px;
-                font-size: 15px;
-                font-weight: 700;
-                box-shadow: 0 8px 24px rgba(255, 215, 0, 0.3);
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-                margin-top: 24px;
-                width: 100%;
-            ">
-                <span style="font-size: 20px;">💎</span>
-                Premium Active
-            </div>
-            <button class="secondary" id="statsBtn"><span>📊</span> View Stats</button>
-            <button class="secondary" id="leaderboardBtn"><span>🏆</span> Leaderboard</button>
-            <button id="restoreBtn" onclick="restorePurchases()">🔄 Restore Purchases</button>
-        </div>
+  <div class="modal redesigned-home">
+    <!-- Hero Title with Roar Effect -->
+    <h1 class="roar-title">🦁 ZOO KEEPER 🦁</h1>
+    
+    <!-- Dynamic Stats Badges -->
+    <div class="hero-stats">
+      <div class="stat-badge">
+        <span class="stat-value" id="highScoreBadge">0</span>
+        <span class="stat-label">HIGH SCORE</span>
+      </div>
+      <div class="stat-badge">
+        <span class="stat-value" id="playsBadge">0</span>
+        <span class="stat-label">PLAYS</span>
+      </div>
     </div>
+    
+    <!-- Animated Animal Parade -->
+    <div class="animal-parade">
+      <span>🐰</span><span>🦊</span><span>🐼</span><span>🦁</span><span>🐯</span><span>🦒</span>
+      <span>🐰</span><span>🦊</span><span>🐼</span><span>🦁</span><span>🐯</span><span>🦒</span>
+    </div>
+    
+    <!-- Subtitle -->
+    <p class="subtitle">Catch 'em all! Build the ultimate zoo! 🌟</p>
+    
+    <!-- Mega Play Button -->
+    <button id="startBtn" class="hero-play">🚀 START ADVENTURE 🚀</button>
+    
+    <!-- Secondary Actions -->
+    <div class="secondary-row">
+      <button id="premiumBtn" class="premium-glow">⭐ UNLOCK PREMIUMS ⭐</button>
+      <div id="premiumStatus" class="hidden premium-active">⭐ PREMIUM ZOO ACTIVE ⭐</div>
+      <button id="statsBtn" class="sec-btn">📊 STATS</button>
+      <button id="leaderboardBtn" class="sec-btn">🏆 LEADERBOARD</button>
+    </div>
+    
+    <!-- Firebase (Hidden by Default) -->
+    <p id="firebaseStatus" class="firebase-status hidden">✅ Connected</p>
+    
+    <!-- Restore IAP -->
+    <button id="restoreBtn" class="restore-btn">🔄 Restore Purchases</button>
+  </div>
+</div>
+
+
+
+
+
+
     <div id="gameOverScreen" class="hidden">
         <div id="overlay">
             <div class="modal">
@@ -1754,6 +1925,11 @@
        window.addEventListener('DOMContentLoaded', () => {
     premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
     updatePremiumButton();
+
+        // ADD THIS LINE:
+  updateHomeBadges();
+
+
 });
 
 
@@ -1926,6 +2102,21 @@ function updatePremiumButton() {
 // Call on page load
 updatePremiumButton();
       
+
+
+// ADD THE NEW CODE HERE ⬇️
+function updateHomeBadges() {
+  document.getElementById('highScoreBadge').textContent = localStorage.getItem('zooKeeperHighScore') || 0;
+  document.getElementById('playsBadge').textContent = parseInt(localStorage.getItem('totalPlays') || 0);
+}
+updateHomeBadges(); // Call on load
+
+// If you have an existing updateMainMenuHighScore function, override it:
+if (typeof updateMainMenuHighScore !== 'undefined') {
+  updateMainMenuHighScore = updateHomeBadges;
+}
+
+
         const BASKET_RADIUS = 40;
       
      
