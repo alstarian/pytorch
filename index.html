@@ -17,139 +17,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
-/* PREMIUM MODERN HOME SCREEN - SLEEK & LUXURIOUS */
-#overlay {
-    background: rgba(10, 14, 26, 0.98);
-    backdrop-filter: blur(20px);
-}
-
-.modal {
-    background: linear-gradient(135deg, #0D1120 0%, #000000 100%);
-    border: 2px solid #D4AF37; /* Rich gold border */
-    border-radius: 28px;
-    padding: env(safe-area-inset-top, 40px) 24px 40px;
-    width: 90%;
-    max-width: 380px;
-    box-shadow: 
-        0 40px 100px rgba(0,0,0,0.95),
-        inset 0 2px 8px rgba(212,175,55,0.25); /* Subtle inner gold glow */
-    backdrop-filter: blur(20px);
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    overflow: hidden;
-}
-
-/* Title - Bold, luxurious gold gradient */
-h1 {
-    font-size: 56px;
-    font-weight: 900;
-    background: linear-gradient(135deg, #FFD700 0%, #D4AF37 50%, #B8860B 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin: 0;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    filter: drop-shadow(0 8px 32px rgba(212,175,55,0.6));
-    line-height: 1;
-}
-
-/* Subtitle - Clean, high-contrast */
-.subtitle {
-    font-size: 16px;
-    color: #E0E0E0;
-    margin: 0 0 12px 0;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-}
-
-/* Animal emoji row - Elegant gold card */
-.animal-emojis {
-    display: flex;
-    justify-content: center;
-    gap: 16px;
-    padding: 20px 24px;
-    background: rgba(212,175,55,0.12);
-    border: 1px solid rgba(212,175,55,0.4);
-    border-radius: 24px;
-    margin: 12px 0;
-}
-.animal-emoji {
-    font-size: 42px;
-    text-shadow: 0 0 20px rgba(212,175,55,0.8);
-}
-
-/* Buttons - Premium feel */
-button {
-    padding: 16px 32px;
-    font-size: 17px;
-    font-weight: 700;
-    border-radius: 20px;
-    cursor: pointer;
-    transition: all 0.25s ease;
-    box-shadow: 0 16px 48px rgba(0,0,0,0.6);
-    margin: 8px 0;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    letter-spacing: 0.8px;
-    text-transform: uppercase;
-}
-
-#startBtn {
-    background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%);
-    color: #0A0E1A;
-    font-size: 18px;
-    padding: 18px 32px;
-    box-shadow: 0 20px 60px rgba(255,215,0,0.5);
-}
-
-#premiumBtn {
-    background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%);
-    color: #0A0E1A;
-    box-shadow: 0 20px 60px rgba(255,215,0,0.5);
-}
-
-#premiumStatus {
-    background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%);
-    color: #0A0E1A;
-    font-weight: 800;
-    padding: 16px 32px;
-    border-radius: 20px;
-    box-shadow: 0 16px 48px rgba(255,215,0,0.5);
-    gap: 12px;
-}
-
-button.secondary {
-    background: rgba(20, 25, 40, 0.95);
-    color: #E0E0E0;
-    border: 1px solid rgba(212,175,55,0.5);
-    box-shadow: 0 12px 36px rgba(0,0,0,0.6);
-}
-
-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 24px 70px rgba(0,0,0,0.7);
-}
-
-button:active {
-    transform: translateY(1px);
-}
-
-/* Firebase status - Subtle but visible */
-.firebase-status {
-    font-size: 13px;
-    color: #B0B0B0;
-    margin-top: 8px;
-    font-weight: 600;
-}
-.firebase-status.connected {
-    color: #4ade80;
-}
-
 
 
 
@@ -1778,6 +1645,126 @@ body {
             80% { transform: translate(-50%, 0) scale(1); opacity: 1; }
             100% { transform: translate(-50%, -20px) scale(0.8); opacity: 0; }
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* PREMIUM HOME SCREEN ONLY - SCOPED & OVERRIDES ALL CONFLICTS - PLACE AT VERY END */
+#overlay {
+    background: rgba(10, 14, 26, 0.98) !important;
+    backdrop-filter: blur(20px);
+    pointer-events: auto !important;
+}
+
+#overlay .modal {
+    background: linear-gradient(135deg, #0D1120 0%, #000000 100%) !important;
+    border: 2px solid #D4AF37 !important;
+    border-radius: 28px !important;
+    padding: env(safe-area-inset-top, 40px) 24px 40px !important;
+    width: 90% !important;
+    max-width: 380px !important;
+    box-shadow: 
+        0 40px 100px rgba(0,0,0,0.95),
+        inset 0 2px 8px rgba(212,175,55,0.25) !important;
+    backdrop-filter: blur(20px);
+    gap: 20px !important;
+}
+
+#overlay h1 {
+    font-size: 56px !important;
+    background: linear-gradient(135deg, #FFD700 0%, #D4AF37 50%, #B8860B 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    letter-spacing: 4px !important;
+    filter: drop-shadow(0 8px 32px rgba(212,175,55,0.6)) !important;
+}
+
+#overlay .subtitle {
+    font-size: 16px !important;
+    color: #E0E0E0 !important;
+}
+
+#overlay .animal-emojis {
+    gap: 16px !important;
+    padding: 20px 24px !important;
+    background: rgba(212,175,55,0.12) !important;
+    border: 1px solid rgba(212,175,55,0.4) !important;
+    border-radius: 24px !important;
+}
+
+#overlay .animal-emoji {
+    font-size: 42px !important;
+    text-shadow: 0 0 20px rgba(212,175,55,0.8) !important;
+}
+
+#overlay button {
+    padding: 16px 32px !important;
+    font-size: 17px !important;
+    border-radius: 20px !important;
+    box-shadow: 0 16px 48px rgba(0,0,0,0.6) !important;
+    gap: 10px !important;
+    letter-spacing: 0.8px !important;
+    text-transform: uppercase !important;
+    pointer-events: auto !important;
+    border: none !important;
+}
+
+#overlay #startBtn,
+#overlay #premiumBtn {
+    background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%) !important;
+    color: #0A0E1A !important;
+    font-size: 18px !important;
+    padding: 18px 32px !important;
+    box-shadow: 0 20px 60px rgba(255,215,0,0.5) !important;
+}
+
+#overlay #premiumStatus {
+    background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%) !important;
+    color: #0A0E1A !important;
+    font-weight: 800 !important;
+    padding: 16px 32px !important;
+    border-radius: 20px !important;
+    box-shadow: 0 16px 48px rgba(255,215,0,0.5) !important;
+    gap: 12px !important;
+    font-size: 17px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+#overlay button.secondary {
+    background: rgba(20, 25, 40, 0.95) !important;
+    color: #E0E0E0 !important;
+    border: 1px solid rgba(212,175,55,0.5) !important;
+}
+
+#overlay .firebase-status {
+    font-size: 13px !important;
+    color: #B0B0B0 !important;
+}
+
+#overlay .firebase-status.connected {
+    color: #4ade80 !important;
+}
+
+
+
+
+
+
+
+
+        
     </style>
 </head>
 <body>
