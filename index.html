@@ -3363,6 +3363,17 @@ function drawBackground() {
     });
 }
 function gameLoop(time) {
+
+
+
+// SAFETY CHECK: Don't run if game over screen is visible
+    if (!document.getElementById('gameOverScreen').classList.contains('hidden')) {
+        return; // Exit immediately if game over screen is showing
+    }
+
+
+
+    
     if (!gameRunning) return;
     checkSlowMo(time);
         // Progressive zone unlock (challenging milestones - no debug mode)
@@ -3791,9 +3802,16 @@ function startGame() {
     }
     
 
+      // CLEAR all game objects
+    animals = [];
+    powerupNumbers = [];
+    dangerItems = [];
+    particles = [];
+
 
             document.getElementById('slowmoOverlay').classList.remove('active');
             document.getElementById('pauseButton').style.display = 'none';
+            document.getElementById('pauseOverlay').classList.add('hidden');
             const gameOverAnim = document.createElement('div');
             gameOverAnim.className = 'game-over-animation';
             gameOverAnim.innerHTML = '<div class="game-over-text">GAME OVER</div>';
