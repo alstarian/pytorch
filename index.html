@@ -16,6 +16,189 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
+
+
+
+
+
+
+
+
+
+/* PREMIUM HOME SCREEN - LUXURY EDITION */
+.modal {
+    background: linear-gradient(135deg, rgba(20, 25, 40, 0.98) 0%, rgba(10, 14, 26, 0.99) 100%);
+    border: 2px solid rgba(212, 175, 55, 0.3);
+    border-radius: 24px;
+    padding: 24px 20px;        /* SUPER TIGHT */
+    width: 94%;
+    max-width: 380px;
+    max-height: 92vh;          /* FITS ALL SCREENS */
+    height: auto;
+    overflow: hidden;
+    text-align: center;
+    box-shadow: 
+        0 25px 60px rgba(0, 0, 0, 0.85),
+        inset 0 1px 0 rgba(255, 255, 255, 0.08),
+        0 0 40px rgba(212, 175, 55, 0.2);
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    backdrop-filter: blur(20px);
+    z-index: 9999;
+}
+
+/* 3. DARKER GOLD BORDER */
+.modal::before {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    background: linear-gradient(45deg, #D4AF37, #B8860B, #DAA520, #D4AF37);
+    border-radius: 32px;
+    z-index: -1;
+    filter: blur(12px);
+    animation: borderGlow 3s ease-in-out infinite;
+}
+
+@keyframes borderGlow {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
+}
+
+* 1. DARKER GOLD TITLE */
+h1 {
+    font-size: 52px;           /* SMALLER TITLE */
+    font-weight: 900;
+    background: linear-gradient(135deg, #D4AF37 0%, #B8860B 50%, #D4AF37 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin: 0 0 8px 0;         /* TIGHTER MARGIN */
+    letter-spacing: 2px;
+    animation: titleShimmer 3s ease-in-out infinite;
+}
+
+
+@keyframes titleShimmer {
+    0%, 100% { background-position: 0% 50%; filter: brightness(1); }
+    50% { background-position: 100% 50%; filter: brightness(1.3); }
+}
+
+.subtitle {
+    font-size: 14px;           /* SMALLER */
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 16px;       /* TIGHTER */
+    font-weight: 600;
+}
+
+.animal-emojis {
+    gap: 8px;                  /* TIGHT PACKING */
+    margin: 12px 0 16px;       /* MINIMAL */
+    padding: 12px 8px;
+    background: rgba(212, 175, 55, 0.06);
+    border-radius: 20px;
+    border: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+
+.animal-emojis .animal-emoji {
+    font-size: 56px;
+    animation: floatGlow 3s ease-in-out infinite;
+    text-shadow: 
+        0 0 20px rgba(255, 215, 0, 0.8),
+        0 0 40px rgba(255, 215, 0, 0.4);
+    filter: drop-shadow(0 8px 24px rgba(255, 215, 0, 0.3));
+}
+
+.animal-emojis .animal-emoji:nth-child(1) { animation-delay: 0s; }
+.animal-emojis .animal-emoji:nth-child(2) { animation-delay: 0.3s; }
+.animal-emojis .animal-emoji:nth-child(3) { animation-delay: 0.6s; }
+.animal-emojis .animal-emoji:nth-child(4) { animation-delay: 0.9s; }
+.animal-emojis .animal-emoji:nth-child(5) { animation-delay: 1.2s; }
+.animal-emojis .animal-emoji:nth-child(6) { animation-delay: 1.5s; }
+
+@keyframes floatGlow {
+    0%, 100% { transform: translateY(0px) scale(1); }
+    50% { transform: translateY(-8px) scale(1.05); }
+}
+
+/* PREMIUM GOLD BUTTONS */
+button {
+    padding: 16px 36px;        /* SMALLER BUTTONS */
+    font-size: 16px;
+    margin-top: 12px;          /* TIGHTER */
+    border-radius: 18px;
+}
+
+button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.6s;
+}
+
+button:active::before {
+    left: 100%;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+#premiumBtn {
+    background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%);
+    color: white;
+    box-shadow: 0 16px 48px rgba(78, 205, 196, 0.4);
+}
+
+#premiumStatus {
+    padding: 14px 24px;
+    font-size: 16px;
+    margin-top: 16px;
+    border-radius: 18px;
+}
+
+@keyframes premiumPulse {
+    0%, 100% { box-shadow: 0 16px 48px rgba(255, 215, 0, 0.4); }
+    50% { box-shadow: 0 24px 64px rgba(255, 215, 0, 0.6); }
+}
+
+button.secondary {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 100%);
+    color: rgba(255, 255, 255, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    font-weight: 700;
+    margin-top: 12px;
+}
+
+.firebase-status {
+    font-size: 14px;
+    color: #4ade80;
+    margin: 20px 0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+        
         /* Compact design styles */
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap');
         body {
@@ -1306,7 +1489,7 @@
                 .firebase-status.error {
                     color: #f87171;
                 }
-       
+        /* Portrait-only lock - MOBILE + TABLET */
         @media (orientation: landscape) {
             body::before {
                 content: "📱 Portrait Mode Only";
@@ -1329,7 +1512,7 @@
                 padding: 20px;
                 gap: 0px;
                 line-height: 1.4;
-            } 
+            }
           
             body::after {
                 content: "";
@@ -1633,12 +1816,12 @@
             <p class="subtitle">Catch animals to build your zoo! Unlock premiums for epic rewards.</p>
             <!-- Glowing Animal Emojis Row -->
             <div class="animal-emojis">
-                <span class="animal-emoji">🦁</span>
-                <span class="animal-emoji">🐘</span>
-                <span class="animal-emoji">🦓</span>
-                <span class="animal-emoji">🦭</span>
+                <span class="animal-emoji">🦄</span>
+                <span class="animal-emoji">🐉</span>
+                <span class="animal-emoji">🐳</span>
+                <span class="animal-emoji">🦇</span>
                 <span class="animal-emoji">🦜</span>
-                <span class="animal-emoji">🦅</span>
+                <span class="animal-emoji">🐒</span>
             </div>
             <p class="firebase-status" id="firebaseStatus">Connecting to leaderboard...</p>
             <button id="startBtn"><span>▶️</span> Start Playing</button>
@@ -1785,12 +1968,6 @@
             document.getElementById('firebaseStatus').textContent = '⚠ Leaderboard offline (configure Firebase)';
             document.getElementById('firebaseStatus').classList.add('error');
         }
-
-
-
-
-
-
         function submitScoreToLeaderboard(playerName, score) {
             if (!firebaseInitialized) {
                 alert('Leaderboard is offline. Configure Firebase to enable.');
