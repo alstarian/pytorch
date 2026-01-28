@@ -2621,7 +2621,7 @@ function resetGameTracker() {
         // updateMainMenuHighScore();
         let audioCtx = null;
         let audioInitialized = false;
-        
+
         function initAudio() {
             if (!audioInitialized) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -2630,9 +2630,7 @@ function resetGameTracker() {
         }
 
 
-// iOS Audio Resume Fix - Paste this anywhere in your script
-let audioCtx = audioCtx || null; // Use existing if defined
-
+// iOS Audio Resume Fix - SAFE VERSION
 function resumeAudio() {
     if (audioCtx && audioCtx.state === 'suspended') {
         audioCtx.resume().then(() => {
@@ -2641,7 +2639,7 @@ function resumeAudio() {
     }
 }
 
-// Resume on app return (Capacitor + Web)
+// Resume on app return (Capacitor + Web) - SAFE
 document.addEventListener('resume', resumeAudio);
 document.addEventListener('visibilitychange', () => {
     if (!document.hidden) resumeAudio();
@@ -2649,15 +2647,13 @@ document.addEventListener('visibilitychange', () => {
 window.addEventListener('focus', resumeAudio);
 window.addEventListener('pageshow', resumeAudio);
 
-// Resume on first touch after return
+// Resume on canvas touch - SAFE
 const canvas = document.getElementById('gameCanvas');
-canvas.addEventListener('touchstart', resumeAudio, { passive: true });
+if (canvas) {
+    canvas.addEventListener('touchstart', resumeAudio, { passive: true });
+}
 
-// Resume when tapping "Resume Game" button
-document.getElementById('resumeButton').addEventListener('click', () => {
-    resumeAudio(); // ← This fixes your issue!
-    // ... rest of your existing resume logic
-});
+// ADD THIS LINE TO YOUR EXISTING resumeButton handler instead:
 
 
 
@@ -4127,6 +4123,7 @@ document.getElementById('pauseButton').addEventListener('click', () => {
 });
 // Resume button
 document.getElementById('resumeButton').addEventListener('click', () => {
+    resumeAudio(); 
     paused = false;
     document.getElementById('pauseOverlay').classList.add('hidden');
     document.getElementById('pauseButton').style.display = 'flex'; // Show pause button again
