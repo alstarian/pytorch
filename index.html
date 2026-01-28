@@ -1862,7 +1862,7 @@ body {
                 <p class="stats" id="stats">0 animals rescued</p>
                 <p class="stats" id="streakStats">Best Streak: 0</p>
                 <p class="stats" id="diffStats">Reached Level: 1</p>
-                <p class="stats" id="premiumStats">⭐ Premium: 0 (0/14 species)</p>
+                <p class="stats" id="premiumStats">⭐ Premium: 0 (0/16 species)</p>
                 <p class="stats" id="almostMsg" style="color: #FFD700;"></p>
                 <input type="text" id="playerNameInput" class="name-input" placeholder="Enter your name" maxlength="20" />
                 <button id="submitScoreBtn">🏆 Submit to Leaderboard</button>
@@ -1901,7 +1901,7 @@ body {
                     <div class="stat-card-label">⭐ Total Caught</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-card-value" id="premiumCollection">0/14</div>
+                    <div class="stat-card-value" id="premiumCollection">0/16</div>
                     <div class="stat-card-label">Species Found</div>
                 </div>
                 <div class="stat-card">
@@ -2948,13 +2948,42 @@ document.getElementById('premiumCollection').textContent = `${premiumSpeciesCaug
     animals.forEach(a => {
         if(!a.baseSpeed) a.baseSpeed = a.speed;
         if(!a.baseVx && a.vx !== undefined) a.baseVx = a.vx;
+        if(!a.baseSwerveSpeed && a.swerveSpeed !== undefined) a.baseSwerveSpeed = a.swerveSpeed;
+        if(!a.baseRotationSpeed) a.baseRotationSpeed = 0.04 + (difficulty * 0.003); // Assume default rotation speed
         a.speed *= 0.3;
         if(a.vx !== undefined) a.vx *= 0.3;
+        if(a.swerveSpeed !== undefined) a.swerveSpeed *= 0.3;
     });
         // ⚡ SLOW DOWN DANGER ITEMS TOO! ⚡
     dangerItems.forEach(d => {
         if(!d.baseSpeed) d.baseSpeed = d.speed;
+        if(!d.baseSwerveSpeed && d.swerveSpeed !== undefined) d.baseSwerveSpeed = d.swerveSpeed;
+        if(!d.baseRotationSpeed) d.baseRotationSpeed = 0.06; // Assume default
         d.speed *= 0.3;
+        if(d.swerveSpeed !== undefined) d.swerveSpeed *= 0.3;
+    });
+    // Slow down powerups
+    powerupNumbers.forEach(p => {
+        if(!p.baseSpeed) p.baseSpeed = p.speed;
+        if(!p.baseSwerveSpeed && p.swerveSpeed !== undefined) p.baseSwerveSpeed = p.swerveSpeed;
+        if(!p.baseRotationSpeed) p.baseRotationSpeed = 0.04; // Assume default
+        p.speed *= 0.3;
+        if(p.swerveSpeed !== undefined) p.swerveSpeed *= 0.3;
+    });
+    // Slow down background elements
+    backgroundElements.forEach(elem => {
+        if (elem.speedY && !elem.baseSpeedY) elem.baseSpeedY = elem.speedY;
+        if (elem.speed && !elem.baseSpeed) elem.baseSpeed = elem.speed;
+        if (elem.swaySpeed && !elem.baseSwaySpeed) elem.baseSwaySpeed = elem.swaySpeed;
+        if (elem.rotationSpeed && !elem.baseRotationSpeed) elem.baseRotationSpeed = elem.rotationSpeed;
+        if (elem.waveSpeed && !elem.baseWaveSpeed) elem.baseWaveSpeed = elem.waveSpeed;
+        if (elem.pulseSpeed && !elem.basePulseSpeed) elem.basePulseSpeed = elem.pulseSpeed;
+        if (elem.speedY) elem.speedY *= 0.3;
+        if (elem.speed) elem.speed *= 0.3;
+        if (elem.swaySpeed) elem.swaySpeed *= 0.3;
+        if (elem.rotationSpeed) elem.rotationSpeed *= 0.3;
+        if (elem.waveSpeed) elem.waveSpeed *= 0.3;
+        if (elem.pulseSpeed) elem.pulseSpeed *= 0.3;
     });
 }
 function checkSlowMo(time) {
@@ -2984,12 +3013,70 @@ function checkSlowMo(time) {
                 a.vx = a.baseVx;
                 delete a.baseVx;
             }
+            if (a.baseSwerveSpeed !== undefined) {
+                a.swerveSpeed = a.baseSwerveSpeed;
+                delete a.baseSwerveSpeed;
+            }
+            if (a.baseRotationSpeed) {
+                // Restore rotation speed
+                delete a.baseRotationSpeed;
+            }
         });
                     // ⚡ SPEED DANGER ITEMS BACK UP! ⚡
         dangerItems.forEach(d => {
             if(d.baseSpeed) {
                 d.speed = d.baseSpeed;
                 delete d.baseSpeed;
+            }
+            if (d.baseSwerveSpeed !== undefined) {
+                d.swerveSpeed = d.baseSwerveSpeed;
+                delete d.baseSwerveSpeed;
+            }
+            if (d.baseRotationSpeed) {
+                // Restore
+                delete d.baseRotationSpeed;
+            }
+        });
+        // Speed up powerups
+        powerupNumbers.forEach(p => {
+            if(p.baseSpeed) {
+                p.speed = p.baseSpeed;
+                delete p.baseSpeed;
+            }
+            if (p.baseSwerveSpeed !== undefined) {
+                p.swerveSpeed = p.baseSwerveSpeed;
+                delete p.baseSwerveSpeed;
+            }
+            if (p.baseRotationSpeed) {
+                // Restore
+                delete p.baseRotationSpeed;
+            }
+        });
+        // Speed up background elements
+        backgroundElements.forEach(elem => {
+            if (elem.baseSpeedY) {
+                elem.speedY = elem.baseSpeedY;
+                delete elem.baseSpeedY;
+            }
+            if (elem.baseSpeed) {
+                elem.speed = elem.baseSpeed;
+                delete elem.baseSpeed;
+            }
+            if (elem.baseSwaySpeed) {
+                elem.swaySpeed = elem.baseSwaySpeed;
+                delete elem.baseSwaySpeed;
+            }
+            if (elem.baseRotationSpeed) {
+                elem.rotationSpeed = elem.baseRotationSpeed;
+                delete elem.baseRotationSpeed;
+            }
+            if (elem.baseWaveSpeed) {
+                elem.waveSpeed = elem.baseWaveSpeed;
+                delete elem.baseWaveSpeed;
+            }
+            if (elem.basePulseSpeed) {
+                elem.pulseSpeed = elem.basePulseSpeed;
+                delete elem.basePulseSpeed;
             }
         });
     }
@@ -3184,6 +3271,7 @@ function checkSlowMo(time) {
         }
         function drawAnimals() {
     const emojiSize = window.innerWidth > 768 ? 64 : 48;
+    const slowMoFactor = slowMoActive ? 0.3 : 1;
     // Draw animals with premium flair
     animals.forEach(a => {
         ctx.save();
@@ -3207,7 +3295,7 @@ function checkSlowMo(time) {
         ctx.shadowBlur = 0;
         ctx.restore();
         // Rotation update
-        a.rotation += slowMoActive ? 0.015 : (0.04 + (difficulty * 0.003));
+        a.rotation += (0.04 + (difficulty * 0.003)) * slowMoFactor;
         a.currentX = a.x;
         // Premium trailing sparkles (magical trail)
         if (a.type.premium && Math.random() < 0.35) {
@@ -3216,7 +3304,7 @@ function checkSlowMo(time) {
     });
     // Danger items (unchanged - keep red glow)
     dangerItems.forEach(d => {
-        d.swerveOffset += d.swerveSpeed;
+        d.swerveOffset += d.swerveSpeed * slowMoFactor;
         const swerveX = Math.sin(d.swerveOffset) * d.swerveAmount;
         ctx.save();
         ctx.translate(d.x + swerveX, d.y);
@@ -3230,12 +3318,12 @@ function checkSlowMo(time) {
         ctx.fillText(d.type.emoji, 0, 0);
         ctx.shadowBlur = 0;
         ctx.restore();
-        d.rotation += slowMoActive ? 0.02 : 0.06;
+        d.rotation += 0.06 * slowMoFactor;
         d.currentX = d.x + swerveX;
     });
     // Powerups (unchanged - keep cyan glow)
     powerupNumbers.forEach(p => {
-        p.swerveOffset += p.swerveSpeed;
+        p.swerveOffset += p.swerveSpeed * slowMoFactor;
         const swerveX = Math.sin(p.swerveOffset) * p.swerveAmount;
         ctx.save();
         ctx.translate(p.x + swerveX, p.y);
@@ -3248,7 +3336,7 @@ function checkSlowMo(time) {
         ctx.fillText(p.type.emoji, 0, 0);
         ctx.shadowBlur = 0;
         ctx.restore();
-        p.rotation += slowMoActive ? 0.015 : 0.04;
+        p.rotation += 0.04 * slowMoFactor;
         p.currentX = p.x + swerveX;
     });
 }
@@ -3329,6 +3417,7 @@ function checkSlowMo(time) {
                 }
             }
 function drawBackground() {
+    const slowMoFactor = slowMoActive ? 0.3 : 1;
     // LAYER 1: Static background elements first (sun, moon, tree, volcano)
     backgroundElements.forEach((elem) => {
         if (elem.speed === 0 && !elem.speedY && !elem.pulse) {
@@ -3351,19 +3440,19 @@ function drawBackground() {
             let drawY = elem.y;
             // === VERTICAL MOVEMENT (snow, leaves, flames, mushrooms, sparkles) ===
             if (elem.speedY) {
-                elem.y += elem.speedY * (slowMoActive ? 0.4 : 1);
+                elem.y += elem.speedY * slowMoFactor;
                 // Apply custom opacity for subtle effects
                 if (elem.opacity !== undefined) {
                     ctx.globalAlpha = elem.opacity;
                 }
                 // Sway side-to-side
                 if (elem.swayAmount) {
-                    elem.swayOffset = (elem.swayOffset || 0) + elem.swaySpeed;
+                    elem.swayOffset = (elem.swayOffset || 0) + elem.swaySpeed * slowMoFactor;
                     drawX += Math.sin(elem.swayOffset) * elem.swayAmount;
                 }
                 // Rotation (for leaves, snowflakes, flames)
                 if (elem.rotationSpeed) {
-                    elem.rotation = (elem.rotation || 0) + elem.rotationSpeed * (slowMoActive ? 0.4 : 1);
+                    elem.rotation = (elem.rotation || 0) + elem.rotationSpeed * slowMoFactor;
                 }
                 // Draw with rotation if needed
                 if (elem.rotation) {
@@ -3391,11 +3480,11 @@ function drawBackground() {
             }
             // === HORIZONTAL MOVEMENT (clouds, eagles, butterflies, grass) ===
             else if (elem.speed > 0) {
-                elem.x += elem.speed * (slowMoActive ? 0.4 : 1);
+                elem.x += elem.speed * slowMoFactor;
                 drawX = elem.x;
                 // Vertical wave motion (for eagles and butterflies)
                 if (elem.waveAmount) {
-                    elem.waveOffset = (elem.waveOffset || 0) + elem.waveSpeed;
+                    elem.waveOffset = (elem.waveOffset || 0) + elem.waveSpeed * slowMoFactor;
                     drawY += Math.sin(elem.waveOffset) * elem.waveAmount;
                 }
                 ctx.fillText(elem.emoji, drawX, drawY);
@@ -3411,7 +3500,7 @@ function drawBackground() {
             else if (elem.pulse) {
                 const scale = 1 + Math.sin(elem.pulseOffset) * 0.2;
                 ctx.globalAlpha = 0.6 + Math.sin(elem.pulseOffset) * 0.3;
-                elem.pulseOffset += elem.pulseSpeed;
+                elem.pulseOffset += elem.pulseSpeed * slowMoFactor;
                 ctx.font = `${elem.size * scale}px Arial, "Apple Color Emoji", sans-serif`;
                 ctx.fillText(elem.emoji, elem.x, elem.y);
             }
@@ -3602,7 +3691,7 @@ if (time - lastHeartSpawn > 20000 && lives < 5 && Math.random() < 0.05) {
         showAchievement('✨', 'New Discovery!', `First ${animals[i].type.name} caught!`);
      
         // Master collector achievement (caught all 14)
-        if (premiumSpeciesCaught.length === 14) {
+        if (premiumSpeciesCaught.length === 16) {
             showAchievement('👑', 'Master Collector!', 'All premium animals caught!');
             celebrateAchievement('milestone');
         }
@@ -3658,7 +3747,6 @@ if (time - lastHeartSpawn > 20000 && lives < 5 && Math.random() < 0.05) {
          
            if (lives <= 0) {
     gameRunning = false;
-    gameOver = true;
     
     // STOP GAME LOOP
     if (animationFrameId) {
@@ -3732,7 +3820,6 @@ for (let i = powerupNumbers.length - 1; i >= 0; i--) {
          
          if (lives <= 0) {
     gameRunning = false;
-    gameOver = true;
     
     // STOP GAME LOOP
     if (animationFrameId) {
