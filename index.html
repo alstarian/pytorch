@@ -3704,6 +3704,17 @@ window.matchMedia('(orientation: landscape)').addEventListener('change', forcePo
 // Initial check
 forcePortraitPause();
 function startGame() {
+
+
+
+// UNLOCK FOR GAME
+    document.body.style.overflow = '';
+    document.body.style.position = '';
+    document.body.style.touchAction = '';
+
+
+
+    
     initAudio();
     console.log("START GAME CALLED!");
     resetGameTracker();
