@@ -1764,7 +1764,7 @@ body {
 
 
 
-        
+
     </style>
 </head>
 <body>
@@ -4440,6 +4440,74 @@ window.addEventListener('resize', function() {
     });
 });
 
+
+
+
+
+// 2. TOUCH & MOUSE CONTROLS
+canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    isDragging = true;
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    player.x = touch.clientX - rect.left - 40;
+});
+
+canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    if (isDragging) {
+        const touch = e.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        player.x = Math.max(0, Math.min(gameWidth - 80, touch.clientX - rect.left - 40));
+    }
+});
+
+canvas.addEventListener('touchend', () => {
+    isDragging = false;
+});
+
+canvas.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    const rect = canvas.getBoundingClientRect();
+    player.x = e.clientX - rect.left - 40;
+});
+
+canvas.addEventListener('mousemove', (e) => {
+    if (isDragging) {
+        const rect = canvas.getBoundingClientRect();
+        player.x = Math.max(0, Math.min(gameWidth - 80, e.clientX - rect.left - 40));
+    }
+});
+
+canvas.addEventListener('mouseup', () => {
+    isDragging = false;
+});
+
+// PAUSE BUTTON LISTENERS
+document.getElementById('pauseButton').addEventListener('click', () => {
+    paused = true;
+    document.getElementById('pauseOverlay').classList.remove('hidden');
+});
+
+document.getElementById('resumeButton').addEventListener('click', () => {
+    paused = false;
+    document.getElementById('pauseOverlay').classList.add('hidden');
+});
+
+document.getElementById('quitButton').addEventListener('click', () => {
+    gameRunning = false;
+    paused = false;
+    document.getElementById('pauseOverlay').classList.add('hidden');
+    document.getElementById('overlay').classList.remove('hidden');
+    if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+        animationFrameId = null;
+    }
+});
+
+// Initialize canvas on load
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 
 
 
