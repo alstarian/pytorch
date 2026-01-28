@@ -2136,7 +2136,7 @@ function createBackgroundElements(zoneName) {
                backgroundElements.push({
             emoji: "☀️",
             x: gameWidth / 2,
-            y: 80,  // ← MOVED DOWN
+            y: 100,  // ← MOVED DOWN
             speed: 0,
             size: 45
         });
@@ -2692,6 +2692,28 @@ function resizeCanvas() {
     canvas.width = window.innerWidth * dpr;
     canvas.height = window.innerHeight * dpr;
     ctx.scale(dpr, dpr);
+
+
+
+
+
+
+   // Update game dimensions
+    gameWidth = window.innerWidth;
+    gameHeight = window.innerHeight;
+    
+    // Reposition basket if game is running
+    if (gameRunning) {
+        player.x = Math.max(0, Math.min(gameWidth - 80, player.x));
+        player.y = gameHeight - 110;
+    }
+
+
+
+
+
+
+    
 }
 resizeCanvas();
 window.addEventListener('resize', resizeCanvas);
@@ -3373,7 +3395,7 @@ function gameLoop(time) {
 
 
 
-    
+
     if (!gameRunning) return;
     checkSlowMo(time);
         // Progressive zone unlock (challenging milestones - no debug mode)
@@ -3686,28 +3708,43 @@ for (let i = powerupNumbers.length - 1; i >= 0; i--) {
 let gamePausedByOrientation = false;
 function forcePortraitPause() {
     const isLandscape = window.innerWidth > window.innerHeight;
-  
+    const gameOverVisible = !document.getElementById('gameOverScreen').classList.contains('hidden');
+    const mainMenuVisible = !document.getElementById('overlay').classList.contains('hidden');
+    
     if(isLandscape) {
         // FORCE PAUSE - Stop gameLoop completely
         document.body.classList.add('portrait-pause');
-        gamePausedByOrientation = true;
-        gameRunning = false; // ← CRITICAL: Stops gameLoop
-        if(animationFrameId) {
-            cancelAnimationFrame(animationFrameId);
-            animationFrameId = null;
+        
+        // Only pause if game is actually running (not on menu or game over)
+        if (gameRunning && !gameOverVisible && !mainMenuVisible) {
+            gamePausedByOrientation = true;
+            gameRunning = false;
+            if(animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
         }
     } else if(gamePausedByOrientation) {
-    // RESUME ONLY when returning to portrait
-    document.body.classList.remove('portrait-pause');
-    gamePausedByOrientation = false;
-    if(paused) {
-        resumeGame(); // Resume if pause button was used
-    } else {
-        gameRunning = true; // ← PROBLEM: Restarts game even after Game Over!
-        gameLoop(performance.now()); // ← Restart animation
+        // RESUME ONLY when returning to portrait AND game was actually playing
+        document.body.classList.remove('portrait-pause');
+        gamePausedByOrientation = false;
+        
+        // Check again before resuming
+        const stillGameOver = !document.getElementById('gameOverScreen').classList.contains('hidden');
+        const stillOnMenu = !document.getElementById('overlay').classList.contains('hidden');
+        
+        // Only resume if NOT on game over or menu
+        if (!stillGameOver && !stillOnMenu) {
+            if(paused) {
+                // Let resume button handle it - don't auto-resume
+            } else {
+                gameRunning = true;
+                gameLoop(performance.now());
+            }
+        }
     }
 }
-}
+
 // Listen for ALL orientation events
 window.addEventListener('resize', () => setTimeout(forcePortraitPause, 50));
 window.addEventListener('orientationchange', () => setTimeout(forcePortraitPause, 150));
@@ -3756,9 +3793,17 @@ function startGame() {
     dangerItems = [];
     particles = [];
     rescued = {};
-    
-    // Reset player position
+
+
+   // Reset player position - ADD THESE TWO LINES:
+    gameWidth = window.innerWidth;   // ← ADD THIS
+    gameHeight = window.innerHeight; // ← ADD THIS
     player.x = gameWidth / 2 - 40;
+    player.y = gameHeight - 110;     // ← ADD THIS
+
+
+
+
     
     // Set initial zone
     currentZoneIndex = 0;
