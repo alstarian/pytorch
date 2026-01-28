@@ -2621,34 +2621,6 @@ function resetGameTracker() {
                 audioInitialized = true;
             }
         }
-
-        function resumeAudioContext() {
-    if (audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume().then(() => {
-            console.log('Audio context resumed');
-        });
-    }
-}
-
-document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) {
-        resumeAudioContext();
-    }
-});
-
-window.addEventListener('focus', resumeAudioContext);
-canvas.addEventListener('touchstart', resumeAudioContext, { once: true });
-
-window.addEventListener('pageshow', (event) => {
-    if (event.persisted) {
-        resumeAudioContext();
-    }
-});
-
-
-
-
-        
         function beep(freq, duration, type = 'sine', vol = 0.3) {
             if (!audioCtx) return;
             try {
