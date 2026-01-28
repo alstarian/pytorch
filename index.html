@@ -2621,44 +2621,12 @@ function resetGameTracker() {
         // updateMainMenuHighScore();
         let audioCtx = null;
         let audioInitialized = false;
-
         function initAudio() {
             if (!audioInitialized) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
                 audioInitialized = true;
             }
         }
-
-
-// iOS Audio Resume Fix - SAFE VERSION
-function resumeAudio() {
-    if (audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume().then(() => {
-            console.log('✅ Audio resumed');
-        }).catch(() => console.log('❌ Audio resume failed'));
-    }
-}
-
-// Resume on app return (Capacitor + Web) - SAFE
-document.addEventListener('resume', resumeAudio);
-document.addEventListener('visibilitychange', () => {
-    if (!document.hidden) resumeAudio();
-});
-window.addEventListener('focus', resumeAudio);
-window.addEventListener('pageshow', resumeAudio);
-
-// Resume on canvas touch - SAFE
-const canvas = document.getElementById('gameCanvas');
-if (canvas) {
-    canvas.addEventListener('touchstart', resumeAudio, { passive: true });
-}
-
-// ADD THIS LINE TO YOUR EXISTING resumeButton handler instead:
-
-
-
-
-
         function beep(freq, duration, type = 'sine', vol = 0.3) {
             if (!audioCtx) return;
             try {
@@ -4123,7 +4091,6 @@ document.getElementById('pauseButton').addEventListener('click', () => {
 });
 // Resume button
 document.getElementById('resumeButton').addEventListener('click', () => {
-    resumeAudio(); 
     paused = false;
     document.getElementById('pauseOverlay').classList.add('hidden');
     document.getElementById('pauseButton').style.display = 'flex'; // Show pause button again
@@ -4350,6 +4317,14 @@ window.addEventListener('resize', function() {
     }
 });
 
+
+// FIX ROTATION AUDIO BUG
+window.addEventListener('resize', function() {
+    document.querySelectorAll('audio').forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
+    });
+});
 
 
 
