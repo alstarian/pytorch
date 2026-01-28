@@ -19,155 +19,146 @@
 
 
 
-
-/* Redesigned Home Screen */
+/* FIXED: Compact Home Screen - Animals Visible + Tight Layout */
 .redesigned-home {
-  padding: 60px 32px;
-  max-width: 420px;
-  gap: 20px;
+  padding: 32px 20px !important; /* Tighter top/bottom */
+  max-width: 360px !important; /* Smaller max-width */
+  width: 92vw !important; /* Responsive */
+  gap: 12px !important; /* Tight spacing */
+  max-height: 85vh !important; /* Prevent scroll */
+  overflow: hidden !important;
 }
 
 .roar-title {
-  font-size: 48px;
-  font-weight: 900;
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FF6B6B 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin: 0 0 12px;
+  font-size: 42px !important; /* Slightly smaller */
+  margin: 0 0 8px !important; /* Less bottom space */
   animation: roarPulse 3s infinite;
   text-align: center;
-  letter-spacing: -1px;
-}
-
-@keyframes roarPulse {
-  0%, 100% { transform: scale(1); text-shadow: 0 0 20px rgba(255,215,0,0.5); }
-  50% { transform: scale(1.05); text-shadow: 0 0 40px rgba(255,107,107,0.8); }
+  letter-spacing: -0.5px;
+  line-height: 1.1;
 }
 
 .hero-stats {
   display: flex;
-  gap: 16px;
+  gap: 12px !important; /* Tighter */
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 12px !important; /* Less space */
 }
 
 .stat-badge {
-  background: rgba(20,25,40,0.9);
-  border: 2px solid rgba(255,215,0,0.4);
-  border-radius: 16px;
-  padding: 12px 20px;
-  text-align: center;
-  backdrop-filter: blur(20px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+  padding: 10px 16px !important; /* More compact */
+  min-width: 80px;
+  border-radius: 14px;
 }
 
 .stat-value {
-  display: block;
-  font-size: 28px;
-  font-weight: 900;
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 24px !important; /* Smaller for compactness */
 }
 
 .stat-label {
-  font-size: 11px;
-  color: rgba(255,255,255,0.7);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  font-size: 10px !important;
 }
 
+/* FIXED: Animals Fully Visible + Compact Parade */
 .animal-parade {
-  display: flex;
-  gap: 12px;
-  animation: parade 20s linear infinite;
-  padding: 20px 0;
-  overflow: hidden;
+  display: flex !important;
+  justify-content: center;
+  gap: 6px !important; /* Tighter */
+  padding: 8px 0 !important; /* Minimal padding */
+  margin: 8px 0 !important;
+  overflow: hidden !important;
+  width: 100% !important;
+  animation: parade 25s linear infinite;
 }
 
 .animal-parade span {
-  font-size: 44px;
-  animation: bounce 1s infinite alternate;
+  font-size: 32px !important; /* Smaller, fits perfectly */
   flex-shrink: 0;
+  animation: bounce 1.2s infinite alternate ease-in-out;
+  filter: drop-shadow(0 0 8px rgba(255,255,255,0.6)); /* Glow for visibility */
 }
 
 @keyframes parade {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
+  0% { transform: translateX(100%); } /* Start off-screen right */
+  100% { transform: translateX(-100%); } /* End off-screen left */
+}
+
+.subtitle {
+  font-size: 13px !important;
+  margin-bottom: 16px !important;
+  line-height: 1.3;
 }
 
 .hero-play {
-  background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%);
-  color: #1a1f35;
-  border: none;
-  padding: 24px 60px;
-  font-size: 20px;
-  font-weight: 900;
-  border-radius: 24px;
-  width: 100%;
-  box-shadow: 0 16px 48px rgba(78,205,196,0.4);
-  text-transform: uppercase;
-  letter-spacing: 2px;
+  padding: 20px 48px !important; /* Slightly smaller */
+  font-size: 18px !important;
+  border-radius: 20px;
+  margin-bottom: 8px !important;
   animation: heroPulse 2s infinite;
-}
-
-.hero-play:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 24px 64px rgba(78,205,196,0.6);
-}
-
-@keyframes heroPulse {
-  0%, 100% { box-shadow: 0 16px 48px rgba(78,205,196,0.4); }
-  50% { box-shadow: 0 24px 64px rgba(78,205,196,0.6); }
 }
 
 .secondary-row {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  align-items: center;
+  gap: 8px !important; /* Tighter */
+  align-items: stretch; /* Full width */
 }
 
-.sec-btn {
-  background: rgba(255,255,255,0.08);
-  color: rgba(255,255,255,0.9);
-  border: 1px solid rgba(255,255,255,0.2);
-  padding: 14px 32px;
-  border-radius: 16px;
-  font-size: 15px;
-  font-weight: 700;
-  transition: all 0.2s;
-  width: 100%;
-  max-width: 280px;
-}
-
-.sec-btn:hover {
-  background: rgba(255,255,255,0.15);
-  transform: translateY(-1px);
+.sec-btn, .premium-glow {
+  padding: 12px 24px !important; /* Compact buttons */
+  font-size: 14px !important;
+  border-radius: 14px;
+  margin: 0 !important;
 }
 
 .premium-glow {
-  background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-  color: #1a1f35 !important;
-  box-shadow: 0 0 32px rgba(255,215,0,0.6);
+  box-shadow: 0 0 24px rgba(255,215,0,0.5) !important;
 }
 
-.firebase-status.hidden,
-.restore-btn {
-  font-size: 13px;
-  color: #4ade80;
-  margin-top: 16px;
+.firebase-status, .restore-btn {
+  font-size: 12px !important;
+  margin-top: 8px !important;
 }
 
-/* Responsive */
-@media (min-width: 768px) {
-  .roar-title { font-size: 56px; }
-  .hero-play { padding: 28px 72px; font-size: 22px; }
-  .secondary-row { flex-direction: row; flex-wrap: wrap; justify-content: center; }
-  .sec-btn { width: auto; max-width: none; }
+/* iPhone-Specific Compactness (Your Screenshot Device) */
+@media (max-width: 390px) and (max-height: 850px) {
+  .redesigned-home {
+    padding: 28px 18px !important; /* Extra tight for iPhone 14/15 */
+    max-width: 340px !important;
+  }
+  .roar-title { font-size: 38px !important; }
+  .animal-parade span { font-size: 28px !important; }
+  .hero-play { padding: 18px 42px !important; font-size: 17px !important; }
 }
 
+/* Ensure Modal Doesn't Override */
+#overlay .modal.redesigned-home {
+  padding: 32px 20px !important;
+  border-radius: 24px !important;
+  max-height: 85vh !important;
+}
 
+/* Hide Overflow + Perfect Centering */
+#overlay {
+  align-items: center !important;
+  justify-content: center !important;
+  padding: env(safe-area-inset-top) 0 !important;
+}
+
+@keyframes roarPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.03); }
+}
+
+@keyframes bounce {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-4px); }
+}
+
+@keyframes heroPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
 
 
 
