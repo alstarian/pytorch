@@ -3714,7 +3714,7 @@ function startGame() {
 
 
 
-    
+
     initAudio();
     console.log("START GAME CALLED!");
     resetGameTracker();
@@ -4179,60 +4179,10 @@ initIAP();
 
 
 
-
-// === HOME SCREEN LOCK - RUNS FIRST ===
-document.addEventListener('DOMContentLoaded', function() {
-    // FORCE LOCK BODY/MODAL
-    function lockScreen() {
-        document.documentElement.style.overflow = 'hidden';
-        document.body.style.overflow = 'hidden';
-        document.body.style.height = '100vh';
-        document.body.style.position = 'fixed';
-        document.body.style.width = '100vw';
-        document.body.style.margin = '0';
-        document.body.style.padding = '0';
-        document.body.style.touchAction = 'none';
-        
-        // FORCE MODAL FULLSCREEN
-        const modal = document.querySelector('.modal');
-        if (modal) {
-            modal.style.position = 'fixed';
-            modal.style.top = '0';
-            modal.style.left = '0';
-            modal.style.width = '100vw';
-            modal.style.height = '100vh';
-            modal.style.maxWidth = '100vw';
-            modal.style.maxHeight = '100vh';
-            modal.style.margin = '0';
-            modal.style.transform = 'none';
-            modal.style.borderRadius = '0';
-            modal.style.overflow = 'hidden';
-            modal.style.padding = 'env(safe-area-inset-top, 20px) 20px calc(env(safe-area-inset-bottom, 20px) + 20px) 20px';
-            modal.style.boxSizing = 'border-box';
-            modal.style.display = 'flex';
-            modal.style.alignItems = 'center';
-            modal.style.justifyContent = 'center';
-            modal.style.flexDirection = 'column';
-        }
-    }
-    
-    lockScreen(); // Immediate lock
-    
-    // RE-APPLY ON ALL TOUCH/MOUSE EVENTS (iOS override)
-    ['touchstart', 'touchmove', 'touchend', 'mousedown', 'mousemove', 'mouseup', 'wheel', 'scroll'].forEach(event => {
-        document.addEventListener(event, function(e) {
-            if (!document.querySelector('#overlay:not(.hidden), .modal:not(.hidden)')) return;
-            e.preventDefault();
-            e.stopPropagation();
-            lockScreen(); // Re-force on every interaction
-            return false;
-        }, { passive: false });
-    });
-    
-    // RESIZE LOCK
-    window.addEventListener('resize', lockScreen);
-    window.addEventListener('orientationchange', lockScreen);
-});
+// Prevent body scroll on home screen
+document.body.style.overflow = 'hidden';
+document.body.style.position = 'fixed';
+document.body.style.width = '100vw';
 
 
 
