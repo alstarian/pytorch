@@ -3919,7 +3919,7 @@ function forcePortraitPause() {
             document.getElementById('pauseButton').style.display = 'none';
         } else {
             gameRunning = true; // Restart gameLoop
-            gameLoop(performance.now()); // Restart animation
+            requestAnimationFrame(gameLoop); // Restart animation
         }
     }
 }
