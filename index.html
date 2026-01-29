@@ -306,22 +306,62 @@ button.secondary:hover {
     margin: 0 !important;
 }
 
-/* Leaderboard list - Bigger, only vertical scroll, no horizontal */
+/* Make the list container use full width - no horizontal scroll */
 .leaderboard-list {
     max-height: 70vh;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: hidden;  /* ← Force no horizontal scroll */
     margin: 15px 0;
-    padding: 0 12px;
+    padding: 0 8px;  /* ← Small padding to prevent edge cutoff */
+    width: 100%;
+    box-sizing: border-box;  /* ← IMPORTANT */
 }
 
-/* Ensure items don't cause horizontal scroll */
+/* WIDER LEADERBOARD ITEMS - No horizontal scroll */
 .leaderboard-item {
-    padding: 12px 18px;
+    padding: 16px 12px;  /* ← Less side padding to prevent overflow */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;  /* ← IMPORTANT: includes padding in width */
 }
+
+
+
+
+/* Bigger text but controlled sizing */
+.leaderboard-rank {
+    font-size: 24px;
+    font-weight: 800;
+    min-width: 45px;  /* ← Controlled width */
+    flex-shrink: 0;  /* ← Never shrink rank */
+}
+
+.leaderboard-name {
+    flex: 1;
+    font-size: 18px;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0 12px;
+    overflow: hidden;  /* ← Prevent name overflow */
+    text-overflow: ellipsis;  /* ← Add ... if name is too long */
+    white-space: nowrap;  /* ← Keep on one line */
+}
+
+
+.leaderboard-score {
+    font-size: 22px;
+    font-weight: 800;
+    color: #FFD700;
+    min-width: 70px;  /* ← Fixed width for score */
+    flex-shrink: 0;  /* ← Never shrink score */
+    text-align: right;
+}
+
+
+
 
 /* For iPad/tablet - Keep full screen */
 @media (min-width: 768px) and (orientation: portrait) {
