@@ -1946,7 +1946,11 @@ body {
 
 
 
+// Add this import FIRST - before your Firebase code
+import { SplashScreen } from '@capacitor/splash-screen';
 
+// Hide splash screen immediately
+SplashScreen.hide();
 
 
 
@@ -2621,12 +2625,41 @@ function resetGameTracker() {
         // updateMainMenuHighScore();
         let audioCtx = null;
         let audioInitialized = false;
-        function initAudio() {
-            if (!audioInitialized) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-                audioInitialized = true;
-            }
+     function initAudio() {
+    if (!audioInitialized) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        audioInitialized = true;
+        // NEW: Immediately resume on creation if suspended (iOS may start suspended)
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume().then(() => console.log('AudioContext resumed on init'));
         }
+    }
+}
+
+
+
+
+    function resumeAudioContext() {
+    if (audioCtx && audioCtx.state === 'suspended') {
+        audioCtx.resume().then(() => {
+            console.log('AudioContext resumed');
+            // OPTIONAL: Play silent sound to fully wake audio (iOS-specific)
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            gain.gain.value = 0; // Silent
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.001);
+        }).catch(err => console.error('Resume failed:', err));
+    }
+}
+
+
+
+
+
+
         function beep(freq, duration, type = 'sine', vol = 0.3) {
             if (!audioCtx) return;
             try {
@@ -4332,6 +4365,9 @@ window.addEventListener('resize', function() {
 
 
     </script>
+
+
+    
   
 <!-- Zone Transition Modal -->
 <div id="zoneTransitionModal" class="hidden">
