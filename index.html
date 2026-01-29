@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
     <link href="https://fonts.cdnfonts.com/css/sf-pro-display" rel="stylesheet">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="Zoo Keeper Pro">
+    <meta name="apple-mobile-web-app-title" content="Zoo Keeper">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="apple-touch-icon" sizes="180x180" href="icon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="icon.png">
@@ -17,47 +17,6 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
-
-
-
-#leaderboardScreen, #statsScreen {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
-}
-
-#leaderboardScreen.show, #statsScreen.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-#overlay {
-  transition: opacity 0.4s ease-in-out;
-}
-
-
-
-
-/* Fade transitions for screens */
-#statsScreen, #leaderboardScreen, #gameOverScreen {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-}
-
-#statsScreen.show, #leaderboardScreen.show, #gameOverScreen.show {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Overlay fade */
-#overlay {
-  transition: opacity 0.3s ease-out;
-}
-
-
-
-
 
 
 #pauseButton {
@@ -2065,7 +2024,7 @@ body {
                 <span class="animal-emoji">🐒</span>
             </div>
             <p class="firebase-status" id="firebaseStatus">Connecting to leaderboard...</p>
-            <button id="startBtn"><span>▶🎮</span> Start Playing</button>
+            <button id="startBtn"><span>🎮</span> Start Playing</button>
             <button id="premiumBtn" onclick="buyPremiumAnimals()">💎 Unlock Premiums</button>
                         <div id="premiumStatus" class="hidden" style="
                 background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
@@ -4243,60 +4202,31 @@ document.getElementById("badge").textContent = msg;
                 document.getElementById('badge').textContent = msg;
             }, 1500);
         }
-     function restart() {
-    document.getElementById('gameOverScreen').classList.remove('show');
-    setTimeout(() => {
-        document.getElementById('gameOverScreen').classList.add('hidden');
-        startGame();
-    }, 200);
-}
-
+        function restart() {
+            document.getElementById('gameOverScreen').classList.add('hidden');
+            startGame();
+        }
         document.getElementById('startBtn').addEventListener('click', startGame);
         document.getElementById('restartBtn').addEventListener('click', restart);
-        document.getElementById('statsBtn').addEventListener('click', () => {
-    document.getElementById('overlay').style.opacity = '0';
-    setTimeout(() => {
-        document.getElementById('overlay').classList.add('hidden');
-        document.getElementById('statsScreen').classList.remove('hidden');
-        setTimeout(() => document.getElementById('statsScreen').classList.add('show'), 50);
-    }, 150);
-});
-       
-document.getElementById('viewStatsBtn').addEventListener('click', () => {
-    document.getElementById('gameOverScreen').style.opacity = '0';
-    setTimeout(() => {
-        document.getElementById('gameOverScreen').classList.add('hidden');
-        document.getElementById('statsScreen').classList.remove('hidden');
-        setTimeout(() => document.getElementById('statsScreen').classList.add('show'), 50);
-    }, 150);
-});
-     document.getElementById('closeStatsBtn').addEventListener('click', () => {
-    document.getElementById('statsScreen').classList.remove('show');
-    setTimeout(() => {
-        document.getElementById('statsScreen').classList.add('hidden');
-        document.getElementById('overlay').classList.remove('hidden');
-        updateMainMenuHighScore();
-    }, 200);
-});
-    document.getElementById('leaderboardBtn').addEventListener('click', () => {
-    document.getElementById('overlay').style.opacity = '0';
-    setTimeout(() => {
-        document.getElementById('overlay').classList.add('hidden');
-        document.getElementById('leaderboardScreen').classList.remove('hidden');
-        setTimeout(() => {
-            document.getElementById('leaderboardScreen').classList.add('show');
+        document.getElementById('statsBtn').addEventListener('click', showStats);
+        document.getElementById('viewStatsBtn').addEventListener('click', () => {
+            document.getElementById('gameOverScreen').classList.add('hidden');
+            showStats();
+        });
+        document.getElementById('closeStatsBtn').addEventListener('click', () => {
+            document.getElementById('statsScreen').classList.add('hidden');
+            document.getElementById('overlay').classList.remove('hidden');
+            updateMainMenuHighScore();
+        });
+        document.getElementById('leaderboardBtn').addEventListener('click', () => {
+            document.getElementById('overlay').classList.add('hidden');
+            document.getElementById('leaderboardScreen').classList.remove('hidden');
             loadLeaderboard();
-        }, 50);
-    }, 150);
-});
-
-     document.getElementById('closeLeaderboardBtn').addEventListener('click', () => {
-    document.getElementById('leaderboardScreen').classList.remove('show');
-    setTimeout(() => {
-        document.getElementById('leaderboardScreen').classList.add('hidden');
-        document.getElementById('overlay').classList.remove('hidden');
-    }, 200);
-});
+        });
+        document.getElementById('closeLeaderboardBtn').addEventListener('click', () => {
+            document.getElementById('leaderboardScreen').classList.add('hidden');
+            document.getElementById('overlay').classList.remove('hidden');
+        });
         document.getElementById('submitScoreBtn').addEventListener('click', () => {
             const playerName = document.getElementById('playerNameInput').value;
             submitScoreToLeaderboard(playerName, score);
