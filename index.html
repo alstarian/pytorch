@@ -19,17 +19,43 @@
     <style>
 
 
-/* Smooth fade and slide transition */
-.page {
+
+#leaderboardScreen, #statsScreen {
   opacity: 0;
-  transform: translateY(20px);
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+  transform: translateY(30px);
+  transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
 }
 
-.page.active {
+#leaderboardScreen.show, #statsScreen.show {
   opacity: 1;
   transform: translateY(0);
 }
+
+#overlay {
+  transition: opacity 0.4s ease-in-out;
+}
+
+
+
+
+/* Fade transitions for screens */
+#statsScreen, #leaderboardScreen, #gameOverScreen {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+#statsScreen.show, #leaderboardScreen.show, #gameOverScreen.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Overlay fade */
+#overlay {
+  transition: opacity 0.3s ease-out;
+}
+
+
 
 
 
@@ -4217,31 +4243,60 @@ document.getElementById("badge").textContent = msg;
                 document.getElementById('badge').textContent = msg;
             }, 1500);
         }
-        function restart() {
-            document.getElementById('gameOverScreen').classList.add('hidden');
-            startGame();
-        }
+     function restart() {
+    document.getElementById('gameOverScreen').classList.remove('show');
+    setTimeout(() => {
+        document.getElementById('gameOverScreen').classList.add('hidden');
+        startGame();
+    }, 200);
+}
+
         document.getElementById('startBtn').addEventListener('click', startGame);
         document.getElementById('restartBtn').addEventListener('click', restart);
-        document.getElementById('statsBtn').addEventListener('click', showStats);
-        document.getElementById('viewStatsBtn').addEventListener('click', () => {
-            document.getElementById('gameOverScreen').classList.add('hidden');
-            showStats();
-        });
-        document.getElementById('closeStatsBtn').addEventListener('click', () => {
-            document.getElementById('statsScreen').classList.add('hidden');
-            document.getElementById('overlay').classList.remove('hidden');
-            updateMainMenuHighScore();
-        });
-        document.getElementById('leaderboardBtn').addEventListener('click', () => {
-            document.getElementById('overlay').classList.add('hidden');
-            document.getElementById('leaderboardScreen').classList.remove('hidden');
+        document.getElementById('statsBtn').addEventListener('click', () => {
+    document.getElementById('overlay').style.opacity = '0';
+    setTimeout(() => {
+        document.getElementById('overlay').classList.add('hidden');
+        document.getElementById('statsScreen').classList.remove('hidden');
+        setTimeout(() => document.getElementById('statsScreen').classList.add('show'), 50);
+    }, 150);
+});
+       
+document.getElementById('viewStatsBtn').addEventListener('click', () => {
+    document.getElementById('gameOverScreen').style.opacity = '0';
+    setTimeout(() => {
+        document.getElementById('gameOverScreen').classList.add('hidden');
+        document.getElementById('statsScreen').classList.remove('hidden');
+        setTimeout(() => document.getElementById('statsScreen').classList.add('show'), 50);
+    }, 150);
+});
+     document.getElementById('closeStatsBtn').addEventListener('click', () => {
+    document.getElementById('statsScreen').classList.remove('show');
+    setTimeout(() => {
+        document.getElementById('statsScreen').classList.add('hidden');
+        document.getElementById('overlay').classList.remove('hidden');
+        updateMainMenuHighScore();
+    }, 200);
+});
+    document.getElementById('leaderboardBtn').addEventListener('click', () => {
+    document.getElementById('overlay').style.opacity = '0';
+    setTimeout(() => {
+        document.getElementById('overlay').classList.add('hidden');
+        document.getElementById('leaderboardScreen').classList.remove('hidden');
+        setTimeout(() => {
+            document.getElementById('leaderboardScreen').classList.add('show');
             loadLeaderboard();
-        });
-        document.getElementById('closeLeaderboardBtn').addEventListener('click', () => {
-            document.getElementById('leaderboardScreen').classList.add('hidden');
-            document.getElementById('overlay').classList.remove('hidden');
-        });
+        }, 50);
+    }, 150);
+});
+
+     document.getElementById('closeLeaderboardBtn').addEventListener('click', () => {
+    document.getElementById('leaderboardScreen').classList.remove('show');
+    setTimeout(() => {
+        document.getElementById('leaderboardScreen').classList.add('hidden');
+        document.getElementById('overlay').classList.remove('hidden');
+    }, 200);
+});
         document.getElementById('submitScoreBtn').addEventListener('click', () => {
             const playerName = document.getElementById('playerNameInput').value;
             submitScoreToLeaderboard(playerName, score);
