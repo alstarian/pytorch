@@ -23,123 +23,233 @@
     display: none !important;
 }
 
-/* ULTRA-COMPACT LUXURY HOME SCREEN - STATIC & HIGH-CONTRAST */
+/* ===================================
+   REDESIGNED HOME SCREEN - MODERN & FUN
+   =================================== */
 
-/* Modal: Deeper shadows for luxury depth, no animations */
+/* Modal: Colorful gradient with floating effect */
 .modal {
-    background: linear-gradient(135deg, #1A1F35 0%, #0A0E1A 100%);  /* Darker gradient for elegance */
-    border: 2px solid #D4AF37;  /* Solid gold border, no glow animation */
-    border-radius: 20px;
-    padding: env(safe-area-inset-top, 20px) 16px 16px;  /* Compact padding */
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-radius: 28px;
+    padding: 40px 24px 32px;
     width: 90%;
-    max-width: 360px;
+    max-width: 380px;
     max-height: 90vh;
-    overflow: hidden;
+    overflow-y: auto;
     text-align: center;
-    box-shadow: 0 30px 70px rgba(0,0,0,0.9),  /* Deeper static shadow */
-                inset 0 2px 4px rgba(212,175,55,0.3);  /* Inner gold highlight */
-    backdrop-filter: blur(15px);  /* Softer blur for premium feel */
+    box-shadow: 0 25px 80px rgba(102, 126, 234, 0.5),
+                0 15px 40px rgba(118, 75, 162, 0.3),
+                inset 0 2px 4px rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(20px);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 8px;  /* Tight spacing */
+    gap: 14px;
+    animation: modalBounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-/* Remove before pseudo-element (no glowing border) */
-.modal::before {
-    display: none;  /* Static - no animation */
+@keyframes modalBounce {
+    0% { transform: scale(0.3); opacity: 0; }
+    60% { transform: scale(1.05); }
+    100% { transform: scale(1); opacity: 1; }
 }
 
-/* Title: Static gold, bolder shadow for contrast */
+/* Title: Bigger, bolder, with playful animation */
 h1 {
-    font-size: 48px;
+    font-size: 56px;
     font-weight: 900;
-    background: linear-gradient(135deg, #D4AF37 0%, #B8860B 100%);
+    background: linear-gradient(135deg, #FFD700 0%, #FFF 50%, #FFD700 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    margin: 0 0 6px 0;
-    letter-spacing: 2px;
+    margin: 0 0 8px 0;
+    letter-spacing: 1px;
     text-transform: uppercase;
-    filter: drop-shadow(0 8px 32px rgba(212,175,55,0.7));  /* Stronger static shadow */
-    line-height: 1;
-    animation: none;  /* Remove shimmer */
+    filter: drop-shadow(0 4px 12px rgba(255, 215, 0, 0.8));
+    line-height: 1.1;
+    animation: titleGlow 3s ease-in-out infinite;
 }
 
-/* Subtitle: Brighter white for high contrast */
+@keyframes titleGlow {
+    0%, 100% { filter: drop-shadow(0 4px 12px rgba(255, 215, 0, 0.8)); }
+    50% { filter: drop-shadow(0 6px 20px rgba(255, 215, 0, 1)); }
+}
+
+/* Subtitle: Brighter and more inviting */
 .subtitle {
-    font-size: 14px;
-    color: #FFFFFF;  /* Full white for visibility */
-    margin-bottom: 8px;
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 16px;
     font-weight: 600;
+    line-height: 1.4;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* Animal Emojis: Static, stronger glow shadow */
+/* Animal Emojis: Animated carousel with bounce */
 .animal-emojis {
-    gap: 8px;
-    margin: 8px 0 10px;
-    padding: 10px 8px;
-    background: rgba(212,175,55,0.1);  /* Subtle gold tint */
+    display: flex;
+    gap: 12px;
+    margin: 12px 0 18px;
+    padding: 16px 12px;
+    background: rgba(255, 255, 255, 0.2);
     border-radius: 20px;
-    border: 1px solid rgba(212,175,55,0.3);  /* Gold border */
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    box-shadow: inset 0 2px 8px rgba(255, 255, 255, 0.3);
 }
 
 .animal-emojis .animal-emoji {
-    font-size: 38px;
-    text-shadow: 0 0 20px rgba(212,175,55,0.9);  /* Static strong glow */
-    animation: none;  /* Remove float/glow animation */
+    font-size: 42px;
+    animation: floatBounce 2s ease-in-out infinite;
+    filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
 }
 
-/* Buttons: Static deeper shadows, high contrast text */
+/* Stagger the animation for each emoji */
+.animal-emoji:nth-child(1) { animation-delay: 0s; }
+.animal-emoji:nth-child(2) { animation-delay: 0.2s; }
+.animal-emoji:nth-child(3) { animation-delay: 0.4s; }
+.animal-emoji:nth-child(4) { animation-delay: 0.6s; }
+.animal-emoji:nth-child(5) { animation-delay: 0.8s; }
+.animal-emoji:nth-child(6) { animation-delay: 1s; }
+
+@keyframes floatBounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-10px) scale(1.1); }
+}
+
+/* Buttons: Modern, colorful, with hover effects */
 button {
-    padding: 14px 32px;
-    font-size: 15px;
-    margin-top: 6px;
-    border-radius: 16px;
-    box-shadow: 0 16px 48px rgba(0,0,0,0.6);  /* Deeper static shadow */
-    animation: none;  /* No pulse */
-    color: #FFFFFF;  /* High contrast white */
+    padding: 18px 36px;
+    font-size: 16px;
+    margin-top: 8px;
+    border-radius: 18px;
+    border: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
 }
 
 button::before {
-    display: none;  /* Remove shine effect */
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+    transition: width 0.6s, height 0.6s;
 }
 
+button:active::before {
+    width: 300px;
+    height: 300px;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+/* Start button - Green gradient */
+#startBtn {
+    background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+    color: white;
+    box-shadow: 0 8px 24px rgba(74, 222, 128, 0.5);
+    font-size: 18px;
+    padding: 20px 40px;
+}
+
+#startBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(74, 222, 128, 0.6);
+}
+
+/* Premium button - Gold gradient with sparkle effect */
 #premiumBtn {
-    background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%);  /* Static gold gradient */
-    color: #0A0E1A;  /* Dark text for contrast */
-    box-shadow: 0 16px 48px rgba(255,215,0,0.6);
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #1a1f35;
+    box-shadow: 0 8px 24px rgba(255, 215, 0, 0.5);
+    animation: premiumPulse 2s ease-in-out infinite;
 }
 
+@keyframes premiumPulse {
+    0%, 100% { box-shadow: 0 8px 24px rgba(255, 215, 0, 0.5); }
+    50% { box-shadow: 0 12px 36px rgba(255, 215, 0, 0.8); }
+}
+
+#premiumBtn:hover {
+    transform: translateY(-2px) scale(1.02);
+}
+
+/* Premium status badge */
 #premiumStatus {
-    padding: 12px 20px;
-    font-size: 15px;
-    margin-top: 8px;
-    border-radius: 16px;
-    background: linear-gradient(135deg, #FFD700 0%, #D4AF37 100%);
-    color: #0A0E1A;  /* Dark text */
-    box-shadow: 0 12px 36px rgba(255,215,0,0.6);  /* Static shadow */
+    padding: 14px 24px;
+    font-size: 16px;
+    margin-top: 12px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+    color: #1a1f35;
+    font-weight: 800;
+    box-shadow: 0 8px 24px rgba(255, 215, 0, 0.5);
+    animation: statusGlow 2s ease-in-out infinite;
 }
 
+@keyframes statusGlow {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+}
+
+/* Secondary buttons - Semi-transparent white */
 button.secondary {
-    background: linear-gradient(135deg, #2A2F45 0%, #1A1F35 100%);  /* Darker luxury bg */
-    color: #FFFFFF;
-    border: 1px solid #D4AF37;  /* Gold border */
-    box-shadow: 0 12px 36px rgba(0,0,0,0.6);
-    margin-top: 8px;
+    background: rgba(255, 255, 255, 0.25);
+    color: white;
+    border: 2px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    margin-top: 10px;
+    padding: 16px 32px;
+    font-size: 15px;
 }
 
-/* Firebase Status: Brighter for visibility */
+button.secondary:hover {
+    background: rgba(255, 255, 255, 0.35);
+    transform: translateY(-2px);
+}
+
+/* Restore button - Smaller cyan accent */
+#restoreBtn {
+    background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%);
+    color: white;
+    font-size: 14px;
+    padding: 12px 24px;
+    box-shadow: 0 6px 16px rgba(78, 205, 196, 0.4);
+}
+
+#restoreBtn:hover {
+    transform: translateY(-2px);
+}
+
+/* Firebase status: Clean and minimal */
 .firebase-status {
     font-size: 12px;
-    color: #FFFFFF;  /* Full white */
-    margin: 10px 0 0;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 12px 0 0;
     font-weight: 600;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
+.firebase-status.connected {
+    color: #4ade80;
+}
 
-
-
+.firebase-status.error {
+    color: #f87171;
+}
 
 
 
@@ -630,7 +740,7 @@ body {
                      /* ADD THIS ENTIRE NEW CSS BLOCK */
         #gameInfoBar {
             position: absolute;
-            top: 80px;
+            top: 130px !important;
             left: 15px;
             right: 15px;
             display: flex; /* This makes them side-by-side */
@@ -640,7 +750,7 @@ body {
         }
                                                 #hud {
                             position: absolute;
-                            top: 25px; /* More aggressive - was 15px */
+                            top: 50px !important; /* More aggressive - was 15px */
                             left: 0;
                             right: 0;
                             padding: 0 15px;
@@ -1056,7 +1166,7 @@ body {
                 top: calc(80px + env(safe-area-inset-top)); /* NEW: adjust the wrapper, not the children */
             }
             #combo {
-                top: calc(155px + env(safe-area-inset-top)); /* CHANGED: was 215px */
+        top: calc(210px + env(safe-area-inset-top)) !important;  /* ← CHANGE 155 to 210 */
             }
         }
         /* If you want to keep the rounded modal on larger screens: */
@@ -1947,9 +2057,6 @@ body {
 
 
 
-
-
-
        window.addEventListener('DOMContentLoaded', () => {
     premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
     updatePremiumButton();
@@ -2621,41 +2728,12 @@ function resetGameTracker() {
         // updateMainMenuHighScore();
         let audioCtx = null;
         let audioInitialized = false;
-     function initAudio() {
-    if (!audioInitialized) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        audioInitialized = true;
-        // NEW: Immediately resume on creation if suspended (iOS may start suspended)
-        if (audioCtx.state === 'suspended') {
-            audioCtx.resume().then(() => console.log('AudioContext resumed on init'));
+        function initAudio() {
+            if (!audioInitialized) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                audioInitialized = true;
+            }
         }
-    }
-}
-
-
-
-
-    function resumeAudioContext() {
-    if (audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume().then(() => {
-            console.log('AudioContext resumed');
-            // OPTIONAL: Play silent sound to fully wake audio (iOS-specific)
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            gain.gain.value = 0; // Silent
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.001);
-        }).catch(err => console.error('Resume failed:', err));
-    }
-}
-
-
-
-
-
-
         function beep(freq, duration, type = 'sine', vol = 0.3) {
             if (!audioCtx) return;
             try {
@@ -4361,9 +4439,6 @@ window.addEventListener('resize', function() {
 
 
     </script>
-
-
-
   
 <!-- Zone Transition Modal -->
 <div id="zoneTransitionModal" class="hidden">
