@@ -2621,41 +2621,12 @@ function resetGameTracker() {
         // updateMainMenuHighScore();
         let audioCtx = null;
         let audioInitialized = false;
-     function initAudio() {
-    if (!audioInitialized) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        audioInitialized = true;
-        // NEW: Immediately resume on creation if suspended (iOS may start suspended)
-        if (audioCtx.state === 'suspended') {
-            audioCtx.resume().then(() => console.log('AudioContext resumed on init'));
+        function initAudio() {
+            if (!audioInitialized) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                audioInitialized = true;
+            }
         }
-    }
-}
-
-
-
-
-    function resumeAudioContext() {
-    if (audioCtx && audioCtx.state === 'suspended') {
-        audioCtx.resume().then(() => {
-            console.log('AudioContext resumed');
-            // OPTIONAL: Play silent sound to fully wake audio (iOS-specific)
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            gain.gain.value = 0; // Silent
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.001);
-        }).catch(err => console.error('Resume failed:', err));
-    }
-}
-
-
-
-
-
-
         function beep(freq, duration, type = 'sine', vol = 0.3) {
             if (!audioCtx) return;
             try {
@@ -2829,7 +2800,7 @@ let gameHeight = window.innerHeight;
     // REGULAR ANIMALS - OCEAN ONLY
     { emoji: "🐟", name: "Fish", points: 10, color: "#00D4FF", premium: false, zone: "Ocean Depths", baseSpeed: 1.8 },
     { emoji: "🐙", name: "Octopus", points: 15, color: "#9B59B6", premium: false, zone: "Ocean Depths", baseSpeed: 2.0 },
-    { emoji: "����", name: "Crab", points: 20, color: "#FF6B6B", premium: false, zone: "Ocean Depths", baseSpeed: 2.2 },
+    { emoji: "🦀", name: "Crab", points: 20, color: "#FF6B6B", premium: false, zone: "Ocean Depths", baseSpeed: 2.2 },
     { emoji: "🐢", name: "Turtle", points: 25, color: "#4ade80", premium: false, zone: "Ocean Depths", baseSpeed: 2.4 },
     { emoji: "🦑", name: "Squid", points: 30, color: "#FF69B4", premium: false, zone: "Ocean Depths", baseSpeed: 2.6 },
     { emoji: "🦞", name: "Lobster", points: 35, color: "#FF4500", premium: false, zone: "Ocean Depths", baseSpeed: 2.8 },
@@ -3933,9 +3904,6 @@ function startGame() {
     // Show pause button
     document.getElementById('pauseButton').style.display = 'flex';
    
-    // NEW: Ensure audio is resumed on start
-    resumeAudioContext();
-   
     // Start game loop (ONLY ONCE!)
     animationFrameId = requestAnimationFrame(gameLoop);
 }
@@ -4124,19 +4092,13 @@ document.getElementById('pauseButton').addEventListener('click', () => {
 // Resume button
 document.getElementById('resumeButton').addEventListener('click', () => {
     paused = false;
-    // NEW: Resume audio here (user tap)
-    resumeAudioContext();
-    const overlay = document.getElementById('pauseOverlay');
-    overlay.style.opacity = '0';
-
-    setTimeout(() => {
-        overlay.classList.add('hidden');
-        document.getElementById('pauseButton').style.display = 'flex'; // Show pause button again
-
-        if (gameRunning && !animationFrameId) {
-            requestAnimationFrame(gameLoop);
-        }
-    }, 300); // Wait for fade out animation
+    document.getElementById('pauseOverlay').classList.add('hidden');
+    document.getElementById('pauseButton').style.display = 'flex'; // Show pause button again
+ 
+    // Resume the game loop
+    if (gameRunning && !animationFrameId) {
+        requestAnimationFrame(gameLoop);
+    }
 });
 // Quit button (returns to main menu)
 document.getElementById('quitButton').addEventListener('click', () => {
@@ -4193,8 +4155,6 @@ window.addEventListener('focus', () => {
         overlay.style.opacity = '1';
         document.getElementById('pauseButton').style.display = 'none';
     }
-    // NEW: Attempt resume (but may need gesture; safe to call)
-    resumeAudioContext();
 });
 // Optional: You could also auto-resume when they come back, but it's safer to keep it paused
 // window.addEventListener('focus', () => {
