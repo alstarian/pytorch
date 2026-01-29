@@ -295,13 +295,15 @@ button.secondary:hover {
 
 
 
-
-/* Make leaderboard panel bigger/wider/taller modal */
+/* LEADERBOARD SCREEN - FULL SCREEN LIKE HOME & STATS */
 #leaderboardScreen .modal {
-    max-width: 95% !important;     /* WAS 90% → NOW 95% (WIDER!) */
-    max-height: 95vh;
-    padding: 30px 24px;            /* WAS 30px 20px → MORE SIDE PADDING */
-    border-radius: 24px;
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+    border-radius: 0 !important;
+    padding: 60px 24px 44px !important;
+    margin: 0 !important;
 }
 
 /* Leaderboard list - Bigger, only vertical scroll, no horizontal */
@@ -310,30 +312,31 @@ button.secondary:hover {
     overflow-y: auto;
     overflow-x: hidden;
     margin: 15px 0;
-    padding: 0 12px;              /* WAS 10px → NOW 12px */
+    padding: 0 12px;
 }
 
 /* Ensure items don't cause horizontal scroll */
 .leaderboard-item {
-    padding: 12px 18px;           /* WAS 10px 14px → BIGGER PADDING */
+    padding: 12px 18px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
 }
 
-/* For iPad/tablet - Even bigger modal */
+/* For iPad/tablet - Keep full screen */
 @media (min-width: 768px) and (orientation: portrait) {
     #leaderboardScreen .modal {
-        max-width: 85% !important;  /* WAS 80% → NOW 85% */
-        padding: 40px 36px;         /* MORE PADDING */
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 100vh !important;
+        padding: 60px 24px 44px !important;
     }
     
     .leaderboard-list {
         max-height: 75vh;
-        padding: 0 16px;            /* EXTRA PADDING */
+        padding: 0 16px;
     }
 }
-
 
 
 
