@@ -1679,6 +1679,40 @@ body {
                 .hidden {
                     display: none !important;
                 }
+
+
+                /* === SMOOTH SCREEN TRANSITIONS === */
+#overlay, #statsScreen, #leaderboardScreen, #gameOverScreen {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+#overlay.fade-out, 
+#statsScreen.fade-out, 
+#leaderboardScreen.fade-out, 
+#gameOverScreen.fade-out {
+    opacity: 0;
+    transform: scale(0.95);
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+#statsScreen:not(.hidden), 
+#leaderboardScreen:not(.hidden) {
+    animation: fadeInScale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+
+
+                
                 .firebase-status {
                     font-size: 11px;
                     color: rgba(255, 255, 255, 0.4);
@@ -3027,43 +3061,40 @@ let gameHeight = window.innerHeight;
             isPowerup: true
         };
         function showStats() {
-    document.getElementById('overlay').classList.add('hidden');
-    document.getElementById('statsScreen').classList.remove('hidden');
-    const currentHighScore = parseInt(localStorage.getItem('zooKeeperHighScore') || 0);
-    document.getElementById('totalGames').textContent = totalPlays;
-    document.getElementById('totalAnimals').textContent = totalAnimalsCaught;
-    document.getElementById('totalPoints').textContent = totalPointsEarned.toLocaleString();
-    document.getElementById('bestScore').textContent = currentHighScore;
-    document.getElementById('longestStreak').textContent = bestStreak;
-    //document.getElementById('totalPowerups').textContent = totalPowerupsCaught;
-    /*if (premiumUnlocked) {
-    document.getElementById('totalPremiums').textContent = totalPremiumsCaught;
-    document.getElementById('premiumCollection').textContent = `${premiumSpeciesCaught.length}/14`;
-} else {
-    document.getElementById('totalPremiums').textContent = '🔒';
-    document.getElementById('premiumCollection').textContent = '🔒';
-}
-*/
-// For testing - always show counts (remove the if/else check)
-document.getElementById('totalPremiums').textContent = totalPremiumsCaught;
-document.getElementById('premiumCollection').textContent = `${premiumSpeciesCaught.length}/16`;
-    document.getElementById('highestLevel').textContent = highestLevelReached;
-    document.getElementById('highestZone').textContent = highestZoneReached;
-    // FIX: Capitalize animal name before searching
-    let maxCount = 0;
-    let favAnimal = 'None';
-    for(let animal in animalCounts) {
-        if(animalCounts[animal] > maxCount) {
-            maxCount = animalCounts[animal];
-            // Capitalize first letter to match types array
-            const capitalizedName = animal.charAt(0).toUpperCase() + animal.slice(1);
-            const type = types.find(t => t.name === capitalizedName);
-            if(type) {
-                favAnimal = type.emoji + ' ' + capitalizedName;
+    // Fade out current screen
+    document.getElementById('overlay').classList.add('fade-out');
+    
+    setTimeout(() => {
+        document.getElementById('overlay').classList.add('hidden');
+        document.getElementById('overlay').classList.remove('fade-out');
+        document.getElementById('statsScreen').classList.remove('hidden');
+        
+        // Update stats content
+        const currentHighScore = parseInt(localStorage.getItem('zooKeeperHighScore') || 0);
+        document.getElementById('totalGames').textContent = totalPlays;
+        document.getElementById('totalAnimals').textContent = totalAnimalsCaught;
+        document.getElementById('totalPoints').textContent = totalPointsEarned.toLocaleString();
+        document.getElementById('bestScore').textContent = currentHighScore;
+        document.getElementById('longestStreak').textContent = bestStreak;
+        document.getElementById('totalPremiums').textContent = totalPremiumsCaught;
+        document.getElementById('premiumCollection').textContent = `${premiumSpeciesCaught.length}/16`;
+        document.getElementById('highestLevel').textContent = highestLevelReached;
+        document.getElementById('highestZone').textContent = highestZoneReached;
+        
+        let maxCount = 0;
+        let favAnimal = 'None';
+        for(let animal in animalCounts) {
+            if(animalCounts[animal] > maxCount) {
+                maxCount = animalCounts[animal];
+                const capitalizedName = animal.charAt(0).toUpperCase() + animal.slice(1);
+                const type = types.find(t => t.name === capitalizedName);
+                if(type) {
+                    favAnimal = type.emoji + ' ' + capitalizedName;
+                }
             }
         }
-    }
-    document.getElementById('favAnimal').textContent = favAnimal;
+        document.getElementById('favAnimal').textContent = favAnimal;
+    }, 300);
 }
         function updateDifficultyDisplay() {
             const el = document.getElementById('diffLevel');
@@ -4210,23 +4241,43 @@ document.getElementById("badge").textContent = msg;
         document.getElementById('restartBtn').addEventListener('click', restart);
         document.getElementById('statsBtn').addEventListener('click', showStats);
         document.getElementById('viewStatsBtn').addEventListener('click', () => {
-            document.getElementById('gameOverScreen').classList.add('hidden');
-            showStats();
-        });
+    document.getElementById('gameOverScreen').classList.add('fade-out');
+    
+    setTimeout(() => {
+        document.getElementById('gameOverScreen').classList.add('hidden');
+        document.getElementById('gameOverScreen').classList.remove('fade-out');
+        showStats();
+    }, 300);
+});
         document.getElementById('closeStatsBtn').addEventListener('click', () => {
-            document.getElementById('statsScreen').classList.add('hidden');
-            document.getElementById('overlay').classList.remove('hidden');
-            updateMainMenuHighScore();
-        });
+    document.getElementById('statsScreen').classList.add('fade-out');
+    
+    setTimeout(() => {
+        document.getElementById('statsScreen').classList.add('hidden');
+        document.getElementById('statsScreen').classList.remove('fade-out');
+        document.getElementById('overlay').classList.remove('hidden');
+        updateMainMenuHighScore();
+    }, 300);
+});
         document.getElementById('leaderboardBtn').addEventListener('click', () => {
-            document.getElementById('overlay').classList.add('hidden');
-            document.getElementById('leaderboardScreen').classList.remove('hidden');
-            loadLeaderboard();
-        });
+    document.getElementById('overlay').classList.add('fade-out');
+    
+    setTimeout(() => {
+        document.getElementById('overlay').classList.add('hidden');
+        document.getElementById('overlay').classList.remove('fade-out');
+        document.getElementById('leaderboardScreen').classList.remove('hidden');
+        loadLeaderboard();
+    }, 300);
+});
         document.getElementById('closeLeaderboardBtn').addEventListener('click', () => {
-            document.getElementById('leaderboardScreen').classList.add('hidden');
-            document.getElementById('overlay').classList.remove('hidden');
-        });
+    document.getElementById('leaderboardScreen').classList.add('fade-out');
+    
+    setTimeout(() => {
+        document.getElementById('leaderboardScreen').classList.add('hidden');
+        document.getElementById('leaderboardScreen').classList.remove('fade-out');
+        document.getElementById('overlay').classList.remove('hidden');
+    }, 300);
+});
         document.getElementById('submitScoreBtn').addEventListener('click', () => {
             const playerName = document.getElementById('playerNameInput').value;
             submitScoreToLeaderboard(playerName, score);
