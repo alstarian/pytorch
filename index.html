@@ -18,7 +18,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
 
-/* 3D HOME SCREEN BUTTONS - FORCED OVERRIDE */
+/* ULTRA 3D HOME SCREEN BUTTONS - MAXIMUM DEPTH */
 #overlay button {
     padding: 18px 36px !important;
     font-size: 16px !important;
@@ -28,92 +28,115 @@
     font-weight: 700 !important;
     position: relative !important;
     
-    /* 3D LAYERED SHADOWS - CRITICAL */
-    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3),
-                0 10px 20px rgba(0, 0, 0, 0.4),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3) !important;
+    /* ULTRA 3D LAYERED SHADOWS - 5 LAYERS */
+    box-shadow: 0 10px 0 rgba(0, 0, 0, 0.4),
+                0 15px 0 rgba(0, 0, 0, 0.35),
+                0 20px 35px rgba(0, 0, 0, 0.45),
+                0 25px 50px rgba(0, 0, 0, 0.25),
+                inset 0 3px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -3px 0 rgba(0, 0, 0, 0.25) !important;
 }
 
-/* Press down effect - CRITICAL */
+/* Ultra press down - 12px movement */
 #overlay button:active {
-    transform: translateY(5px) !important;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3),
-                0 4px 8px rgba(0, 0, 0, 0.3),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3) !important;
+    transform: translateY(12px) !important;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4),
+                0 5px 10px rgba(0, 0, 0, 0.35),
+                inset 0 3px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -3px 0 rgba(0, 0, 0, 0.25) !important;
 }
 
-/* Start button - 3D Purple with deep shadow */
+/* START BUTTON - ULTRA 3D PURPLE */
 #startBtn {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
     color: white !important;
     font-size: 18px !important;
     padding: 20px 40px !important;
     
-    box-shadow: 0 8px 0 #5a67c7,
-                0 14px 28px rgba(102, 126, 234, 0.5),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 12px 0 #5a67c7,
+                0 16px 0 #4c5fb8,
+                0 20px 0 #3d4f98,
+                0 25px 50px rgba(102, 126, 234, 0.6),
+                0 30px 60px rgba(102, 126, 234, 0.4),
+                inset 0 4px 0 rgba(255, 255, 255, 0.5),
+                inset 0 -3px 0 rgba(0, 0, 0, 0.3) !important;
 }
 
 #startBtn:active {
-    transform: translateY(7px) !important;
-    box-shadow: 0 1px 0 #5a67c7,
-                0 6px 16px rgba(102, 126, 234, 0.3),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3) !important;
+    transform: translateY(14px) !important;
+    box-shadow: 0 2px 0 #5a67c7,
+                0 8px 20px rgba(102, 126, 234, 0.4),
+                inset 0 4px 0 rgba(255, 255, 255, 0.5),
+                inset 0 -3px 0 rgba(0, 0, 0, 0.3) !important;
 }
 
-/* Premium button - 3D Gold */
+/* PREMIUM BUTTON - ULTRA 3D GOLD */
 #premiumBtn {
     background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%) !important;
     color: #1a1f35 !important;
     
-    box-shadow: 0 8px 0 #d4a500,
-                0 14px 28px rgba(255, 215, 0, 0.5),
-                inset 0 2px 0 rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 12px 0 #d4a500,
+                0 16px 0 #c49500,
+                0 20px 0 #a47d00,
+                0 25px 50px rgba(255, 215, 0, 0.6),
+                0 30px 60px rgba(255, 215, 0, 0.4),
+                inset 0 4px 0 rgba(255, 255, 255, 0.6),
+                inset 0 -3px 0 rgba(0, 0, 0, 0.25) !important;
 }
 
 #premiumBtn:active {
-    transform: translateY(7px) !important;
-    box-shadow: 0 1px 0 #d4a500,
-                0 6px 16px rgba(255, 215, 0, 0.3),
-                inset 0 2px 0 rgba(255, 255, 255, 0.4) !important;
+    transform: translateY(14px) !important;
+    box-shadow: 0 2px 0 #d4a500,
+                0 8px 20px rgba(255, 215, 0, 0.4),
+                inset 0 4px 0 rgba(255, 255, 255, 0.6),
+                inset 0 -3px 0 rgba(0, 0, 0, 0.25) !important;
 }
 
-/* Secondary buttons - 3D dark */
+/* SECONDARY BUTTONS - ULTRA 3D DARK */
 #overlay button.secondary {
     background: linear-gradient(135deg, #2A2F45 0%, #1A1F35 100%) !important;
     color: #FFFFFF !important;
-    border: 2px solid rgba(255, 255, 255, 0.2) !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
     
-    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.4),
-                0 10px 20px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    box-shadow: 0 10px 0 rgba(0, 0, 0, 0.5),
+                0 14px 0 rgba(0, 0, 0, 0.45),
+                0 18px 0 rgba(0, 0, 0, 0.4),
+                0 22px 45px rgba(0, 0, 0, 0.6),
+                inset 0 2px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -3px 0 rgba(0, 0, 0, 0.35) !important;
 }
 
 #overlay button.secondary:active {
-    transform: translateY(5px) !important;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4),
-                0 4px 8px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+    transform: translateY(12px) !important;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5),
+                0 6px 15px rgba(0, 0, 0, 0.5),
+                inset 0 2px 0 rgba(255, 255, 255, 0.2),
+                inset 0 -3px 0 rgba(0, 0, 0, 0.35) !important;
 }
 
-/* Restore button - 3D Cyan */
+/* RESTORE BUTTON - ULTRA 3D CYAN */
 #restoreBtn {
     background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%) !important;
     color: white !important;
     font-size: 14px !important;
     padding: 12px 24px !important;
     
-    box-shadow: 0 5px 0 #3ba9a1,
-                0 10px 20px rgba(78, 205, 196, 0.4),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3) !important;
+    box-shadow: 0 10px 0 #3ba9a1,
+                0 13px 0 #2d8a83,
+                0 16px 0 #226f6a,
+                0 20px 40px rgba(78, 205, 196, 0.5),
+                inset 0 3px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -3px 0 rgba(0, 0, 0, 0.25) !important;
 }
 
 #restoreBtn:active {
-    transform: translateY(4px) !important;
-    box-shadow: 0 1px 0 #3ba9a1,
-                0 4px 8px rgba(78, 205, 196, 0.3),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3) !important;
+    transform: translateY(12px) !important;
+    box-shadow: 0 2px 0 #3ba9a1,
+                0 6px 15px rgba(78, 205, 196, 0.4),
+                inset 0 3px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -3px 0 rgba(0, 0, 0, 0.25) !important;
 }
+
 
 
 
