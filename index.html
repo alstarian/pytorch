@@ -2159,8 +2159,13 @@ body {
                 <span class="animal-emoji">🐒</span>
             </div>
             <p class="firebase-status" id="firebaseStatus">Connecting to leaderboard...</p>
-            <button id="startBtn"><span>🎮</span> Start Playing</button>
-            <button id="premiumBtn" onclick="buyPremiumAnimals()">💎 Unlock Premiums</button>
+            <button id="startBtn"><span>🎮</span> Start Playing</button>    
+
+
+
+
+
+               <button id="premiumBtn">💎 Unlock Premiums</button>
                         <div id="premiumStatus" class="hidden" style="
                 background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
                 color: #1a1f35;
@@ -2181,7 +2186,9 @@ body {
             </div>
             <button class="secondary" id="statsBtn"><span>📊</span> View Stats</button>
             <button class="secondary" id="leaderboardBtn"><span>🏆</span> Leaderboard</button>
-            <button id="restoreBtn" onclick="restorePurchases()">🔄 Restore Purchases</button>
+
+
+              <button id="restoreBtn">🔄 Restore Purchases</button>
         </div>
     </div>
     <div id="gameOverScreen" class="hidden">
@@ -4638,242 +4645,155 @@ document.getElementById('quitButton').addEventListener('click', () => {
 
 
 
-
 // ================================
-// ZOO KEEPER IAP - @capgo/native-purchases v8 (CORRECT FIELD NAMES)
+// ZOO KEEPER REAL IAP CODE - FINAL POLISHED
 // ================================
-
 const PREMIUM_PRODUCT_ID = 'com.alstarian.zookeeper.premiumanimals';
+let premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
 let iapReady = false;
 
-// Check for existing purchases on app startup
-async function checkPremiumStatus() {
-  try {
-    const { NativePurchases } = window.Capacitor.Plugins;
-    
-    // Get all purchases for this user
-    const result = await NativePurchases.restorePurchases();
-    
-    if (result && result.purchases && result.purchases.length > 0) {
-      const hasPremium = result.purchases.some(p => 
-        p.productIdentifier === PREMIUM_PRODUCT_ID
-      );
-      
-      if (hasPremium && !premiumUnlocked) {
-        unlockPremium('cached', true); // Silent unlock on startup
-        console.log('✅ Premium restored from device');
-      }
-    }
-    
-    iapReady = true;
-    
-  } catch (e) {
-    console.log('Check status error:', e);
-    iapReady = true;
-    
-    // Fallback to localStorage
-    if (localStorage.getItem('premiumUnlocked') === 'true') {
-      premiumUnlocked = true;
-      updatePremiumButton();
-    }
+// Update button visibility
+function updatePremiumButton() {
+  const premiumBtn = document.getElementById('premiumBtn');
+  const premiumStatus = document.getElementById('premiumStatus');
+  if (premiumUnlocked) {
+    premiumBtn.style.display = 'none';
+    premiumStatus.classList.remove('hidden');
+  } else {
+    premiumBtn.style.display = 'flex';
+    premiumStatus.classList.add('hidden');
   }
 }
 
 // Shared unlock function
-function unlockPremium(source = 'purchase', silent = false) {
+function unlockPremium(silent = false) {
   if (premiumUnlocked) return;
-  
   premiumUnlocked = true;
   localStorage.setItem('premiumUnlocked', 'true');
-  
-  console.log(`✅ Premium unlocked via ${source}`);
-  
-  // Show celebration only for new purchases
-  if (!silent && source === 'purchase') {
+  if (!silent) {
     alert('🎉 PREMIUM ANIMALS UNLOCKED!\n\n16 rare species now available in ALL zones:\n🦄 Unicorn • 🐺 Arctic Wolf\n🐒 Golden Monkey • 🐉 Dragon\n🦅 Golden Eagle • 🦚 Macaw\n🐋 Whale • 🦈 Shark\nand 8 more!');
-    
-    if (typeof throwConfetti === 'function') throwConfetti(100);
-    if (typeof showAchievement === 'function') {
-      showAchievement('🦄', 'Premium Unlocked!', '16 rare animals added!');
-    }
+    throwConfetti(100);
+    showAchievement('🦄', 'Premium Unlocked!', '16 rare animals added!');
   }
-  
   updatePremiumButton();
 }
 
-// Purchase premium animals
+// Init IAP
+async function initIAP() {
+  if (typeof window.Capacitor === 'undefined') {
+    console.log('🧪 Browser: IAP skipped');
+    iapReady = true;
+    return;
+  }
+  try {
+    const { NativePurchases } = window.Capacitor.Plugins;
+    await NativePurchases.initialize();
+    console.log('✅ IAP initialized');
+    iapReady = true;
+    await checkPremiumStatus(); // Auto-check on startup
+  } catch (e) {
+    console.log('IAP init (normal in sandbox/free mode):', e.message);
+    iapReady = true;
+  }
+}
+
+// Check/restore on startup & resume
+async function checkPremiumStatus() {
+  if (!iapReady || typeof window.Capacitor === 'undefined') return;
+  try {
+    const { NativePurchases } = window.Capacitor.Plugins;
+    const result = await NativePurchases.restorePurchases();
+    if (result?.purchases?.some(p => p.productIdentifier === PREMIUM_PRODUCT_ID)) {
+      unlockPremium(true); // Silent
+      console.log('✅ Premium auto-restored');
+    }
+  } catch (e) {
+    console.log('Auto-restore check failed (normal without paid account):', e);
+  }
+}
+
+// Buy Premium
 async function buyPremiumAnimals() {
   if (premiumUnlocked) {
     alert('✅ Premium Animals already unlocked!');
-    updatePremiumButton();
     return;
   }
-  
   if (!iapReady) {
-    alert('Store not ready. Please try again in a moment.');
+    alert('Store loading... Try again.');
     return;
   }
-  
   try {
     const { NativePurchases } = window.Capacitor.Plugins;
-    
-    // Show loading state
     const btn = document.getElementById('premiumBtn');
-    const originalHTML = btn.innerHTML;
-    btn.innerHTML = '<span>⏳</span> Processing...';
+    const original = btn.innerHTML;
+    btn.innerHTML = '⏳ Processing...';
     btn.disabled = true;
-    
-    // Purchase the product - this returns immediately when transaction completes
+
     const result = await NativePurchases.purchaseProduct({
       productIdentifier: PREMIUM_PRODUCT_ID,
-      applicationUsername: '', // Optional: can link to user account
+      productType: 'INAPP'
     });
-    
-    console.log('Purchase result:', result);
-    
-    // Check if purchase was successful
-    if (result && result.productIdentifier === PREMIUM_PRODUCT_ID) {
-      unlockPremium('purchase', false);
-      
-      // Restore button
-      btn.innerHTML = originalHTML;
-      btn.disabled = false;
-    } else {
-      throw new Error('Purchase completed but product not found in result');
+
+    if (result?.productIdentifier === PREMIUM_PRODUCT_ID) {
+      unlockPremium();
     }
-    
-  } catch (e) {
-    console.error('Purchase error:', e);
-    
-    // Restore button
-    const btn = document.getElementById('premiumBtn');
-    btn.innerHTML = '<span>💎</span> Unlock Premiums';
+    btn.innerHTML = original;
     btn.disabled = false;
-    
-    // Handle specific error cases
-    const errorMessage = (e.message || '').toLowerCase();
-    const errorCode = e.code || '';
-    
-    if (errorMessage.includes('cancel') || 
-        errorMessage.includes('user') ||
-        errorCode === '1') { // iOS user cancelled code
-      console.log('User cancelled purchase');
-      // Don't show alert for user cancellation
-    } else if (errorMessage.includes('network') || 
-               errorMessage.includes('internet') ||
-               errorCode === '2') {
-      alert('Network error. Please check your connection and try again.');
-    } else if (errorMessage.includes('payment') || 
-               errorMessage.includes('billing') ||
-               errorCode === '3') {
-      alert('Payment issue. Please check your payment method in Settings.');
-    } else if (errorMessage.includes('unavailable') ||
-               errorCode === '4') {
-      alert('This item is currently unavailable. Please try again later.');
-    } else if (errorMessage.includes('already') || 
-               errorMessage.includes('owned')) {
-      // User already owns this - restore it
-      alert('You already own this! Restoring...');
-      restorePurchases();
+  } catch (e) {
+    document.getElementById('premiumBtn').innerHTML = '💎 Unlock Premiums';
+    document.getElementById('premiumBtn').disabled = false;
+    if (e.message?.toLowerCase().includes('cancel')) {
+      console.log('User cancelled');
     } else {
-      alert('Purchase failed. Please try again or contact support.');
-      console.error('Unhandled error:', e);
+      alert('Purchase unavailable (normal in free dev mode). Try again later.');
     }
   }
 }
 
-// Restore previous purchases
+// Restore
 async function restorePurchases() {
   if (!iapReady) {
-    alert('Store not ready. Please try again in a moment.');
+    alert('Store loading... Try again.');
     return;
   }
-  
   try {
     const { NativePurchases } = window.Capacitor.Plugins;
-    
-    // Show loading state
     const btn = document.getElementById('restoreBtn');
-    const originalHTML = btn.innerHTML;
+    const original = btn.innerHTML;
     btn.innerHTML = '⏳ Restoring...';
     btn.disabled = true;
-    
-    // Track state before restore
-    const premiumBefore = premiumUnlocked;
-    
-    // Restore purchases - returns all owned items
-  const result = await NativePurchases.restorePurchases();
-    
-    console.log('Restore result:', result);
-    
-    // Check if premium was found
-    let hasPremium = false;
-    if (result && result.purchases && result.purchases.length > 0) {
-      hasPremium = result.purchases.some(p => 
-        p.productIdentifier === PREMIUM_PRODUCT_ID
-      );
-    }
-    
-    // Restore button
-    btn.innerHTML = originalHTML;
+
+    const result = await NativePurchases.restorePurchases();
+    const hasPremium = result?.purchases?.some(p => p.productIdentifier === PREMIUM_PRODUCT_ID);
+
+    btn.innerHTML = original;
     btn.disabled = false;
-    
-    if (hasPremium && !premiumBefore) {
-      // Successfully restored premium
-      unlockPremium('restored', false);
+
+    if (hasPremium) {
+      unlockPremium();
       alert('✅ Premium Animals restored successfully!');
-    } else if (hasPremium && premiumBefore) {
-      // Already had premium
-      alert('✅ Premium Animals already active on this device.');
     } else {
-      // No purchases found
-      alert('No previous purchases found.\n\nPurchases are linked to your Apple ID. Make sure you\'re signed in with the same account used for the original purchase.');
+      alert('No previous purchases found.\n\nMake sure you\'re signed in with the same Apple ID.');
     }
-    
   } catch (e) {
-    console.error('Restore error:', e);
-    
-    // Restore button
-    const btn = document.getElementById('restoreBtn');
-    btn.innerHTML = '🔄 Restore Purchases';
-    btn.disabled = false;
-    
-    const errorMessage = (e.message || '').toLowerCase();
-    
-    if (errorMessage.includes('network')) {
-      alert('Network error. Please check your internet connection and try again.');
-    } else {
-      alert('Restore failed. Please try again or contact support if the problem persists.');
-    }
+    document.getElementById('restoreBtn').innerHTML = '🔄 Restore Purchases';
+    document.getElementById('restoreBtn').disabled = false;
+    alert('Restore failed (normal in free dev mode). Try again.');
   }
 }
 
-// Initialize IAP when app loads
-document.addEventListener('DOMContentLoaded', () => {
-  if (typeof window.Capacitor !== 'undefined') {
-    // Mobile app - check for existing purchases
-    setTimeout(() => {
-      checkPremiumStatus();
-      console.log('✅ IAP ready');
-    }, 500);
-  } else {
-    // Browser - check localStorage only
-    premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
-    updatePremiumButton();
-    iapReady = true;
-  }
-});
-
-// Check premium status when app resumes from background
+// Auto-start + resume check
+initIAP();
 if (typeof window.Capacitor !== 'undefined') {
-  document.addEventListener('resume', () => {
-    if (iapReady) {
-      checkPremiumStatus();
-    }
-  });
+  document.addEventListener('resume', checkPremiumStatus);
 }
 
-
+// Button listeners (fixes device errors!)
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('premiumBtn')?.addEventListener('click', buyPremiumAnimals);
+  document.getElementById('restoreBtn')?.addEventListener('click', restorePurchases);
+  updatePremiumButton();
+});
 
 
 
@@ -4906,6 +4826,20 @@ window.addEventListener('resize', function() {
 });
 
 
+// Button event listeners (fixes clicks on real iPhone)
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('startBtn')?.addEventListener('click', startGame);
+  document.getElementById('premiumBtn')?.addEventListener('click', buyPremiumAnimals);
+  document.getElementById('statsBtn')?.addEventListener('click', showStats);
+  document.getElementById('leaderboardBtn')?.addEventListener('click', () => {
+    document.getElementById('overlay').classList.add('hidden');
+    document.getElementById('leaderboardScreen').classList.remove('hidden');
+    loadLeaderboard();
+  });
+  document.getElementById('restoreBtn')?.addEventListener('click', restorePurchases);
+
+  updatePremiumButton(); // Initial check for premium status
+});
 
 
 
