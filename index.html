@@ -19,115 +19,59 @@
     <style>
 
 
-
-        /* 3D BUTTONS - Modern depth effect */
-button {
-    padding: 18px 36px;
-    font-size: 16px;
-    margin-top: 8px;
-    border-radius: 18px;
-    border: none;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    position: relative;
-    transition: all 0.2s ease;
+/* WHITE 3D BUTTONS - Clean & crisp */
+#overlay button:not(#premiumBtn):not(#restoreBtn) {
+    background: rgba(255, 255, 255, 0.95) !important;
+    color: #1F2937 !important;  /* Dark gray-black text */
+    font-weight: 700 !important;
+    text-shadow: none !important;
     
-    /* 3D Effect - Layered shadows */
-    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.2),
-                0 8px 16px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
-    
-    /* Subtle top highlight for 3D look */
-    background-image: linear-gradient(to bottom, 
-                      rgba(255, 255, 255, 0.2) 0%, 
-                      rgba(255, 255, 255, 0) 50%);
-}
-
-/* Press down effect when clicked */
-button:active {
-    transform: translateY(4px);
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.2),
+    /* 3D WHITE BUTTON SHADOW */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3),
                 0 4px 8px rgba(0, 0, 0, 0.2),
-                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+                inset 0 1px 0 rgba(255, 255, 255, 0.8),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Start Playing button - 3D Purple */
-#startBtn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    font-size: 18px;
-    padding: 20px 40px;
-    
-    /* Enhanced 3D shadow in purple tones */
-    box-shadow: 0 8px 0 #5a67c7,
-                0 12px 24px rgba(102, 126, 234, 0.4),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3);
+#overlay button:not(#premiumBtn):not(#restoreBtn):active {
+    transform: translateY(6px) !important;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1) !important;
 }
 
-#startBtn:active {
-    transform: translateY(6px);
-    box-shadow: 0 2px 0 #5a67c7,
-                0 6px 16px rgba(102, 126, 234, 0.3),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3);
-}
-
-/* Premium button - 3D Gold */
+/* Keep Premium gold and Restore cyan */
 #premiumBtn {
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
-    color: #1a1f35;
-    
-    /* Enhanced 3D shadow in gold tones */
-    box-shadow: 0 8px 0 #d4a500,
-                0 12px 24px rgba(255, 215, 0, 0.4),
-                inset 0 2px 0 rgba(255, 255, 255, 0.4);
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%) !important;
+    color: #1a1f35 !important;
+    box-shadow: 0 10px 20px rgba(255, 215, 0, 0.4),
+                0 4px 8px rgba(255, 215, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1) !important;
 }
 
 #premiumBtn:active {
-    transform: translateY(6px);
-    box-shadow: 0 2px 0 #d4a500,
-                0 6px 16px rgba(255, 215, 0, 0.3),
-                inset 0 2px 0 rgba(255, 255, 255, 0.4);
+    transform: translateY(6px) !important;
+    box-shadow: 0 3px 6px rgba(255, 215, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1) !important;
 }
 
-/* Secondary buttons - 3D subtle */
-button.secondary {
-    background: linear-gradient(135deg, #2A2F45 0%, #1A1F35 100%);
-    color: #FFFFFF;
-    border: 2px solid rgba(255, 255, 255, 0.2);
-    
-    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3),
-                0 8px 16px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-button.secondary:active {
-    transform: translateY(4px);
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3),
-                0 4px 8px rgba(0, 0, 0, 0.3),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
-}
-
-/* Restore button - 3D Cyan */
 #restoreBtn {
-    background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%);
-    color: white;
-    font-size: 14px;
-    padding: 12px 24px;
-    
-    box-shadow: 0 5px 0 #3ba9a1,
-                0 8px 16px rgba(78, 205, 196, 0.3),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3);
+    background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%) !important;
+    color: #1a1f35 !important;
+    box-shadow: 0 10px 20px rgba(78, 205, 196, 0.4),
+                0 4px 8px rgba(78, 205, 196, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1) !important;
 }
 
 #restoreBtn:active {
-    transform: translateY(4px);
-    box-shadow: 0 1px 0 #3ba9a1,
-                0 4px 8px rgba(78, 205, 196, 0.2),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3);
+    transform: translateY(6px) !important;
+    box-shadow: 0 3px 6px rgba(78, 205, 196, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.8),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1) !important;
 }
-
 
 
 #pauseButton {
