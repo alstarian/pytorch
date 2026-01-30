@@ -17,8 +17,7 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <style>
-
-/* ULTRA 3D HOME SCREEN BUTTONS - EXTREME DEPTH */
+/* ULTRA 3D HOME SCREEN BUTTONS - VIBRANT COLORS */
 #overlay button {
     padding: 18px 36px !important;
     font-size: 16px !important;
@@ -34,12 +33,6 @@
                 0 20px 40px rgba(0, 0, 0, 0.3),
                 inset 0 3px 0 rgba(255, 255, 255, 0.4),
                 inset 0 -2px 0 rgba(0, 0, 0, 0.2) !important;
-    
-    /* Glossy gradient overlay for 3D effect */
-    background-image: linear-gradient(to bottom, 
-                      rgba(255, 255, 255, 0.3) 0%, 
-                      rgba(255, 255, 255, 0) 50%,
-                      rgba(0, 0, 0, 0.1) 100%) !important;
 }
 
 /* EXTREME press down effect */
@@ -51,34 +44,36 @@
                 inset 0 -2px 0 rgba(0, 0, 0, 0.2) !important;
 }
 
-/* Start button - SUPER 3D Purple */
+/* Start button - BRIGHT ELECTRIC BLUE */
 #startBtn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    background: linear-gradient(135deg, #00D4FF 0%, #0099FF 100%) !important;
     color: white !important;
     font-size: 18px !important;
     padding: 20px 40px !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
     
-    /* MEGA purple shadow stack */
-    box-shadow: 0 12px 0 #4d5fb8,
-                0 15px 0 #3d4f98,
-                0 20px 40px rgba(102, 126, 234, 0.6),
-                0 25px 50px rgba(102, 126, 234, 0.4),
-                inset 0 3px 0 rgba(255, 255, 255, 0.4),
+    /* MEGA bright blue shadow stack */
+    box-shadow: 0 12px 0 #0077cc,
+                0 15px 0 #005599,
+                0 20px 40px rgba(0, 212, 255, 0.6),
+                0 25px 50px rgba(0, 153, 255, 0.4),
+                inset 0 3px 0 rgba(255, 255, 255, 0.5),
                 inset 0 -2px 0 rgba(0, 0, 0, 0.3) !important;
 }
 
 #startBtn:active {
     transform: translateY(10px) !important;
-    box-shadow: 0 2px 0 #4d5fb8,
-                0 8px 20px rgba(102, 126, 234, 0.4),
-                inset 0 3px 0 rgba(255, 255, 255, 0.4),
+    box-shadow: 0 2px 0 #0077cc,
+                0 8px 20px rgba(0, 212, 255, 0.5),
+                inset 0 3px 0 rgba(255, 255, 255, 0.5),
                 inset 0 -2px 0 rgba(0, 0, 0, 0.3) !important;
 }
 
-/* Premium button - SUPER 3D Gold */
+/* Premium button - VIBRANT GOLD (keep this bright) */
 #premiumBtn {
     background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%) !important;
     color: #1a1f35 !important;
+    text-shadow: 0 1px 2px rgba(255, 255, 255, 0.3) !important;
     
     /* MEGA gold shadow stack */
     box-shadow: 0 12px 0 #c49500,
@@ -97,50 +92,74 @@
                 inset 0 -2px 0 rgba(0, 0, 0, 0.2) !important;
 }
 
-/* Secondary buttons - SUPER 3D dark */
-#overlay button.secondary {
-    background: linear-gradient(135deg, #2A2F45 0%, #1A1F35 100%) !important;
-    color: #FFFFFF !important;
-    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+/* View Stats button - BRIGHT PURPLE */
+#statsBtn {
+    background: linear-gradient(135deg, #A855F7 0%, #9333EA 100%) !important;
+    color: white !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
     
-    /* MEGA dark shadow stack */
-    box-shadow: 0 10px 0 rgba(0, 0, 0, 0.5),
-                0 12px 0 rgba(0, 0, 0, 0.4),
-                0 15px 30px rgba(0, 0, 0, 0.6),
-                inset 0 2px 0 rgba(255, 255, 255, 0.15),
+    /* MEGA purple shadow stack */
+    box-shadow: 0 10px 0 #7e22ce,
+                0 12px 0 #6b21a8,
+                0 15px 30px rgba(168, 85, 247, 0.5),
+                inset 0 2px 0 rgba(255, 255, 255, 0.4),
                 inset 0 -2px 0 rgba(0, 0, 0, 0.3) !important;
 }
 
-#overlay button.secondary:active {
+#statsBtn:active {
     transform: translateY(8px) !important;
-    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.5),
-                0 5px 15px rgba(0, 0, 0, 0.5),
-                inset 0 2px 0 rgba(255, 255, 255, 0.15),
+    box-shadow: 0 2px 0 #7e22ce,
+                0 5px 15px rgba(168, 85, 247, 0.4),
+                inset 0 2px 0 rgba(255, 255, 255, 0.4),
                 inset 0 -2px 0 rgba(0, 0, 0, 0.3) !important;
 }
 
-/* Restore button - SUPER 3D Cyan */
+/* Leaderboard button - BRIGHT GREEN */
+#leaderboardBtn {
+    background: linear-gradient(135deg, #10B981 0%, #059669 100%) !important;
+    color: white !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
+    
+    /* MEGA green shadow stack */
+    box-shadow: 0 10px 0 #047857,
+                0 12px 0 #065f46,
+                0 15px 30px rgba(16, 185, 129, 0.5),
+                inset 0 2px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -2px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+#leaderboardBtn:active {
+    transform: translateY(8px) !important;
+    box-shadow: 0 2px 0 #047857,
+                0 5px 15px rgba(16, 185, 129, 0.4),
+                inset 0 2px 0 rgba(255, 255, 255, 0.4),
+                inset 0 -2px 0 rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Restore button - BRIGHT CYAN/TEAL */
 #restoreBtn {
-    background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%) !important;
+    background: linear-gradient(135deg, #06B6D4 0%, #0891B2 100%) !important;
     color: white !important;
     font-size: 14px !important;
     padding: 12px 24px !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3) !important;
     
     /* MEGA cyan shadow stack */
-    box-shadow: 0 8px 0 #3ba9a1,
-                0 10px 0 #2d8a83,
-                0 15px 30px rgba(78, 205, 196, 0.5),
+    box-shadow: 0 8px 0 #0e7490,
+                0 10px 0 #155e75,
+                0 15px 30px rgba(6, 182, 212, 0.5),
                 inset 0 3px 0 rgba(255, 255, 255, 0.4),
                 inset 0 -2px 0 rgba(0, 0, 0, 0.2) !important;
 }
 
 #restoreBtn:active {
     transform: translateY(7px) !important;
-    box-shadow: 0 1px 0 #3ba9a1,
-                0 5px 15px rgba(78, 205, 196, 0.4),
+    box-shadow: 0 1px 0 #0e7490,
+                0 5px 15px rgba(6, 182, 212, 0.4),
                 inset 0 3px 0 rgba(255, 255, 255, 0.4),
                 inset 0 -2px 0 rgba(0, 0, 0, 0.2) !important;
 }
+
 
 
 
