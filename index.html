@@ -19,102 +19,219 @@
     <style>
 
 
+/* ==========================================
+   GLASSMORPHIC BUTTONS - NEON GLOW STYLE
+   ========================================== */
 
-/* 3D HOME SCREEN BUTTONS - FORCED OVERRIDE */
-#overlay button {
-    padding: 18px 36px !important;
-    font-size: 16px !important;
-    margin-top: 8px !important;
-    border-radius: 18px !important;
-    border: none !important;
-    font-weight: 700 !important;
-    position: relative !important;
-    
-    /* 3D LAYERED SHADOWS - CRITICAL */
-    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3),
-                0 10px 20px rgba(0, 0, 0, 0.4),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3) !important;
+button {
+    padding: 18px 36px;
+    font-size: 16px;
+    margin-top: 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0.3px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    background: rgba(26, 29, 36, 0.8);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Press down effect - CRITICAL */
-#overlay button:active {
-    transform: translateY(5px) !important;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3),
-                0 4px 8px rgba(0, 0, 0, 0.3),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3) !important;
+/* Glow effect on hover */
+button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 20px;
+    padding: 2px;
+    background: linear-gradient(135deg, 
+        rgba(255, 107, 107, 0.6) 0%, 
+        rgba(138, 99, 210, 0.6) 50%, 
+        rgba(99, 179, 237, 0.6) 100%);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, 
+                  linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-/* Start button - 3D Purple with deep shadow */
+button:hover::before {
+    opacity: 1;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5),
+                0 0 40px rgba(138, 99, 210, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+button:active {
+    transform: translateY(0px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+/* Start Button - Purple Gradient with Glow */
 #startBtn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-    color: white !important;
-    font-size: 18px !important;
-    padding: 20px 40px !important;
-    
-    box-shadow: 0 8px 0 #5a67c7,
-                0 14px 28px rgba(102, 126, 234, 0.5),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3) !important;
+    background: linear-gradient(135deg, 
+        rgba(168, 85, 247, 0.9) 0%, 
+        rgba(138, 99, 210, 0.9) 50%,
+        rgba(99, 102, 241, 0.9) 100%);
+    backdrop-filter: blur(20px);
+    color: #FFFFFF;
+    font-size: 18px;
+    padding: 20px 40px;
+    font-weight: 700;
+    border: 1px solid rgba(168, 85, 247, 0.4);
+    box-shadow: 0 8px 32px rgba(138, 99, 210, 0.4),
+                0 0 60px rgba(168, 85, 247, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+#startBtn::before {
+    background: linear-gradient(135deg, 
+        rgba(255, 107, 107, 0.8) 0%, 
+        rgba(168, 85, 247, 0.8) 50%, 
+        rgba(99, 179, 237, 0.8) 100%);
+}
+
+#startBtn:hover {
+    box-shadow: 0 12px 40px rgba(138, 99, 210, 0.6),
+                0 0 80px rgba(168, 85, 247, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    transform: translateY(-3px);
 }
 
 #startBtn:active {
-    transform: translateY(7px) !important;
-    box-shadow: 0 1px 0 #5a67c7,
-                0 6px 16px rgba(102, 126, 234, 0.3),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3) !important;
+    transform: translateY(0px);
+    box-shadow: 0 4px 16px rgba(138, 99, 210, 0.4),
+                0 0 40px rgba(168, 85, 247, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-/* Premium button - 3D Gold */
+/* Premium Button - Gold Gradient with Intense Glow */
 #premiumBtn {
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%) !important;
-    color: #1a1f35 !important;
-    
-    box-shadow: 0 8px 0 #d4a500,
-                0 14px 28px rgba(255, 215, 0, 0.5),
-                inset 0 2px 0 rgba(255, 255, 255, 0.4) !important;
+    background: linear-gradient(135deg, 
+        rgba(251, 191, 36, 0.9) 0%, 
+        rgba(245, 158, 11, 0.9) 50%,
+        rgba(217, 119, 6, 0.9) 100%);
+    backdrop-filter: blur(20px);
+    color: #1F2937;
+    font-weight: 700;
+    border: 1px solid rgba(251, 191, 36, 0.5);
+    box-shadow: 0 8px 32px rgba(251, 191, 36, 0.4),
+                0 0 60px rgba(251, 191, 36, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    animation: premiumGlow 3s ease-in-out infinite;
 }
 
-#premiumBtn:active {
-    transform: translateY(7px) !important;
-    box-shadow: 0 1px 0 #d4a500,
-                0 6px 16px rgba(255, 215, 0, 0.3),
-                inset 0 2px 0 rgba(255, 255, 255, 0.4) !important;
+@keyframes premiumGlow {
+    0%, 100% { 
+        box-shadow: 0 8px 32px rgba(251, 191, 36, 0.4),
+                    0 0 60px rgba(251, 191, 36, 0.3),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+    50% { 
+        box-shadow: 0 8px 32px rgba(251, 191, 36, 0.6),
+                    0 0 100px rgba(251, 191, 36, 0.5),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    }
 }
 
-/* Secondary buttons - 3D dark */
-#overlay button.secondary {
-    background: linear-gradient(135deg, #2A2F45 0%, #1A1F35 100%) !important;
-    color: #FFFFFF !important;
-    border: 2px solid rgba(255, 255, 255, 0.2) !important;
-    
-    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.4),
-                0 10px 20px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+#premiumBtn::before {
+    background: linear-gradient(135deg, 
+        rgba(251, 191, 36, 1) 0%, 
+        rgba(245, 158, 11, 1) 50%, 
+        rgba(251, 191, 36, 1) 100%);
 }
 
-#overlay button.secondary:active {
-    transform: translateY(5px) !important;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4),
-                0 4px 8px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+#premiumBtn:hover {
+    box-shadow: 0 12px 40px rgba(251, 191, 36, 0.6),
+                0 0 100px rgba(251, 191, 36, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.4);
 }
 
-/* Restore button - 3D Cyan */
+/* Premium Status Badge */
+#premiumStatus {
+    padding: 14px 24px;
+    font-size: 16px;
+    margin-top: 16px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, 
+        rgba(251, 191, 36, 0.95) 0%, 
+        rgba(245, 158, 11, 0.95) 100%);
+    backdrop-filter: blur(20px);
+    color: #1F2937;
+    font-weight: 700;
+    border: 1px solid rgba(251, 191, 36, 0.5);
+    box-shadow: 0 8px 24px rgba(251, 191, 36, 0.4),
+                0 0 40px rgba(251, 191, 36, 0.2);
+}
+
+/* Secondary Buttons - Subtle Glassmorphic */
+button.secondary {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    color: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    margin-top: 10px;
+    padding: 16px 32px;
+    font-size: 15px;
+}
+
+button.secondary::before {
+    background: linear-gradient(135deg, 
+        rgba(168, 85, 247, 0.5) 0%, 
+        rgba(99, 102, 241, 0.5) 100%);
+}
+
+button.secondary:hover {
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4),
+                0 0 40px rgba(138, 99, 210, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+
+/* Restore Button - Cyan/Blue Gradient */
 #restoreBtn {
-    background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%) !important;
-    color: white !important;
-    font-size: 14px !important;
-    padding: 12px 24px !important;
-    
-    box-shadow: 0 5px 0 #3ba9a1,
-                0 10px 20px rgba(78, 205, 196, 0.4),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3) !important;
+    background: linear-gradient(135deg, 
+        rgba(99, 179, 237, 0.9) 0%, 
+        rgba(79, 209, 197, 0.9) 100%);
+    backdrop-filter: blur(20px);
+    color: #FFFFFF;
+    font-size: 14px;
+    padding: 12px 24px;
+    font-weight: 600;
+    border: 1px solid rgba(99, 179, 237, 0.4);
+    box-shadow: 0 8px 32px rgba(99, 179, 237, 0.3),
+                0 0 40px rgba(99, 179, 237, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
-#restoreBtn:active {
-    transform: translateY(4px) !important;
-    box-shadow: 0 1px 0 #3ba9a1,
-                0 4px 8px rgba(78, 205, 196, 0.3),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3) !important;
+#restoreBtn::before {
+    background: linear-gradient(135deg, 
+        rgba(99, 179, 237, 0.8) 0%, 
+        rgba(79, 209, 197, 0.8) 100%);
+}
+
+#restoreBtn:hover {
+    box-shadow: 0 12px 40px rgba(99, 179, 237, 0.5),
+                0 0 60px rgba(99, 179, 237, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
 }
 
 
