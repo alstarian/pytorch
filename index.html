@@ -19,105 +19,6 @@
     <style>
 
 
-
-/* 3D HOME SCREEN BUTTONS - FORCED OVERRIDE */
-#overlay button {
-    padding: 18px 36px !important;
-    font-size: 16px !important;
-    margin-top: 8px !important;
-    border-radius: 18px !important;
-    border: none !important;
-    font-weight: 700 !important;
-    position: relative !important;
-    
-    /* 3D LAYERED SHADOWS - CRITICAL */
-    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.3),
-                0 10px 20px rgba(0, 0, 0, 0.4),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3) !important;
-}
-
-/* Press down effect - CRITICAL */
-#overlay button:active {
-    transform: translateY(5px) !important;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.3),
-                0 4px 8px rgba(0, 0, 0, 0.3),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3) !important;
-}
-
-/* Start button - 3D Purple with deep shadow */
-#startBtn {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
-    color: white !important;
-    font-size: 18px !important;
-    padding: 20px 40px !important;
-    
-    box-shadow: 0 8px 0 #5a67c7,
-                0 14px 28px rgba(102, 126, 234, 0.5),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3) !important;
-}
-
-#startBtn:active {
-    transform: translateY(7px) !important;
-    box-shadow: 0 1px 0 #5a67c7,
-                0 6px 16px rgba(102, 126, 234, 0.3),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3) !important;
-}
-
-/* Premium button - 3D Gold */
-#premiumBtn {
-    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%) !important;
-    color: #1a1f35 !important;
-    
-    box-shadow: 0 8px 0 #d4a500,
-                0 14px 28px rgba(255, 215, 0, 0.5),
-                inset 0 2px 0 rgba(255, 255, 255, 0.4) !important;
-}
-
-#premiumBtn:active {
-    transform: translateY(7px) !important;
-    box-shadow: 0 1px 0 #d4a500,
-                0 6px 16px rgba(255, 215, 0, 0.3),
-                inset 0 2px 0 rgba(255, 255, 255, 0.4) !important;
-}
-
-/* Secondary buttons - 3D dark */
-#overlay button.secondary {
-    background: linear-gradient(135deg, #2A2F45 0%, #1A1F35 100%) !important;
-    color: #FFFFFF !important;
-    border: 2px solid rgba(255, 255, 255, 0.2) !important;
-    
-    box-shadow: 0 6px 0 rgba(0, 0, 0, 0.4),
-                0 10px 20px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
-}
-
-#overlay button.secondary:active {
-    transform: translateY(5px) !important;
-    box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4),
-                0 4px 8px rgba(0, 0, 0, 0.4),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
-}
-
-/* Restore button - 3D Cyan */
-#restoreBtn {
-    background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%) !important;
-    color: white !important;
-    font-size: 14px !important;
-    padding: 12px 24px !important;
-    
-    box-shadow: 0 5px 0 #3ba9a1,
-                0 10px 20px rgba(78, 205, 196, 0.4),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3) !important;
-}
-
-#restoreBtn:active {
-    transform: translateY(4px) !important;
-    box-shadow: 0 1px 0 #3ba9a1,
-                0 4px 8px rgba(78, 205, 196, 0.3),
-                inset 0 2px 0 rgba(255, 255, 255, 0.3) !important;
-}
-
-
 #pauseButton {
     display: none !important;
 }
@@ -1776,44 +1677,8 @@ body {
                     margin: 20px 0;
                 }
                 .hidden {
-    display: none !important;
-}
-
-/* === SMOOTH SCREEN TRANSITIONS (FIXED) === */
-#overlay, #statsScreen, #leaderboardScreen, #gameOverScreen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 1000;
-    transition: opacity 0.3s ease;
-}
-
-/* Keep screens in DOM during transition but invisible */
-#overlay.transitioning, 
-#statsScreen.transitioning, 
-#leaderboardScreen.transitioning, 
-#gameOverScreen.transitioning {
-    display: flex !important;
-    opacity: 0;
-    pointer-events: none;
-}
-
-/* Animate screens fading in */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-#statsScreen:not(.hidden):not(.transitioning), 
-#leaderboardScreen:not(.hidden):not(.transitioning) {
-    animation: fadeIn 0.3s ease;
-}
-
-
-
-
+                    display: none !important;
+                }
                 .firebase-status {
                     font-size: 11px;
                     color: rgba(255, 255, 255, 0.4);
@@ -3162,30 +3027,35 @@ let gameHeight = window.innerHeight;
             isPowerup: true
         };
         function showStats() {
-    const overlay = document.getElementById('overlay');
-    const statsScreen = document.getElementById('statsScreen');
-    
-    // Prepare stats screen (hidden but in DOM)
-    statsScreen.classList.remove('hidden');
-    statsScreen.classList.add('transitioning');
-    
-    // Update stats content immediately
+    document.getElementById('overlay').classList.add('hidden');
+    document.getElementById('statsScreen').classList.remove('hidden');
     const currentHighScore = parseInt(localStorage.getItem('zooKeeperHighScore') || 0);
     document.getElementById('totalGames').textContent = totalPlays;
     document.getElementById('totalAnimals').textContent = totalAnimalsCaught;
     document.getElementById('totalPoints').textContent = totalPointsEarned.toLocaleString();
     document.getElementById('bestScore').textContent = currentHighScore;
     document.getElementById('longestStreak').textContent = bestStreak;
+    //document.getElementById('totalPowerups').textContent = totalPowerupsCaught;
+    /*if (premiumUnlocked) {
     document.getElementById('totalPremiums').textContent = totalPremiumsCaught;
-    document.getElementById('premiumCollection').textContent = `${premiumSpeciesCaught.length}/16`;
+    document.getElementById('premiumCollection').textContent = `${premiumSpeciesCaught.length}/14`;
+} else {
+    document.getElementById('totalPremiums').textContent = '🔒';
+    document.getElementById('premiumCollection').textContent = '🔒';
+}
+*/
+// For testing - always show counts (remove the if/else check)
+document.getElementById('totalPremiums').textContent = totalPremiumsCaught;
+document.getElementById('premiumCollection').textContent = `${premiumSpeciesCaught.length}/16`;
     document.getElementById('highestLevel').textContent = highestLevelReached;
     document.getElementById('highestZone').textContent = highestZoneReached;
-    
+    // FIX: Capitalize animal name before searching
     let maxCount = 0;
     let favAnimal = 'None';
     for(let animal in animalCounts) {
         if(animalCounts[animal] > maxCount) {
             maxCount = animalCounts[animal];
+            // Capitalize first letter to match types array
             const capitalizedName = animal.charAt(0).toUpperCase() + animal.slice(1);
             const type = types.find(t => t.name === capitalizedName);
             if(type) {
@@ -3194,19 +3064,6 @@ let gameHeight = window.innerHeight;
         }
     }
     document.getElementById('favAnimal').textContent = favAnimal;
-    
-    // Crossfade: Fade out overlay while fading in stats
-    requestAnimationFrame(() => {
-        overlay.style.opacity = '0';
-        statsScreen.classList.remove('transitioning');
-        statsScreen.style.opacity = '1';
-    });
-    
-    // Clean up after transition
-    setTimeout(() => {
-        overlay.classList.add('hidden');
-        overlay.style.opacity = '1';
-    }, 300);
 }
         function updateDifficultyDisplay() {
             const el = document.getElementById('diffLevel');
@@ -4353,117 +4210,23 @@ document.getElementById("badge").textContent = msg;
         document.getElementById('restartBtn').addEventListener('click', restart);
         document.getElementById('statsBtn').addEventListener('click', showStats);
         document.getElementById('viewStatsBtn').addEventListener('click', () => {
-    const gameOverScreen = document.getElementById('gameOverScreen');
-    const statsScreen = document.getElementById('statsScreen');
-    
-    // Prepare stats screen
-    statsScreen.classList.remove('hidden');
-    statsScreen.classList.add('transitioning');
-    
-    // Update stats content
-    const currentHighScore = parseInt(localStorage.getItem('zooKeeperHighScore') || 0);
-    document.getElementById('totalGames').textContent = totalPlays;
-    document.getElementById('totalAnimals').textContent = totalAnimalsCaught;
-    document.getElementById('totalPoints').textContent = totalPointsEarned.toLocaleString();
-    document.getElementById('bestScore').textContent = currentHighScore;
-    document.getElementById('longestStreak').textContent = bestStreak;
-    document.getElementById('totalPremiums').textContent = totalPremiumsCaught;
-    document.getElementById('premiumCollection').textContent = `${premiumSpeciesCaught.length}/16`;
-    document.getElementById('highestLevel').textContent = highestLevelReached;
-    document.getElementById('highestZone').textContent = highestZoneReached;
-    
-    let maxCount = 0;
-    let favAnimal = 'None';
-    for(let animal in animalCounts) {
-        if(animalCounts[animal] > maxCount) {
-            maxCount = animalCounts[animal];
-            const capitalizedName = animal.charAt(0).toUpperCase() + animal.slice(1);
-            const type = types.find(t => t.name === capitalizedName);
-            if(type) {
-                favAnimal = type.emoji + ' ' + capitalizedName;
-            }
-        }
-    }
-    document.getElementById('favAnimal').textContent = favAnimal;
-    
-    // Crossfade
-    requestAnimationFrame(() => {
-        gameOverScreen.style.opacity = '0';
-        statsScreen.classList.remove('transitioning');
-        statsScreen.style.opacity = '1';
-    });
-    
-    // Clean up
-    setTimeout(() => {
-        gameOverScreen.classList.add('hidden');
-        gameOverScreen.style.opacity = '1';
-    }, 300);
-});
+            document.getElementById('gameOverScreen').classList.add('hidden');
+            showStats();
+        });
         document.getElementById('closeStatsBtn').addEventListener('click', () => {
-    const statsScreen = document.getElementById('statsScreen');
-    const overlay = document.getElementById('overlay');
-    
-    // Prepare overlay (hidden but in DOM)
-    overlay.classList.remove('hidden');
-    overlay.style.opacity = '0';
-    
-    // Crossfade
-    requestAnimationFrame(() => {
-        statsScreen.style.opacity = '0';
-        overlay.style.opacity = '1';
-    });
-    
-    // Clean up after transition
-    setTimeout(() => {
-        statsScreen.classList.add('hidden');
-        statsScreen.style.opacity = '1';
-        updateMainMenuHighScore();
-    }, 300);
-});
+            document.getElementById('statsScreen').classList.add('hidden');
+            document.getElementById('overlay').classList.remove('hidden');
+            updateMainMenuHighScore();
+        });
         document.getElementById('leaderboardBtn').addEventListener('click', () => {
-    const overlay = document.getElementById('overlay');
-    const leaderboardScreen = document.getElementById('leaderboardScreen');
-    
-    // Prepare leaderboard screen
-    leaderboardScreen.classList.remove('hidden');
-    leaderboardScreen.classList.add('transitioning');
-    
-    // Start loading leaderboard data
-    loadLeaderboard();
-    
-    // Crossfade
-    requestAnimationFrame(() => {
-        overlay.style.opacity = '0';
-        leaderboardScreen.classList.remove('transitioning');
-        leaderboardScreen.style.opacity = '1';
-    });
-    
-    // Clean up
-    setTimeout(() => {
-        overlay.classList.add('hidden');
-        overlay.style.opacity = '1';
-    }, 300);
-});
+            document.getElementById('overlay').classList.add('hidden');
+            document.getElementById('leaderboardScreen').classList.remove('hidden');
+            loadLeaderboard();
+        });
         document.getElementById('closeLeaderboardBtn').addEventListener('click', () => {
-    const leaderboardScreen = document.getElementById('leaderboardScreen');
-    const overlay = document.getElementById('overlay');
-    
-    // Prepare overlay
-    overlay.classList.remove('hidden');
-    overlay.style.opacity = '0';
-    
-    // Crossfade
-    requestAnimationFrame(() => {
-        leaderboardScreen.style.opacity = '0';
-        overlay.style.opacity = '1';
-    });
-    
-    // Clean up
-    setTimeout(() => {
-        leaderboardScreen.classList.add('hidden');
-        leaderboardScreen.style.opacity = '1';
-    }, 300);
-});
+            document.getElementById('leaderboardScreen').classList.add('hidden');
+            document.getElementById('overlay').classList.remove('hidden');
+        });
         document.getElementById('submitScoreBtn').addEventListener('click', () => {
             const playerName = document.getElementById('playerNameInput').value;
             submitScoreToLeaderboard(playerName, score);
@@ -4635,244 +4398,97 @@ document.getElementById('quitButton').addEventListener('click', () => {
 
 
 
-
-
-
-
 // ================================
-// ZOO KEEPER IAP - @capgo/native-purchases v8 (CORRECT FIELD NAMES)
+// ZOO KEEPER REAL IAP CODE
 // ================================
-
-const PREMIUM_PRODUCT_ID = 'com.alstarian.zookeeper.premiumanimals';
-let iapReady = false;
-
-// Check for existing purchases on app startup
-async function checkPremiumStatus() {
+// Real IAP initialization - runs automatically on app start
+async function initIAP() {
+  if (typeof window.Capacitor === 'undefined') {
+    console.log('🧪 Browser: IAP skipped (expected)');
+    return;
+  }
   try {
-    const { NativePurchases } = window.Capacitor.Plugins;
-    
-    // Get all purchases for this user
-    const result = await NativePurchases.restorePurchases();
-    
-    if (result && result.purchases && result.purchases.length > 0) {
-      const hasPremium = result.purchases.some(p => 
-        p.productIdentifier === PREMIUM_PRODUCT_ID
-      );
-      
-      if (hasPremium && !premiumUnlocked) {
-        unlockPremium('cached', true); // Silent unlock on startup
-        console.log('✅ Premium restored from device');
-      }
+    const NativePurchases = window.Capacitor.Plugins.NativePurchases;
+    await NativePurchases.initialize();
+    console.log('✅ IAP initialized successfully');
+ 
+    // Check for premium product (logs when dev account ready)
+    const { products } = await NativePurchases.getProducts({
+      productIdentifiers: ['com.alstarian.zookeeper.premiumanimals'],
+      productType: 'INAPP'
+    });
+ 
+    if (products && products.length > 0) {
+      console.log('✅ Premium product ready:', products[0].identifier);
     }
-    
-    iapReady = true;
-    
   } catch (e) {
-    console.log('Check status error:', e);
-    iapReady = true;
-    
-    // Fallback to localStorage
-    if (localStorage.getItem('premiumUnlocked') === 'true') {
-      premiumUnlocked = true;
-      updatePremiumButton();
-    }
+    console.log('IAP init (normal without dev account):', e.message);
   }
 }
-
-// Shared unlock function
-function unlockPremium(source = 'purchase', silent = false) {
-  if (premiumUnlocked) return;
-  
-  premiumUnlocked = true;
-  localStorage.setItem('premiumUnlocked', 'true');
-  
-  console.log(`✅ Premium unlocked via ${source}`);
-  
-  // Show celebration only for new purchases
-  if (!silent && source === 'purchase') {
-    alert('🎉 PREMIUM ANIMALS UNLOCKED!\n\n16 rare species now available in ALL zones:\n🦄 Unicorn • 🐺 Arctic Wolf\n🐒 Golden Monkey • 🐉 Dragon\n🦅 Golden Eagle • 🦚 Macaw\n🐋 Whale • 🦈 Shark\nand 8 more!');
-    
-    if (typeof throwConfetti === 'function') throwConfetti(100);
-    if (typeof showAchievement === 'function') {
-      showAchievement('🦄', 'Premium Unlocked!', '16 rare animals added!');
-    }
-  }
-  
-  updatePremiumButton();
-}
-
-// Purchase premium animals
+// Buy Premium Animals button
 async function buyPremiumAnimals() {
   if (premiumUnlocked) {
     alert('✅ Premium Animals already unlocked!');
+    // Update button display
     updatePremiumButton();
     return;
   }
-  
-  if (!iapReady) {
-    alert('Store not ready. Please try again in a moment.');
-    return;
-  }
-  
   try {
-    const { NativePurchases } = window.Capacitor.Plugins;
-    
-    // Show loading state
-    const btn = document.getElementById('premiumBtn');
-    const originalHTML = btn.innerHTML;
-    btn.innerHTML = '<span>⏳</span> Processing...';
-    btn.disabled = true;
-    
-    // Purchase the product - this returns immediately when transaction completes
+    const NativePurchases = window.Capacitor.Plugins.NativePurchases;
     const result = await NativePurchases.purchaseProduct({
-      productIdentifier: PREMIUM_PRODUCT_ID,
-      applicationUsername: '', // Optional: can link to user account
+      productIdentifier: 'com.alstarian.zookeeper.premiumanimals',
+      productType: 'INAPP'
     });
-    
-    console.log('Purchase result:', result);
-    
-    // Check if purchase was successful
-    if (result && result.productIdentifier === PREMIUM_PRODUCT_ID) {
-      unlockPremium('purchase', false);
-      
-      // Restore button
-      btn.innerHTML = originalHTML;
-      btn.disabled = false;
-    } else {
-      throw new Error('Purchase completed but product not found in result');
-    }
-    
-  } catch (e) {
-    console.error('Purchase error:', e);
-    
-    // Restore button
-    const btn = document.getElementById('premiumBtn');
-    btn.innerHTML = '<span>💎</span> Unlock Premiums';
-    btn.disabled = false;
-    
-    // Handle specific error cases
-    const errorMessage = (e.message || '').toLowerCase();
-    const errorCode = e.code || '';
-    
-    if (errorMessage.includes('cancel') || 
-        errorMessage.includes('user') ||
-        errorCode === '1') { // iOS user cancelled code
-      console.log('User cancelled purchase');
-      // Don't show alert for user cancellation
-    } else if (errorMessage.includes('network') || 
-               errorMessage.includes('internet') ||
-               errorCode === '2') {
-      alert('Network error. Please check your connection and try again.');
-    } else if (errorMessage.includes('payment') || 
-               errorMessage.includes('billing') ||
-               errorCode === '3') {
-      alert('Payment issue. Please check your payment method in Settings.');
-    } else if (errorMessage.includes('unavailable') ||
-               errorCode === '4') {
-      alert('This item is currently unavailable. Please try again later.');
-    } else if (errorMessage.includes('already') || 
-               errorMessage.includes('owned')) {
-      // User already owns this - restore it
-      alert('You already own this! Restoring...');
-      restorePurchases();
-    } else {
-      alert('Purchase failed. Please try again or contact support.');
-      console.error('Unhandled error:', e);
-    }
-  }
-}
-
-// Restore previous purchases
-async function restorePurchases() {
-  if (!iapReady) {
-    alert('Store not ready. Please try again in a moment.');
-    return;
-  }
-  
-  try {
-    const { NativePurchases } = window.Capacitor.Plugins;
-    
-    // Show loading state
-    const btn = document.getElementById('restoreBtn');
-    const originalHTML = btn.innerHTML;
-    btn.innerHTML = '⏳ Restoring...';
-    btn.disabled = true;
-    
-    // Track state before restore
-    const premiumBefore = premiumUnlocked;
-    
-    // Restore purchases - returns all owned items
-  const result = await NativePurchases.restorePurchases();
-    
-    console.log('Restore result:', result);
-    
-    // Check if premium was found
-    let hasPremium = false;
-    if (result && result.purchases && result.purchases.length > 0) {
-      hasPremium = result.purchases.some(p => 
-        p.productIdentifier === PREMIUM_PRODUCT_ID
-      );
-    }
-    
-    // Restore button
-    btn.innerHTML = originalHTML;
-    btn.disabled = false;
-    
-    if (hasPremium && !premiumBefore) {
-      // Successfully restored premium
-      unlockPremium('restored', false);
-      alert('✅ Premium Animals restored successfully!');
-    } else if (hasPremium && premiumBefore) {
-      // Already had premium
-      alert('✅ Premium Animals already active on this device.');
-    } else {
-      // No purchases found
-      alert('No previous purchases found.\n\nPurchases are linked to your Apple ID. Make sure you\'re signed in with the same account used for the original purchase.');
-    }
-    
-  } catch (e) {
-    console.error('Restore error:', e);
-    
-    // Restore button
-    const btn = document.getElementById('restoreBtn');
-    btn.innerHTML = '🔄 Restore Purchases';
-    btn.disabled = false;
-    
-    const errorMessage = (e.message || '').toLowerCase();
-    
-    if (errorMessage.includes('network')) {
-      alert('Network error. Please check your internet connection and try again.');
-    } else {
-      alert('Restore failed. Please try again or contact support if the problem persists.');
-    }
-  }
-}
-
-// Initialize IAP when app loads
-document.addEventListener('DOMContentLoaded', () => {
-  if (typeof window.Capacitor !== 'undefined') {
-    // Mobile app - check for existing purchases
-    setTimeout(() => {
-      checkPremiumStatus();
-      console.log('✅ IAP ready');
-    }, 500);
-  } else {
-    // Browser - check localStorage only
-    premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
+ 
+    // Success! Unlock premium forever
+    premiumUnlocked = true
+    localStorage.setItem('premiumUnlocked', 'true');
+ 
+    alert('🎉 PREMIUM ANIMALS UNLOCKED!\n\n16 rare species now available in ALL zones:\n🦄 Unicorn • 🐺 Arctic Wolf\n🐒 Golden Monkey • 🐉 Dragon\n🦅 Golden Eagle • 🦚 Macaw\n🐋 Whale • 🦈 Shark\nand 8 more!'); // ← CHANGE: 14 to 16
+ 
+    // Celebrate!
+    throwConfetti(100);
+    showAchievement('🦄', 'Premium Unlocked!', '16 rare animals added!');
     updatePremiumButton();
-    iapReady = true;
-  }
-});
-
-// Check premium status when app resumes from background
-if (typeof window.Capacitor !== 'undefined') {
-  document.addEventListener('resume', () => {
-    if (iapReady) {
-      checkPremiumStatus();
+ 
+  } catch (e) {
+    if (e.message && (e.message.includes('cancelled') || e.message.includes('user cancelled'))) {
+      console.log('User cancelled purchase');
+    } else {
+      alert('Purchase unavailable. Please try again or contact support.');
     }
-  });
+  }
 }
-
+// Restore Purchases button (REQUIRED by Apple)
+async function restorePurchases() {
+  try {
+    const NativePurchases = window.Capacitor.Plugins.NativePurchases;
+    await NativePurchases.restorePurchases();
+ 
+    alert('✅ Purchases restored!\n\nPremium Animals will be unlocked if previously purchased.');
+ 
+    // Check if premium was restored
+    setTimeout(() => {
+      if (premiumUnlocked) {
+        alert('🎉 Premium Animals restored from previous purchase!');
+      }
+    }, 1000);
+ 
+  } catch (e) {
+    alert('Restore complete. No previous purchases found.');
+  }
+}
+// Auto-start IAP when app loads
+initIAP();
+        // Tab Switching Logic
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                document.querySelectorAll('.animal-list').forEach(list => list.classList.remove('active'));
+                document.getElementById(button.dataset.tab + '-list').classList.add('active');
+            });
+        });
 
 
 
