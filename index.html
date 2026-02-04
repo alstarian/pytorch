@@ -4486,12 +4486,21 @@ function unlockPremium() {
 
 // Show/hide premium button based on unlock status
 function updatePremiumButton() {
+    const premiumBtn = document.getElementById('premiumBtn');
+    const premiumStatus = document.getElementById('premiumStatus');
+    
+    // Safety check - elements might not exist yet
+    if (!premiumBtn || !premiumStatus) {
+        console.log('Premium UI elements not ready yet');
+        return;
+    }
+    
     if (premiumUnlocked) {
-        document.getElementById('premiumBtn').style.display = 'none';
-        document.getElementById('premiumStatus').classList.remove('hidden');
+        premiumBtn.style.display = 'none';
+        premiumStatus.classList.remove('hidden');
     } else {
-        document.getElementById('premiumBtn').style.display = 'flex';
-        document.getElementById('premiumStatus').classList.add('hidden');
+        premiumBtn.style.display = 'flex';
+        premiumStatus.classList.add('hidden');
     }
 }
 
@@ -4551,20 +4560,37 @@ async function restorePurchases() {
     }
 }
 
-// Call on page load
+// CORRECTED: Safe initialization order
 window.addEventListener('DOMContentLoaded', () => {
-    // Check localStorage first for instant UI update
+    // First check localStorage and set the variable
     premiumUnlocked = (localStorage.getItem('premiumUnlocked') === 'true');
-    updatePremiumButton();
-    // Now safe to init IAP
-    initIAP();
+    
+    // Wait a tick to ensure DOM is fully ready
+    setTimeout(() => {
+        updatePremiumButton(); // Now safe - DOM exists
+        initIAP(); // Then initialize IAP
+    }, 0);
+});
+
+// Add event listeners for IAP buttons (moved to DOMContentLoaded for safety)
+window.addEventListener('DOMContentLoaded', () => {
+    const premiumBtn = document.getElementById('premiumBtn');
+    const restoreBtn = document.getElementById('restoreBtn');
+    
+    if (premiumBtn) {
+        premiumBtn.addEventListener('click', buyPremiumAnimals);
+    }
+    
+    if (restoreBtn) {
+        restoreBtn.addEventListener('click', restorePurchases);
+    }
 });
 
 
 
-// Add event listeners for IAP buttons
-document.getElementById('premiumBtn').addEventListener('click', buyPremiumAnimals);
-document.getElementById('restoreBtn').addEventListener('click', restorePurchases);
+
+
+
 
 
 
