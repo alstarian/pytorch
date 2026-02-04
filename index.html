@@ -2025,7 +2025,7 @@ body {
             </div>
             <p class="firebase-status" id="firebaseStatus">Connecting to leaderboard...</p>
             <button id="startBtn"><span>🎮</span> Start Playing</button>
-            <button id="premiumBtn" onclick="buyPremiumAnimals()">💎 Unlock Premiums</button>
+            <button id="premiumBtn">💎 Unlock Premiums</button>
                         <div id="premiumStatus" class="hidden" style="
                 background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
                 color: #1a1f35;
@@ -2046,7 +2046,7 @@ body {
             </div>
             <button class="secondary" id="statsBtn"><span>📊</span> View Stats</button>
             <button class="secondary" id="leaderboardBtn"><span>🏆</span> Leaderboard</button>
-            <button id="restoreBtn" onclick="restorePurchases()">🔄 Restore Purchases</button>
+            <button id="restoreBtn">🔄 Restore Purchases</button>
         </div>
     </div>
     <div id="gameOverScreen" class="hidden">
@@ -4398,156 +4398,173 @@ document.getElementById('quitButton').addEventListener('click', () => {
 
 
 
-
-
-// ================================
-// ULTRA-SAFE & SECURE IAP CODE (StoreKit direct - no localStorage, no crashes)
-// ================================
+// ULTRA-SAFE SECURE IAP CODE - StoreKit direct
 let premiumUnlocked = false; // Start locked
 
+// Safe init - called once at page load
 async function initIAP() {
-  // Completely safe in browser - skip everything
-  if (typeof window.Capacitor === 'undefined') {
-    console.log('🧪 Browser mode: IAP skipped - game works normally');
-    updatePremiumButton(); // Ensure button shows correctly
-    return;
-  }
-
-  // Only run in the actual app
-  try {
-    const NativePurchases = window.Capacitor.Plugins.NativePurchases;
-
-    if (!NativePurchases) {
-      console.log('NativePurchases plugin not found - skipping IAP');
-      updatePremiumButton();
-      return;
+    // Completely safe in browser - skip everything
+    if (typeof window.Capacitor === 'undefined') {
+        console.log('Browser mode - IAP skipped, game works normally');
+        premiumUnlocked = (localStorage.getItem('premiumUnlocked') === 'true');
+        updatePremiumButton(); // Ensure button shows correctly
+        return;
     }
-
-    // Listener for purchases/restores
-    NativePurchases.addListener('transactionUpdated', (transaction) => {
-      console.log('Transaction:', transaction);
-      if (transaction.productIdentifier === 'com.alstarian.zookeeper.premiumanimals' &&
-          transaction.transactionState === 'purchased') {
-        unlockPremium();
-      }
-    }).catch(e => console.log('Listener error (non-fatal):', e));
-
-    // Fetch product (optional but nice)
-    const { products } = await NativePurchases.getProducts({
-      productIdentifiers: ['com.alstarian.zookeeper.premiumanimals']
-    }).catch(e => ({ products: [] }));
-
-    if (products.length > 0) {
-      console.log('✅ Product ready:', products[0]);
+    
+    // Only run in the actual app
+    try {
+        const { NativePurchases } = window.Capacitor.Plugins;
+        if (!NativePurchases) {
+            console.log('NativePurchases plugin not found - skipping IAP');
+            updatePremiumButton();
+            return;
+        }
+        
+        // Listener for purchases/restores
+        NativePurchases.addListener('transactionUpdated', (transaction) => {
+            console.log('Transaction:', transaction);
+            if (transaction.productIdentifier === 'com.alstarian.zookeeper.premiumanimals' && 
+                transaction.transactionState === 'purchased') {
+                unlockPremium();
+            }
+        }).catch(e => console.log('Listener error (non-fatal):', e));
+        
+        // Fetch product (optional but nice)
+        const products = await NativePurchases.getProducts({
+            productIdentifiers: ['com.alstarian.zookeeper.premiumanimals']
+        }).catch(() => []);
+        
+        if (products.length > 0) {
+            console.log('Product ready:', products[0]);
+        }
+        
+        // Check if already owned
+        await checkPremiumStatus();
+    } catch (e) {
+        console.log('IAP setup failed (non-fatal, common in dev):', e);
+        // Game continues normally
     }
-
-    // Check if already owned
-    await checkPremiumStatus();
-
-  } catch (e) {
-    console.log('IAP setup failed (non-fatal, common in dev):', e);
-    // Game continues normally
     updatePremiumButton();
-  }
 }
 
 async function checkPremiumStatus() {
-  if (typeof window.Capacitor === 'undefined') return;
-
-  try {
-    const NativePurchases = window.Capacitor.Plugins.NativePurchases;
-    if (!NativePurchases) return;
-
-    const { purchases } = await NativePurchases.getPurchases().catch(() => ({ purchases: [] }));
-
-    const hasPremium = purchases.some(p =>
-      p.productIdentifier === 'com.alstarian.zookeeper.premiumanimals'
-    );
-
-    if (hasPremium) {
-      unlockPremium();
-    } else {
-      premiumUnlocked = false;
-      updatePremiumButton();
+    if (typeof window.Capacitor === 'undefined') {
+        premiumUnlocked = (localStorage.getItem('premiumUnlocked') === 'true');
+        return;
     }
-  } catch (e) {
-    console.log('Status check error (non-fatal):', e);
-    updatePremiumButton();
-  }
+    
+    try {
+        const { NativePurchases } = window.Capacitor.Plugins;
+        if (!NativePurchases) return;
+        
+        const { purchases } = await NativePurchases.getPurchases().catch(() => ({ purchases: [] }));
+        const hasPremium = purchases.some(p => p.productIdentifier === 'com.alstarian.zookeeper.premiumanimals');
+        
+        if (hasPremium) {
+            unlockPremium();
+        } else {
+            premiumUnlocked = false;
+            updatePremiumButton();
+        }
+    } catch (e) {
+        console.log('Status check error (non-fatal):', e);
+        updatePremiumButton();
+    }
 }
 
 function unlockPremium() {
-  if (premiumUnlocked) return;
-  premiumUnlocked = true;
-  alert('🎉 PREMIUM ANIMALS UNLOCKED!\n\n16 rare species now available in ALL zones:\n🦄 Unicorn • 🐺 Arctic Wolf\n🐒 Golden Monkey • 🐉 Dragon\n🦅 Golden Eagle • 🦚 Macaw\n🐋 Whale • 🦈 Shark\nand 8 more!');
-  throwConfetti(100);
-  showAchievement('🦄', 'Premium Unlocked!', '16 rare animals added!');
-  updatePremiumButton();
+    if (premiumUnlocked) return; // Already unlocked
+    
+    premiumUnlocked = true;
+    localStorage.setItem('premiumUnlocked', 'true');
+    
+    alert('🎉 PREMIUM ANIMALS UNLOCKED!\n\n16 rare species now available in ALL zones:\n🦄 Unicorn • 🐺 Arctic Wolf • 🐵 Golden Monkey • 🐉 Dragon • 🦅 Golden Eagle • 🦜 Macaw • 🦈 Whale Shark & 8 more!');
+    throwConfetti(100);
+    showAchievement('🌟', 'Premium Unlocked!', '16 rare animals added!');
+    updatePremiumButton();
+}
+
+// Show/hide premium button based on unlock status
+function updatePremiumButton() {
+    if (premiumUnlocked) {
+        document.getElementById('premiumBtn').style.display = 'none';
+        document.getElementById('premiumStatus').classList.remove('hidden');
+    } else {
+        document.getElementById('premiumBtn').style.display = 'flex';
+        document.getElementById('premiumStatus').classList.add('hidden');
+    }
 }
 
 async function buyPremiumAnimals() {
-  if (premiumUnlocked) {
-    alert('✅ Premium Animals already unlocked!');
-    return;
-  }
-
-  // Easy testing in browser
-  if (typeof window.Capacitor === 'undefined') {
-    alert('Testing mode: Premium unlocked!');
-    unlockPremium();
-    return;
-  }
-
-  try {
-    const NativePurchases = window.Capacitor.Plugins.NativePurchases;
-    if (!NativePurchases) {
-      alert('Purchase unavailable in this environment.');
-      return;
+    if (premiumUnlocked) {
+        alert('Premium Animals already unlocked!');
+        return;
     }
-
-    await NativePurchases.purchaseProduct({
-      productIdentifier: 'com.alstarian.zookeeper.premiumanimals'
-    });
-    // Success comes through listener
-  } catch (e) {
-    if (e.userCancelled || (e.message && e.message.includes('cancelled'))) {
-      console.log('Cancelled');
-    } else {
-      console.error('Purchase error:', e);
-      alert('Purchase failed. Try again later.');
+    
+    // Easy testing in browser
+    if (typeof window.Capacitor === 'undefined') {
+        alert('Testing mode - Premium unlocked!');
+        unlockPremium();
+        return;
     }
-  }
+    
+    try {
+        const { NativePurchases } = window.Capacitor.Plugins;
+        if (!NativePurchases) {
+            alert('Purchase unavailable in this environment.');
+            return;
+        }
+        
+        await NativePurchases.purchaseProduct({
+            productIdentifier: 'com.alstarian.zookeeper.premiumanimals'
+        });
+        // Success comes through listener
+    } catch (e) {
+        if (e.userCancelled || (e.message && e.message.includes('cancelled'))) {
+            console.log('Cancelled');
+        } else {
+            console.error('Purchase error:', e);
+            alert('Purchase failed. Try again later.');
+        }
+    }
 }
 
 async function restorePurchases() {
-  if (typeof window.Capacitor === 'undefined') {
-    alert('Restore only works in the app.');
-    return;
-  }
-
-  try {
-    const NativePurchases = window.Capacitor.Plugins.NativePurchases;
-    if (!NativePurchases) {
-      alert('Restore unavailable.');
-      return;
+    if (typeof window.Capacitor === 'undefined') {
+        alert('Restore only works in the app.');
+        return;
     }
-
-    await NativePurchases.restorePurchases();
-    await checkPremiumStatus();
-    alert('✅ Restore complete!');
-  } catch (e) {
-    console.error('Restore error:', e);
-    alert('No previous purchases found.');
-  }
+    
+    try {
+        const { NativePurchases } = window.Capacitor.Plugins;
+        if (!NativePurchases) {
+            alert('Restore unavailable.');
+            return;
+        }
+        
+        await NativePurchases.restorePurchases();
+        await checkPremiumStatus();
+        alert('Restore complete!');
+    } catch (e) {
+        console.error('Restore error:', e);
+        alert('No previous purchases found.');
+    }
 }
 
-// Safe init - called once at the very end
-initIAP();
+// Call on page load
+window.addEventListener('DOMContentLoaded', () => {
+    // Check localStorage first for instant UI update
+    premiumUnlocked = (localStorage.getItem('premiumUnlocked') === 'true');
+    updatePremiumButton();
+    // Now safe to init IAP
+    initIAP();
+});
 
 
 
-
-
+// Add event listeners for IAP buttons
+document.getElementById('premiumBtn').addEventListener('click', buyPremiumAnimals);
+document.getElementById('restoreBtn').addEventListener('click', restorePurchases);
 
 
 
