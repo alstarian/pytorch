@@ -2067,13 +2067,18 @@ body {
    <script>
 
 
+<script>
+// === DECLARE premiumUnlocked AT THE ABSOLUTE TOP (fixes TDZ) ===
+let premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
 
-
-
-       window.addEventListener('DOMContentLoaded', () => {
-    premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
-    updatePremiumButton();
+// Immediate UI update on load
+document.addEventListener('DOMContentLoaded', () => {
+  updatePremiumButton();
 });
+// === END TOP FIX ===
+
+
+
         //localStorage.setItem('premiumUnlocked', 'true');
         //window.addEventListener('DOMContentLoaded', () => {
             //premiumUnlocked = true;
@@ -4284,15 +4289,16 @@ document.getElementById('quitButton').addEventListener('click', () => {
     }, 300);
 });
 
+
+
+
+
 // ================================
-// ZOO KEEPER IAP - FINAL FIXED (NO REDECLARATION EVER)
+// ZOO KEEPER IAP - FINAL SAFE VERSION (NO DECLARATIONS INSIDE)
 // ================================
 const PREMIUM_PRODUCT_ID = 'com.alstarian.zookeeper.premiumanimals';
 
-// NO 'let' HERE - we'll set it safely below
-let premiumUnlocked;  // Only this single declaration (safe placeholder)
-
-// Central unlock
+// Central unlock (with celebration)
 function unlockPremium() {
   if (premiumUnlocked) return;
   premiumUnlocked = true;
@@ -4303,7 +4309,7 @@ function unlockPremium() {
   showAchievement('🦄', 'Premium Unlocked!', '16 rare animals added!');
 }
 
-// Safe status check
+// Safe status check using real purchases
 async function checkPremiumStatus() {
   if (typeof Capacitor === 'undefined' || !Capacitor.Plugins.NativePurchases) return;
   try {
@@ -4339,7 +4345,7 @@ async function buyPremiumAnimals() {
   }
 }
 
-// Restore Purchases
+// Restore Purchases (Apple-required)
 async function restorePurchases() {
   try {
     const NativePurchases = window.Capacitor.Plugins.NativePurchases;
@@ -4353,7 +4359,7 @@ async function restorePurchases() {
 
 // Full safe IAP init
 async function initIAP() {
-  // Load from localStorage first (fast UI update)
+  // Fast UI from localStorage
   premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
   updatePremiumButton();
 
@@ -4375,7 +4381,7 @@ async function initIAP() {
       console.log('✅ Premium product ready:', products[0].identifier);
     }
 
-    // iOS listener
+    // iOS listener for async updates
     if (Capacitor.getPlatform() === 'ios') {
       NativePurchases.addListener('transactionUpdated', async (transaction) => {
         console.log('Transaction update:', transaction);
@@ -4385,7 +4391,7 @@ async function initIAP() {
       });
     }
 
-    // Final real check
+    // Final real purchase check
     await checkPremiumStatus();
 
   } catch (e) {
@@ -4394,9 +4400,13 @@ async function initIAP() {
 }
 
 // Run on load
-document.addEventListener('DOMContentLoaded', () => {
-  initIAP();
-});
+document.addEventListener('DOMContentLoaded', initIAP);
+
+
+
+
+
+
 
 
 
@@ -4434,6 +4444,11 @@ window.addEventListener('resize', function() {
 
 
     </script>
+
+
+
+
+
   
 <!-- Zone Transition Modal -->
 <div id="zoneTransitionModal" class="hidden">
