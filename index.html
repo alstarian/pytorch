@@ -4284,78 +4284,12 @@ document.getElementById('quitButton').addEventListener('click', () => {
     }, 300);
 });
 
+
 // ================================
-// ZOO KEEPER IAP - FIXED (NO REDECLARATION)
+// ZOO KEEPER REAL IAP CODE
 // ================================
-const PREMIUM_PRODUCT_ID = 'com.alstarian.zookeeper.premiumanimals';
-
-let premiumUnlocked = false;  // Single declaration here
-
-// Central unlock (with celebration)
-function unlockPremium() {
-  if (premiumUnlocked) return;
-  premiumUnlocked = true;
-  localStorage.setItem('premiumUnlocked', 'true');
-  updatePremiumButton();
-  alert('🎉 PREMIUM ANIMALS UNLOCKED!\n\n16 rare species now available in ALL zones:\n🦄 Unicorn • 🐺 Arctic Wolf\n🐒 Golden Monkey • 🐉 Dragon\n🦅 Golden Eagle • 🦚 Macaw\n🐳 Blue Whale • 🦈 Shark\nand 8 more!');
-  throwConfetti(100);
-  showAchievement('🦄', 'Premium Unlocked!', '16 rare animals added!');
-}
-
-// Safe status check (uses your 'INAPP' style)
-async function checkPremiumStatus() {
-  if (typeof Capacitor === 'undefined' || !Capacitor.Plugins.NativePurchases) return;
-  try {
-    const NativePurchases = Capacitor.Plugins.NativePurchases;
-    const { purchases } = await NativePurchases.getPurchases({ productType: 'INAPP' });
-    const hasPremium = purchases.some(p => p.productIdentifier === PREMIUM_PRODUCT_ID);
-    if (hasPremium) unlockPremium();
-  } catch (err) {
-    console.log('Status check skipped (safe):', err.message);
-  }
-}
-
-// Buy Premium
-async function buyPremiumAnimals() {
-  if (premiumUnlocked) {
-    alert('✅ Premium Animals already unlocked!');
-    updatePremiumButton();
-    return;
-  }
-  try {
-    const NativePurchases = window.Capacitor.Plugins.NativePurchases;
-    const result = await NativePurchases.purchaseProduct({
-      productIdentifier: PREMIUM_PRODUCT_ID,
-      productType: 'INAPP'
-    });
-    await checkPremiumStatus();
-  } catch (e) {
-    if (e.message && (e.message.includes('cancelled') || e.message.includes('user cancelled'))) {
-      console.log('User cancelled purchase');
-    } else {
-      alert('Purchase unavailable. Please try again or contact support.');
-    }
-  }
-}
-
-// Restore Purchases
-async function restorePurchases() {
-  try {
-    const NativePurchases = window.Capacitor.Plugins.NativePurchases;
-    await NativePurchases.restorePurchases();
-    await checkPremiumStatus();
-    alert('✅ Purchases restored!\n\nPremium Animals will be unlocked if previously purchased.');
-  } catch (e) {
-    alert('Restore complete. No previous purchases found.');
-  }
-}
-
-// Full safe IAP init
+// Real IAP initialization - runs automatically on app start
 async function initIAP() {
-  // Load from localStorage first (fast UI)
-  premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
-  updatePremiumButton();
-
   if (typeof window.Capacitor === 'undefined') {
     console.log('🧪 Browser: IAP skipped (expected)');
     return;
@@ -4364,37 +4298,84 @@ async function initIAP() {
     const NativePurchases = window.Capacitor.Plugins.NativePurchases;
     await NativePurchases.initialize();
     console.log('✅ IAP initialized successfully');
-
-    // Your original product load
+ 
+    // Check for premium product (logs when dev account ready)
     const { products } = await NativePurchases.getProducts({
-      productIdentifiers: [PREMIUM_PRODUCT_ID],
+      productIdentifiers: ['com.alstarian.zookeeper.premiumanimals'],
       productType: 'INAPP'
     });
+ 
     if (products && products.length > 0) {
       console.log('✅ Premium product ready:', products[0].identifier);
     }
-
-    // iOS-only listener
-    if (Capacitor.getPlatform() === 'ios') {
-      NativePurchases.addListener('transactionUpdated', async (transaction) => {
-        console.log('Transaction update:', transaction);
-        if (transaction.productIdentifier === PREMIUM_PRODUCT_ID) {
-          await checkPremiumStatus();
-        }
-      });
-    }
-
-    // Final real status check
-    await checkPremiumStatus();
-
   } catch (e) {
     console.log('IAP init (normal without dev account):', e.message);
   }
 }
-
-// Auto-start on load
-document.addEventListener('DOMContentLoaded', initIAP);
-
+// Buy Premium Animals button
+async function buyPremiumAnimals() {
+  if (premiumUnlocked) {
+    alert('✅ Premium Animals already unlocked!');
+    // Update button display
+    updatePremiumButton();
+    return;
+  }
+  try {
+    const NativePurchases = window.Capacitor.Plugins.NativePurchases;
+    const result = await NativePurchases.purchaseProduct({
+      productIdentifier: 'com.alstarian.zookeeper.premiumanimals',
+      productType: 'INAPP'
+    });
+ 
+    // Success! Unlock premium forever
+    premiumUnlocked = true
+    localStorage.setItem('premiumUnlocked', 'true');
+ 
+    alert('🎉 PREMIUM ANIMALS UNLOCKED!\n\n16 rare species now available in ALL zones:\n🦄 Unicorn • 🐺 Arctic Wolf\n🐒 Golden Monkey • 🐉 Dragon\n🦅 Golden Eagle • 🦚 Macaw\n🐋 Whale • 🦈 Shark\nand 8 more!'); // ← CHANGE: 14 to 16
+ 
+    // Celebrate!
+    throwConfetti(100);
+    showAchievement('🦄', 'Premium Unlocked!', '16 rare animals added!');
+    updatePremiumButton();
+ 
+  } catch (e) {
+    if (e.message && (e.message.includes('cancelled') || e.message.includes('user cancelled'))) {
+      console.log('User cancelled purchase');
+    } else {
+      alert('Purchase unavailable. Please try again or contact support.');
+    }
+  }
+}
+// Restore Purchases button (REQUIRED by Apple)
+async function restorePurchases() {
+  try {
+    const NativePurchases = window.Capacitor.Plugins.NativePurchases;
+    await NativePurchases.restorePurchases();
+ 
+    alert('✅ Purchases restored!\n\nPremium Animals will be unlocked if previously purchased.');
+ 
+    // Check if premium was restored
+    setTimeout(() => {
+      if (premiumUnlocked) {
+        alert('🎉 Premium Animals restored from previous purchase!');
+      }
+    }, 1000);
+ 
+  } catch (e) {
+    alert('Restore complete. No previous purchases found.');
+  }
+}
+// Auto-start IAP when app loads
+initIAP();
+        // Tab Switching Logic
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', () => {
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                document.querySelectorAll('.animal-list').forEach(list => list.classList.remove('active'));
+                document.getElementById(button.dataset.tab + '-list').classList.add('active');
+            });
+        });
 
 
 
