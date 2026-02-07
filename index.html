@@ -4297,6 +4297,86 @@ document.getElementById('quitButton').addEventListener('click', () => {
 
 
 
+// ================================
+// ZOO KEEPER REAL IAP CODE (YOUR ORIGINAL WORKING VERSION)
+// ================================
+async function initIAP() {
+  if (typeof window.Capacitor === 'undefined') {
+    console.log('🧪 Browser: IAP skipped (expected)');
+    return;
+  }
+  try {
+    const NativePurchases = window.Capacitor.Plugins.NativePurchases;
+    await NativePurchases.initialize();
+    console.log('✅ IAP initialized successfully');
+
+    const { products } = await NativePurchases.getProducts({
+      productIdentifiers: ['com.alstarian.zookeeper.premiumanimals'],
+      productType: 'INAPP'
+    });
+    if (products && products.length > 0) {
+      console.log('✅ Premium product ready:', products[0].identifier);
+    }
+  } catch (e) {
+    console.log('IAP init (normal without dev account):', e.message);
+  }
+}
+
+// Buy Premium Animals button
+async function buyPremiumAnimals() {
+  if (premiumUnlocked) {
+    alert('✅ Premium Animals already unlocked!');
+    // Update button display
+    updatePremiumButton();
+    return;
+  }
+  try {
+    const NativePurchases = window.Capacitor.Plugins.NativePurchases;
+    const result = await NativePurchases.purchaseProduct({
+      productIdentifier: 'com.alstarian.zookeeper.premiumanimals',
+      productType: 'INAPP'
+    });
+    // Success! Unlock premium forever
+    premiumUnlocked = true
+    localStorage.setItem('premiumUnlocked', 'true');
+    alert('🎉 PREMIUM ANIMALS UNLOCKED!\n\n16 rare species now available in ALL zones:\n🦄 Unicorn • 🐺 Arctic Wolf\n🐒 Golden Monkey • 🐉 Dragon\n🦅 Golden Eagle • 🦚 Macaw\n🐋 Whale • 🦈 Shark\nand 8 more!');
+    // Celebrate!
+    throwConfetti(100);
+    showAchievement('🦄', 'Premium Unlocked!', '16 rare animals added!');
+    updatePremiumButton();
+  } catch (e) {
+    if (e.message && (e.message.includes('cancelled') || e.message.includes('user cancelled'))) {
+      console.log('User cancelled purchase');
+    } else {
+      alert('Purchase unavailable. Please try again or contact support.');
+    }
+  }
+}
+
+// Restore Purchases button (REQUIRED by Apple)
+async function restorePurchases() {
+  try {
+    const NativePurchases = window.Capacitor.Plugins.NativePurchases;
+    await NativePurchases.restorePurchases();
+    alert('✅ Purchases restored!\n\nPremium Animals will be unlocked if previously purchased.');
+    // Check if premium was restored
+    setTimeout(() => {
+      if (premiumUnlocked) {
+        alert('🎉 Premium Animals restored from previous purchase!');
+      }
+    }, 1000);
+  } catch (e) {
+    alert('Restore complete. No previous purchases found.');
+  }
+}
+
+// Auto-start IAP when app loads
+initIAP();
+
+
+
+
+
 
 window.addEventListener('resize', function() {
     // ONLY stop audio if game is actually running
