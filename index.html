@@ -4284,14 +4284,12 @@ document.getElementById('quitButton').addEventListener('click', () => {
     }, 300);
 });
 
-
-
 // ================================
-// ZOO KEEPER IAP - MINIMAL SAFE FIX
+// ZOO KEEPER IAP - FIXED (NO REDECLARATION)
 // ================================
 const PREMIUM_PRODUCT_ID = 'com.alstarian.zookeeper.premiumanimals';
 
-let premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
+let premiumUnlocked = false;  // Single declaration here
 
 // Central unlock (with celebration)
 function unlockPremium() {
@@ -4317,7 +4315,7 @@ async function checkPremiumStatus() {
   }
 }
 
-// Your buy function (unchanged except adds check)
+// Buy Premium
 async function buyPremiumAnimals() {
   if (premiumUnlocked) {
     alert('✅ Premium Animals already unlocked!');
@@ -4330,7 +4328,6 @@ async function buyPremiumAnimals() {
       productIdentifier: PREMIUM_PRODUCT_ID,
       productType: 'INAPP'
     });
-    // Listener + check will handle unlock
     await checkPremiumStatus();
   } catch (e) {
     if (e.message && (e.message.includes('cancelled') || e.message.includes('user cancelled'))) {
@@ -4341,20 +4338,24 @@ async function buyPremiumAnimals() {
   }
 }
 
-// Your restore (adds check after)
+// Restore Purchases
 async function restorePurchases() {
   try {
     const NativePurchases = window.Capacitor.Plugins.NativePurchases;
     await NativePurchases.restorePurchases();
-    await checkPremiumStatus();  // This catches restored purchases
+    await checkPremiumStatus();
     alert('✅ Purchases restored!\n\nPremium Animals will be unlocked if previously purchased.');
   } catch (e) {
     alert('Restore complete. No previous purchases found.');
   }
 }
 
-// Your initIAP (kept exactly as-is + adds safe listener and check)
+// Full safe IAP init
 async function initIAP() {
+  // Load from localStorage first (fast UI)
+  premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
+  updatePremiumButton();
+
   if (typeof window.Capacitor === 'undefined') {
     console.log('🧪 Browser: IAP skipped (expected)');
     return;
@@ -4373,7 +4374,7 @@ async function initIAP() {
       console.log('✅ Premium product ready:', products[0].identifier);
     }
 
-    // NEW: Safe iOS listener (only if iOS)
+    // iOS-only listener
     if (Capacitor.getPlatform() === 'ios') {
       NativePurchases.addListener('transactionUpdated', async (transaction) => {
         console.log('Transaction update:', transaction);
@@ -4383,21 +4384,16 @@ async function initIAP() {
       });
     }
 
-    // NEW: Check on load
+    // Final real status check
     await checkPremiumStatus();
 
-  } catch (e Ia) {
+  } catch (e) {
     console.log('IAP init (normal without dev account):', e.message);
   }
 }
 
-// Auto-start
-initIAP();
-
-
-
-
-
+// Auto-start on load
+document.addEventListener('DOMContentLoaded', initIAP);
 
 
 
