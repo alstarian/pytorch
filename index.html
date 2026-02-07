@@ -4546,12 +4546,159 @@ if (DEBUG_MODE) {
     if (e.key === 'r' || e.key === 'R') {
       debugResetPremium();
     }
+    // Press 'T' to test RevenueCat API
+    if (e.key === 't' || e.key === 'T') {
+      testRevenueCatConnection();
+    }
   });
   
   console.log('🧪 DEBUG MODE ACTIVE');
   console.log('Press U = Unlock Premium');
   console.log('Press R = Reset Premium');
+  console.log('Press T = Test RevenueCat API');
 }
+
+
+
+
+// ================================
+// REVENUECAT API TEST FUNCTION
+// ================================
+
+async function testRevenueCatConnection() {
+  console.log('🧪 Testing RevenueCat API connection...');
+  
+  if (typeof window.Capacitor === 'undefined') {
+    console.log('⚠️ Not in Capacitor environment');
+    console.log('Running in browser - Capacitor plugins need device/TestFlight');
+    alert('⚠️ Test needs device build\n\nCapacitor plugins only work in:\n• Real device via Xcode\n• TestFlight build\n\nNot in browser.');
+    return;
+  }
+  
+  try {
+    const { Purchases } = window.Capacitor.Plugins;
+    
+    if (!Purchases) {
+      console.log('❌ Purchases plugin not found');
+      alert('❌ Capgo Plugin Missing\n\nPurchases plugin not found.\n\nRun: npx cap sync');
+      return;
+    }
+    
+    console.log('✅ Step 1: Purchases plugin loaded');
+    
+    // Test 1: Configure with API key
+    await Purchases.configure({
+      apiKey: 'test_mnpbwxZpTeBoKaJsHsIgHTDznRf',
+      appUserID: null
+    });
+    console.log('✅ Step 2: API key accepted - RevenueCat configured');
+    
+    // Test 2: Get customer info
+    const { customerInfo } = await Purchases.getCustomerInfo();
+    console.log('✅ Step 3: Successfully connected to RevenueCat servers');
+    console.log('📊 Customer Info:', customerInfo);
+    console.log('   - User ID:', customerInfo.originalAppUserId);
+    console.log('   - Active entitlements:', Object.keys(customerInfo.entitlements.active).length);
+    
+    // Test 3: Get offerings
+    try {
+      const { offerings } = await Purchases.getOfferings();
+      console.log('✅ Step 4: Offerings retrieved');
+      console.log('📦 Available offerings:', offerings);
+      
+      if (offerings.current) {
+        console.log('✅ Step 5: Default offering found!');
+        console.log('   - Packages:', offerings.current.availablePackages.length);
+        offerings.current.availablePackages.forEach((pkg, i) => {
+          console.log(`   - Package ${i + 1}:`, pkg.identifier);
+        });
+      } else {
+        console.log('⚠️ Step 5: No default offering configured');
+        console.log('   Need to configure in RevenueCat dashboard');
+      }
+      
+    } catch (offerError) {
+      console.log('⚠️ Step 4: Could not get offerings');
+      console.log('   Error:', offerError.message);
+      console.log('   Normal if products not configured yet');
+    }
+    
+    // Final verdict
+    console.log('\n🎉 REVENUECAT API TEST COMPLETE!');
+    console.log('✅ API key is valid and working');
+    console.log('✅ Server communication successful');
+    
+    alert('✅ RevenueCat API Working!\n\nAPI Key: Valid ✓\nServer Connection: Success ✓\n\nCheck console for details.');
+    
+  } catch (e) {
+    console.log('❌ TEST FAILED:', e.message);
+    console.log('Full error:', e);
+    
+    if (e.message.includes('Invalid API key')) {
+      alert('❌ Invalid API Key\n\nYour RevenueCat API key is incorrect.');
+    } else if (e.message.includes('network')) {
+      alert('❌ Network Error\n\nCannot reach RevenueCat servers.\n\nCheck internet connection.');
+    } else {
+      alert('❌ RevenueCat Test Failed\n\n' + e.message + '\n\nCheck console for details.');
+    }
+  }
+}
+
+// Add test button to home screen
+function addRevenueCatTestButton() {
+  if (!DEBUG_MODE) return;
+  
+  setTimeout(() => {
+    // Don't add if already exists
+    if (document.getElementById('rcTestBtn')) return;
+    
+    const testBtn = document.createElement('button');
+    testBtn.id = 'rcTestBtn';
+    testBtn.textContent = '🧪 Test RevenueCat';
+    testBtn.style.cssText = `
+      position: fixed;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%);
+      color: white;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(78, 205, 196, 0.4);
+    `;
+    
+    testBtn.onclick = testRevenueCatConnection;
+    document.body.appendChild(testBtn);
+  }, 600);
+}
+
+// Call button creator when app loads
+if (DEBUG_MODE) {
+  addRevenueCatTestButton();
+}
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
