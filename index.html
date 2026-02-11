@@ -4292,405 +4292,113 @@ document.getElementById('quitButton').addEventListener('click', () => {
 
 
 
-
-
-
 // ================================
-// ZOO KEEPER IAP - MOCK VERSION FOR TESTING
+// NATIVE STOREKIT IAP (via @capgo/capacitor-native-purchases)
 // ================================
+const PREMIUM_PRODUCT_ID = 'com.alstarian.zookeeper.premium'; // ← CHANGE TO YOUR REAL PRODUCT ID
 
-// Check if we're in debug mode (no dev account yet)
-const DEBUG_MODE = true; // Set to false when you have real IAP
+let premiumUnlocked = false;
 
-async function initIAP() {
-  if (DEBUG_MODE) {
-    console.log('🧪 DEBUG MODE: Using mock IAP');
-    
-    // Check if premium was already unlocked in previous session
-    const savedPremium = localStorage.getItem('premiumUnlocked');
-    if (savedPremium === 'true') {
-      premiumUnlocked = true;
-      updatePremiumButton();
-      console.log('✅ Mock: Premium already unlocked');
-    }
-    
-    // Add debug unlock button (shows on home screen)
-    addDebugUnlockButton();
-    return;
-  }
-  
-  // REAL IAP CODE (runs when DEBUG_MODE = false)
-  if (typeof window.Capacitor === 'undefined') {
-    console.log('🧪 Browser: IAP skipped (expected)');
-    return;
-  }
-  
-  try {
-    const { Purchases } = window.Capacitor.Plugins;
-    
-    await Purchases.configure({
-      apiKey: 'test_mnpbwxZpTeBoKaJsHsIgHTDznRf',
-      appUserID: null
-    });
-    
-    console.log('✅ IAP initialized successfully');
-    
-    const { customerInfo } = await Purchases.getCustomerInfo();
-    
-    if (customerInfo.entitlements.active['premium']) {
-      premiumUnlocked = true;
-      localStorage.setItem('premiumUnlocked', 'true');
-      updatePremiumButton();
-      console.log('✅ Premium already owned');
-    }
-    
-  } catch (e) {
-    console.log('IAP init error:', e.message);
-  }
-}
-
-// Buy Premium Animals
-async function buyPremiumAnimals() {
-  if (premiumUnlocked) {
-    alert('✅ Premium Animals already unlocked!');
+// Check purchase status (native first, fallback to localStorage)
+async function checkPremiumStatus() {
+  if (typeof NativePurchases === 'undefined') {
+    console.log('Not in native environment - skipping IAP check');
+    premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
     updatePremiumButton();
     return;
   }
-  
-  // MOCK PURCHASE (in debug mode)
-  if (DEBUG_MODE) {
-    console.log('🧪 DEBUG: Simulating purchase...');
+
+  try {
+    await NativePurchases.setup(); // No API key needed
+
+    const { purchases } = await NativePurchases.getPurchases({
+      productType: 'INAPP' // Non-consumable
+    });
+
+    const owned = purchases.some(p => p.productIdentifier === PREMIUM_PRODUCT_ID && p.isOwned);
     
-    // Simulate 2 second purchase delay
-    setTimeout(() => {
+    if (owned) {
       premiumUnlocked = true;
       localStorage.setItem('premiumUnlocked', 'true');
-      
-      alert('🎉 PREMIUM ANIMALS UNLOCKED!\n\n(DEBUG MODE - No real purchase)\n\n16 rare species now available in ALL zones:\n🦄 Unicorn • 🐺 Arctic Wolf\n🐒 Golden Monkey • 🐉 Dragon\n🦅 Golden Eagle • 🦚 Macaw\n🐋 Whale • 🦈 Shark\nand 8 more!');
-      
-      throwConfetti(100);
-      showAchievement('🦄', 'Premium Unlocked!', '16 rare animals added!');
-      updatePremiumButton();
-      
-      // Remove debug button if it exists
-      const debugBtn = document.getElementById('debugUnlockBtn');
-      if (debugBtn) debugBtn.remove();
-      
-    }, 2000);
-    
+    } else {
+      premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
+    }
+  } catch (error) {
+    console.error('IAP check failed:', error);
+    premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
+  }
+
+  updatePremiumButton();
+}
+
+// Buy Premium
+async function buyPremiumAnimals() {
+  if (premiumUnlocked) {
+    alert('✅ Premium Animals already unlocked!');
     return;
   }
-  
-  // REAL PURCHASE CODE (runs when DEBUG_MODE = false)
+
+  if (typeof NativePurchases === 'undefined') {
+    alert('IAP only works on device/TestFlight');
+    return;
+  }
+
   try {
-    const { Purchases } = window.Capacitor.Plugins;
-    
-    const { offerings } = await Purchases.getOfferings();
-    
-    if (!offerings.current || !offerings.current.availablePackages[0]) {
-      alert('Premium not available right now. Please try again.');
-      return;
-    }
-    
-    console.log('🛒 Starting purchase...');
-    
-    const { customerInfo } = await Purchases.purchasePackage({
-      identifier: offerings.current.availablePackages[0].identifier,
-      offeringIdentifier: offerings.current.identifier
+    await NativePurchases.setup();
+
+    const transaction = await NativePurchases.purchaseProduct({
+      productIdentifier: PREMIUM_PRODUCT_ID,
+      productType: 'INAPP'
     });
-    
-    if (customerInfo.entitlements.active['premium']) {
+
+    if (transaction.customerInfo?.entitlements?.active?.premium || transaction.transaction?.productId === PREMIUM_PRODUCT_ID) {
       premiumUnlocked = true;
       localStorage.setItem('premiumUnlocked', 'true');
       
-      alert('🎉 PREMIUM ANIMALS UNLOCKED!\n\n16 rare species now available in ALL zones:\n🦄 Unicorn • 🐺 Arctic Wolf\n🐒 Golden Monkey • 🐉 Dragon\n🦅 Golden Eagle • 🦚 Macaw\n🐋 Whale • 🦈 Shark\nand 8 more!');
-      
+      alert('🎉 PREMIUM ANIMALS UNLOCKED!\n\n16 rare species now available in ALL zones!');
       throwConfetti(100);
       showAchievement('🦄', 'Premium Unlocked!', '16 rare animals added!');
       updatePremiumButton();
     }
-    
-  } catch (e) {
-    if (e.message && e.message.includes('cancelled')) {
-      console.log('User cancelled purchase');
+  } catch (error) {
+    if (error.code === 'USER_CANCELLED') {
+      console.log('Purchase cancelled');
     } else {
-      alert('Purchase unavailable. Please try again or contact support.');
-      console.error('Purchase error:', e);
+      alert('Purchase failed. Try again or contact support.\n\nError: ' + error.message);
+      console.error('Purchase error:', error);
     }
   }
 }
 
-// Restore Purchases
+// Restore Purchases (REQUIRED for App Store compliance)
 async function restorePurchases() {
-  if (DEBUG_MODE) {
-    console.log('🧪 DEBUG: Mock restore');
-    
-    // Check localStorage
-    const savedPremium = localStorage.getItem('premiumUnlocked');
-    if (savedPremium === 'true') {
-      premiumUnlocked = true;
-      alert('✅ Purchases restored!\n\n(DEBUG MODE)\n\nPremium Animals unlocked!');
-      throwConfetti(50);
-      updatePremiumButton();
-    } else {
-      alert('Restore complete. No previous purchases found.\n\n(DEBUG MODE)');
-    }
+  if (typeof NativePurchases === 'undefined') {
+    alert('Restore only works on device/TestFlight');
     return;
   }
-  
-  // REAL RESTORE CODE
+
   try {
-    const { Purchases } = window.Capacitor.Plugins;
-    
-    console.log('🔄 Restoring purchases...');
-    
-    const { customerInfo } = await Purchases.restorePurchases();
-    
-    if (customerInfo.entitlements.active['premium']) {
-      premiumUnlocked = true;
-      localStorage.setItem('premiumUnlocked', 'true');
-      
+    await NativePurchases.setup();
+    await NativePurchases.restorePurchases();
+
+    await checkPremiumStatus(); // Re-check after restore
+
+    if (premiumUnlocked) {
       alert('✅ Purchases restored!\n\nPremium Animals unlocked!');
       throwConfetti(50);
-      updatePremiumButton();
     } else {
-      alert('Restore complete. No previous purchases found.');
+      alert('No previous purchases found.');
     }
-    
-  } catch (e) {
-    alert('Restore complete. No previous purchases found.');
-    console.error('Restore error:', e);
+  } catch (error) {
+    alert('Restore failed: ' + error.message);
+    console.error('Restore error:', error);
   }
 }
 
-// DEBUG ONLY: Add unlock button to home screen
-function addDebugUnlockButton() {
-  // Only add if not already unlocked
-  if (premiumUnlocked) return;
-  
-  // Wait for home screen to be visible
-  setTimeout(() => {
-    const homeScreen = document.getElementById('homeScreen');
-    if (!homeScreen) return;
-    
-    // Check if button already exists
-    if (document.getElementById('debugUnlockBtn')) return;
-    
-    // Create debug button
-    const debugBtn = document.createElement('button');
-    debugBtn.id = 'debugUnlockBtn';
-    debugBtn.textContent = '🧪 DEBUG: Unlock Premium';
-    debugBtn.style.cssText = `
-      position: fixed;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 9999;
-      padding: 12px 24px;
-      background: linear-gradient(135deg, #FF6B6B 0%, #FF8E53 100%);
-      color: white;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 8px 24px rgba(255, 107, 107, 0.4);
-    `;
-    
-    debugBtn.onclick = () => {
-      if (confirm('🧪 DEBUG MODE\n\nUnlock Premium Animals for testing?\n\n(This simulates a successful purchase)')) {
-        debugUnlockPremium();
-        debugBtn.remove();
-      }
-    };
-    
-    document.body.appendChild(debugBtn);
-    
-  }, 500);
-}
-
-// DEBUG: Manual unlock function
-function debugUnlockPremium() {
-  premiumUnlocked = true;
-  localStorage.setItem('premiumUnlocked', 'true');
-  
-  alert('🎉 PREMIUM ANIMALS UNLOCKED!\n\n(DEBUG MODE - Free unlock)\n\n16 rare species now available!');
-  
-  throwConfetti(100);
-  showAchievement('🦄', 'Premium Unlocked!', '16 rare animals added!');
-  updatePremiumButton();
-  
-  console.log('✅ DEBUG: Premium unlocked manually');
-}
-
-// DEBUG: Reset premium (for testing)
-function debugResetPremium() {
-  premiumUnlocked = false;
-  localStorage.removeItem('premiumUnlocked');
-  alert('🧪 DEBUG: Premium reset!\n\nReload the app to test purchase flow again.');
-  console.log('✅ DEBUG: Premium reset');
-  location.reload();
-}
-
-// Auto-start IAP when app loads
-initIAP();
-
-// DEBUG: Add keyboard shortcuts
-if (DEBUG_MODE) {
-  document.addEventListener('keydown', (e) => {
-    // Press 'U' to unlock premium
-    if (e.key === 'u' || e.key === 'U') {
-      debugUnlockPremium();
-    }
-    // Press 'R' to reset premium
-    if (e.key === 'r' || e.key === 'R') {
-      debugResetPremium();
-    }
-    // Press 'T' to test RevenueCat API
-    if (e.key === 't' || e.key === 'T') {
-      testRevenueCatConnection();
-    }
-  });
-  
-  console.log('🧪 DEBUG MODE ACTIVE');
-  console.log('Press U = Unlock Premium');
-  console.log('Press R = Reset Premium');
-  console.log('Press T = Test RevenueCat API');
-}
-
-
-
-
-// ================================
-// REVENUECAT API TEST FUNCTION
-// ================================
-
-async function testRevenueCatConnection() {
-  console.log('🧪 Testing RevenueCat API connection...');
-  
-  if (typeof window.Capacitor === 'undefined') {
-    console.log('⚠️ Not in Capacitor environment');
-    console.log('Running in browser - Capacitor plugins need device/TestFlight');
-    alert('⚠️ Test needs device build\n\nCapacitor plugins only work in:\n• Real device via Xcode\n• TestFlight build\n\nNot in browser.');
-    return;
-  }
-  
-  try {
-    const { Purchases } = window.Capacitor.Plugins;
-    
-    if (!Purchases) {
-      console.log('❌ Purchases plugin not found');
-      alert('❌ Capgo Plugin Missing\n\nPurchases plugin not found.\n\nRun: npx cap sync');
-      return;
-    }
-    
-    console.log('✅ Step 1: Purchases plugin loaded');
-    
-    // Test 1: Configure with API key
-    await Purchases.configure({
-      apiKey: 'test_mnpbwxZpTeBoKaJsHsIgHTDznRf',
-      appUserID: null
-    });
-    console.log('✅ Step 2: API key accepted - RevenueCat configured');
-    
-    // Test 2: Get customer info
-    const { customerInfo } = await Purchases.getCustomerInfo();
-    console.log('✅ Step 3: Successfully connected to RevenueCat servers');
-    console.log('📊 Customer Info:', customerInfo);
-    console.log('   - User ID:', customerInfo.originalAppUserId);
-    console.log('   - Active entitlements:', Object.keys(customerInfo.entitlements.active).length);
-    
-    // Test 3: Get offerings
-    try {
-      const { offerings } = await Purchases.getOfferings();
-      console.log('✅ Step 4: Offerings retrieved');
-      console.log('📦 Available offerings:', offerings);
-      
-      if (offerings.current) {
-        console.log('✅ Step 5: Default offering found!');
-        console.log('   - Packages:', offerings.current.availablePackages.length);
-        offerings.current.availablePackages.forEach((pkg, i) => {
-          console.log(`   - Package ${i + 1}:`, pkg.identifier);
-        });
-      } else {
-        console.log('⚠️ Step 5: No default offering configured');
-        console.log('   Need to configure in RevenueCat dashboard');
-      }
-      
-    } catch (offerError) {
-      console.log('⚠️ Step 4: Could not get offerings');
-      console.log('   Error:', offerError.message);
-      console.log('   Normal if products not configured yet');
-    }
-    
-    // Final verdict
-    console.log('\n🎉 REVENUECAT API TEST COMPLETE!');
-    console.log('✅ API key is valid and working');
-    console.log('✅ Server communication successful');
-    
-    alert('✅ RevenueCat API Working!\n\nAPI Key: Valid ✓\nServer Connection: Success ✓\n\nCheck console for details.');
-    
-  } catch (e) {
-    console.log('❌ TEST FAILED:', e.message);
-    console.log('Full error:', e);
-    
-    if (e.message.includes('Invalid API key')) {
-      alert('❌ Invalid API Key\n\nYour RevenueCat API key is incorrect.');
-    } else if (e.message.includes('network')) {
-      alert('❌ Network Error\n\nCannot reach RevenueCat servers.\n\nCheck internet connection.');
-    } else {
-      alert('❌ RevenueCat Test Failed\n\n' + e.message + '\n\nCheck console for details.');
-    }
-  }
-}
-
-// Add test button to home screen
-function addRevenueCatTestButton() {
-  if (!DEBUG_MODE) return;
-  
-  setTimeout(() => {
-    // Don't add if already exists
-    if (document.getElementById('rcTestBtn')) return;
-    
-    const testBtn = document.createElement('button');
-    testBtn.id = 'rcTestBtn';
-    testBtn.textContent = '🧪 Test RevenueCat';
-    testBtn.style.cssText = `
-      position: fixed;
-      bottom: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 9999;
-      padding: 10px 20px;
-      background: linear-gradient(135deg, #4ECDC4 0%, #45B7D1 100%);
-      color: white;
-      border: 2px solid rgba(255, 255, 255, 0.3);
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: 0 8px 24px rgba(78, 205, 196, 0.4);
-    `;
-    
-    testBtn.onclick = testRevenueCatConnection;
-    document.body.appendChild(testBtn);
-  }, 600);
-}
-
-// Call button creator when app loads
-if (DEBUG_MODE) {
-  addRevenueCatTestButton();
-}
-
-
-
-
-
-
-
-
-
-
+// Run on app load
+document.addEventListener('DOMContentLoaded', () => {
+  checkPremiumStatus();
+});
 
 
 
