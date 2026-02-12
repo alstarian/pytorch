@@ -4288,38 +4288,45 @@ document.getElementById('quitButton').addEventListener('click', () => {
     }, 300);
 });
 
-
 // ================================
-// NATIVE STOREKIT IAP (via @capgo/capacitor-native-purchases)
+// NATIVE STOREKIT IAP (via @capgo/native-purchases)
 // ================================
-const PREMIUM_PRODUCT_ID = 'com.alstarian.zookeeper.premium'; // ← Your real product ID
+import { NativePurchases } from '@capgo/native-purchases';
 
-// premiumUnlocked is already declared at the top of the script
-// (We just assign/update it here—no 'let' needed)
+const PREMIUM_PRODUCT_ID = 'com.alstarian.zookeeper.premium'; // ← Your real App Store Connect ID
 
-// Check purchase status on load
+// premiumUnlocked declared at top of script (keep your existing one)
+
+// Safe init
+function initIAP() {
+  checkPremiumStatus();
+}
+
+// Check purchase status
 async function checkPremiumStatus() {
+  // Fallback for browser/simulator/no plugin
   if (typeof NativePurchases === 'undefined') {
-    console.log('Not in native environment - skipping IAP check');
+    console.log('🟡 Non-native or plugin not loaded: Using localStorage');
     premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
     updatePremiumButton();
     return;
   }
 
   try {
-    await NativePurchases.setup(); // No API key needed
+    await NativePurchases.setup();
 
     const { purchases } = await NativePurchases.getPurchases({
-      productType: 'INAPP' // Non-consumable
+      productType: 'INAPP'
     });
 
-    // For non-consumables: owned if product ID is in the list
     const owned = purchases.some(p => p.productIdentifier === PREMIUM_PRODUCT_ID);
-    
+
     premiumUnlocked = owned || localStorage.getItem('premiumUnlocked') === 'true';
     if (owned) localStorage.setItem('premiumUnlocked', 'true');
+
+    console.log('✅ IAP status:', premiumUnlocked ? 'Unlocked' : 'Locked');
   } catch (error) {
-    console.error('IAP check failed:', error);
+    console.error('IAP check error:', error);
     premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
   }
 
@@ -4334,42 +4341,42 @@ async function buyPremiumAnimals() {
   }
 
   if (typeof NativePurchases === 'undefined') {
-    alert('IAP only works on device/TestFlight');
+    alert('IAP only works on a real device or TestFlight build');
     return;
   }
 
   try {
     await NativePurchases.setup();
 
-    const transaction = await NativePurchases.purchaseProduct({
+    const result = await NativePurchases.purchaseProduct({
       productIdentifier: PREMIUM_PRODUCT_ID,
       productType: 'INAPP'
     });
 
-    // Success: purchaseProduct resolves with transaction if completed
-    if (transaction.productIdentifier === PREMIUM_PRODUCT_ID) {
+    if (result.productIdentifier === PREMIUM_PRODUCT_ID) {
       premiumUnlocked = true;
       localStorage.setItem('premiumUnlocked', 'true');
-      
+
       alert('🎉 PREMIUM ANIMALS UNLOCKED!\n\n16 rare species now available in ALL zones!');
       throwConfetti(100);
       showAchievement('🦄', 'Premium Unlocked!', '16 rare animals added!');
       updatePremiumButton();
+      console.log('✅ Purchase successful');
     }
   } catch (error) {
-    if (error.code === 'USER_CANCELLED') {
+    console.error('Purchase error:', error);
+    if (error.code === 'USER_CANCELLED' || error.message?.includes('cancelled')) {
       console.log('Purchase cancelled');
     } else {
-      alert('Purchase failed. Try again or contact support.\n\nError: ' + error.message);
-      console.error('Purchase error:', error);
+      alert('Purchase failed. Try again later.');
     }
   }
 }
 
-// Restore Purchases (REQUIRED for App Store)
+// Restore Purchases
 async function restorePurchases() {
   if (typeof NativePurchases === 'undefined') {
-    alert('Restore only works on device/TestFlight');
+    alert('Restore only works on a real device or TestFlight build');
     return;
   }
 
@@ -4377,7 +4384,7 @@ async function restorePurchases() {
     await NativePurchases.setup();
     await NativePurchases.restorePurchases();
 
-    await checkPremiumStatus(); // Re-check after restore
+    await checkPremiumStatus();
 
     if (premiumUnlocked) {
       alert('✅ Purchases restored!\n\nPremium Animals unlocked!');
@@ -4386,18 +4393,16 @@ async function restorePurchases() {
       alert('No previous purchases found.');
     }
   } catch (error) {
-    alert('Restore failed: ' + error.message);
     console.error('Restore error:', error);
+    alert('Restore failed. Try again.');
   }
 }
 
-// Run on app load
-document.addEventListener('DOMContentLoaded', () => {
-  checkPremiumStatus();
-});
-
-
-
+// Init on load (safe for Capacitor)
+document.addEventListener('DOMContentLoaded', initIAP);
+if (typeof window.Capacitor !== 'undefined') {
+  document.addEventListener('deviceready', initIAP);
+}
 
 
 
