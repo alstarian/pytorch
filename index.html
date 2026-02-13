@@ -8581,12 +8581,12 @@ document.getElementById('quitButton').addEventListener('click', () => {
 
 
 
-
-
 // ================================
 // NATIVE STOREKIT IAP (via @capgo/native-purchases)
 // ================================
-const PREMIUM_PRODUCT_ID = 'com.alstarian.zookeeper.premium'; // ← Your real App Store Connect ID
+import { NativePurchases, PURCHASE_TYPE } from '@capgo/native-purchases';
+
+const PREMIUM_PRODUCT_ID = 'com.alstarian.zookeeper.premium';
 
 // premiumUnlocked is already declared at the top (keep your existing one)
 
@@ -8605,13 +8605,20 @@ async function checkPremiumStatus() {
     return;
   }
 
-  const { NativePurchases } = window.Capacitor.Plugins;
-
   try {
-    await NativePurchases.setup();
+    // Check if billing is supported
+    const { isBillingSupported } = await NativePurchases.isBillingSupported();
+    
+    if (!isBillingSupported) {
+      console.log('🟡 Billing not supported on this device');
+      premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
+      updatePremiumButton();
+      return;
+    }
 
+    // Get all purchases for this user
     const { purchases } = await NativePurchases.getPurchases({
-      productType: 'INAPP'
+      productType: PURCHASE_TYPE.INAPP
     });
 
     const owned = purchases.some(p => p.productIdentifier === PREMIUM_PRODUCT_ID);
@@ -8640,17 +8647,31 @@ async function buyPremiumAnimals() {
     return;
   }
 
-  const { NativePurchases } = window.Capacitor.Plugins;
-
   try {
-    await NativePurchases.setup();
+    // Check billing support first
+    const { isBillingSupported } = await NativePurchases.isBillingSupported();
+    
+    if (!isBillingSupported) {
+      alert('Purchases not supported on this device');
+      return;
+    }
 
-    const result = await NativePurchases.purchaseProduct({
+    // Get product info (required by Apple - shows real price)
+    const { product } = await NativePurchases.getProduct({
       productIdentifier: PREMIUM_PRODUCT_ID,
-      productType: 'INAPP'
+      productType: PURCHASE_TYPE.INAPP
     });
 
-    if (result.productIdentifier === PREMIUM_PRODUCT_ID) {
+    console.log(`Purchasing: ${product.title} - ${product.priceString}`);
+
+    // Make the purchase
+    const result = await NativePurchases.purchaseProduct({
+      productIdentifier: PREMIUM_PRODUCT_ID,
+      productType: PURCHASE_TYPE.INAPP,
+      quantity: 1
+    });
+
+    if (result.transactionId) {
       premiumUnlocked = true;
       localStorage.setItem('premiumUnlocked', 'true');
 
@@ -8658,14 +8679,20 @@ async function buyPremiumAnimals() {
       throwConfetti(100);
       showAchievement('🦄', 'Premium Unlocked!', '16 rare animals added!');
       updatePremiumButton();
-      console.log('✅ Purchase successful');
+      console.log('✅ Purchase successful:', result.transactionId);
+
+      // Optional: Verify on your server
+      if (result.receipt) {
+        // Send result.receipt to your backend for validation
+        console.log('Receipt available for server validation');
+      }
     }
   } catch (error) {
     console.error('Purchase error:', error);
     if (error.code === 'USER_CANCELLED' || error.message?.includes('cancelled')) {
-      console.log('Purchase cancelled');
+      console.log('Purchase cancelled by user');
     } else {
-      alert('Purchase failed. Try again later.');
+      alert('Purchase failed. Please try again later.');
     }
   }
 }
@@ -8677,12 +8704,19 @@ async function restorePurchases() {
     return;
   }
 
-  const { NativePurchases } = window.Capacitor.Plugins;
-
   try {
-    await NativePurchases.setup();
+    // Check billing support
+    const { isBillingSupported } = await NativePurchases.isBillingSupported();
+    
+    if (!isBillingSupported) {
+      alert('Purchases not supported on this device');
+      return;
+    }
+
+    // Restore purchases
     await NativePurchases.restorePurchases();
 
+    // Check status after restore
     await checkPremiumStatus();
 
     if (premiumUnlocked) {
@@ -8693,7 +8727,7 @@ async function restorePurchases() {
     }
   } catch (error) {
     console.error('Restore error:', error);
-    alert('Restore failed. Try again.');
+    alert('Restore failed. Please try again.');
   }
 }
 
