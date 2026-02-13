@@ -8578,14 +8578,22 @@ document.getElementById('quitButton').addEventListener('click', () => {
     }, 300);
 });
 
+
+
+
+
+
+
+
+
+
+
 // ================================
 // NATIVE STOREKIT IAP (via @capgo/native-purchases)
 // ================================
-import { NativePurchases } from '@capgo/native-purchases';
-
 const PREMIUM_PRODUCT_ID = 'com.alstarian.zookeeper.premium'; // ← Your real App Store Connect ID
 
-// premiumUnlocked declared at top of script (keep your existing one)
+// premiumUnlocked is already declared at the top (keep your existing one)
 
 // Safe init
 function initIAP() {
@@ -8595,12 +8603,14 @@ function initIAP() {
 // Check purchase status
 async function checkPremiumStatus() {
   // Fallback for browser/simulator/no plugin
-  if (typeof NativePurchases === 'undefined') {
+  if (typeof window.Capacitor === 'undefined' || typeof window.Capacitor.Plugins?.NativePurchases === 'undefined') {
     console.log('🟡 Non-native or plugin not loaded: Using localStorage');
     premiumUnlocked = localStorage.getItem('premiumUnlocked') === 'true';
     updatePremiumButton();
     return;
   }
+
+  const { NativePurchases } = window.Capacitor.Plugins;
 
   try {
     await NativePurchases.setup();
@@ -8630,10 +8640,12 @@ async function buyPremiumAnimals() {
     return;
   }
 
-  if (typeof NativePurchases === 'undefined') {
+  if (typeof window.Capacitor === 'undefined' || typeof window.Capacitor.Plugins?.NativePurchases === 'undefined') {
     alert('IAP only works on a real device or TestFlight build');
     return;
   }
+
+  const { NativePurchases } = window.Capacitor.Plugins;
 
   try {
     await NativePurchases.setup();
@@ -8665,10 +8677,12 @@ async function buyPremiumAnimals() {
 
 // Restore Purchases
 async function restorePurchases() {
-  if (typeof NativePurchases === 'undefined') {
+  if (typeof window.Capacitor === 'undefined' || typeof window.Capacitor.Plugins?.NativePurchases === 'undefined') {
     alert('Restore only works on a real device or TestFlight build');
     return;
   }
+
+  const { NativePurchases } = window.Capacitor.Plugins;
 
   try {
     await NativePurchases.setup();
@@ -8693,6 +8707,14 @@ document.addEventListener('DOMContentLoaded', initIAP);
 if (typeof window.Capacitor !== 'undefined') {
   document.addEventListener('deviceready', initIAP);
 }
+
+
+
+
+
+
+
+
 
 
 
@@ -8731,22 +8753,6 @@ window.addEventListener('resize', function() {
 
 
     </script>
-
-
-
-
-
-  
-<!-- Zone Transition Modal -->
-<div id="zoneTransitionModal" class="hidden">
-    <div class="zone-modal-content">
-        <h2 id="zoneModalTitle">Entering Zone</h2>
-        <div id="zoneModalEmoji" class="zone-emoji">🌍</div>
-        <p class="zone-subtitle">Get ready!</p>
-    </div>
-</div>
-</body>
-</html>
 
 
 
